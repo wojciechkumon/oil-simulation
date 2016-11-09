@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<VBox fx:controller="org.kris.oilsimulation.controller.AutomatonStartController"
+      xmlns:fx="http://javafx.com/fxml">
+
+    <Button fx:id="startButton" text="%start" onAction="#startAutomaton"/>
+
+</VBox>
