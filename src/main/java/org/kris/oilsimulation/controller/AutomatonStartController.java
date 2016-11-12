@@ -1,63 +1,55 @@
 package org.kris.oilsimulation.controller;
 
+import org.kris.oilsimulation.controller.handler.IterationCounter;
+import org.kris.oilsimulation.controller.handler.SimulationHandlers;
+import org.kris.oilsimulation.controller.handler.SimulationTimeLogger;
+import org.kris.oilsimulation.controller.handler.ViewRefresher;
 import org.kris.oilsimulation.model.Model;
 
 import java.util.ResourceBundle;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ToggleGroup;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 public class AutomatonStartController {
-  private final ScheduledExecutorService scheduler;
+  private SimulationRunner simulationRunner;
 
-  private Model model;
-  private ScheduledFuture<?> currentTask;
-
+  @FXML
+  private Label iterations;
+  @FXML
+  private ToggleGroup iterationDelayMillis;
   @FXML
   private Button startButton;
   @FXML
   private ResourceBundle resources;
 
-  public AutomatonStartController() {
-    // setting threads as daemons to be able to close application process when closing window
-    this.scheduler = Executors.newScheduledThreadPool(1, runnable -> {
-      Thread thread = Executors.defaultThreadFactory().newThread(runnable);
-      thread.setDaemon(true);
-      return thread;
-    });
-  }
-
-  public synchronized void startAutomaton() {
-    if (isRunning()) {
-      stop();
-    } else {
-      runModel(model, 300);
-    }
-  }
-
-  private boolean isRunning() {
-    return currentTask != null && !currentTask.isCancelled();
-  }
-
-  private void stop() {
-    currentTask.cancel(false);
-    startButton.setText(resources.getString("start"));
-  }
-
-  private void runModel(Model model, int periodMillis) {
-    currentTask = scheduler.scheduleAtFixedRate(
-        () -> model.setAutomaton(model.getAutomaton().nextState()),
-        0, periodMillis, TimeUnit.MILLISECONDS);
-    startButton.setText(resources.getString("stop"));
+  public void startOrStopClicked() {
+    simulationRunner.startOrStopClicked();
   }
 
   public void initModel(Model model) {
-    this.model = model;
+    createSimulationRunner(model);
   }
 
+  private void createSimulationRunner(Model model) {
+    SimulationTimeLogger logger = new SimulationTimeLogger();
+    ViewRefresher viewRefresher = new ViewRefresher(startButton, iterationDelayMillis, resources);
+    SimulationHandlers handlers = createSimulationHandlers(resources, logger, viewRefresher);
+    this.simulationRunner = new SimulationRunner(model, iterationDelayMillis, handlers);
+  }
+
+  private SimulationHandlers createSimulationHandlers(ResourceBundle resources,
+                                                      SimulationTimeLogger logger,
+                                                      ViewRefresher viewRefresher) {
+    return new SimulationHandlers(
+        asList(logger.onStartHandler(), viewRefresher.onStartHandler()),
+        asList(logger.onStopHandler(), viewRefresher.onStopHandler()),
+        singletonList(new IterationCounter(iterations, resources).afterStepHandler()));
+  }
 
 }

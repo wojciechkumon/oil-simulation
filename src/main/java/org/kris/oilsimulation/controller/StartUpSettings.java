@@ -14,7 +14,7 @@ public class StartUpSettings {
   }
 
   public static StartUpSettings getDefault() {
-    return new StartUpSettings(new Size(20, 10));
+    return new StartUpSettings(new Size(100, 100));
   }
 
 }
