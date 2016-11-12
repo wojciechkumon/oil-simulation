@@ -18,8 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class GridCanvasController implements Initializable {
-  private static final int CELL_SIZE = 20;
-
   private AutomatonView currentView;
 
   @FXML
@@ -27,7 +25,59 @@ public class GridCanvasController implements Initializable {
   @FXML
   public Canvas canvas;
 
-  public void initGrid() {
+  private void redraw() {
+    double cellSize = calculateCellSize();
+
+    GraphicsContext graphics = canvas.getGraphicsContext2D();
+    clearCanvas(graphics);
+
+    drawCells(graphics, cellSize);
+    drawGrid(graphics, cellSize);
+  }
+
+  private double calculateCellSize() {
+    if (currentView.getWidth() == 0) {
+      return 0;
+    }
+
+    double cellMaxWidth = canvas.getWidth() / currentView.getWidth();
+    double cellMaxHeight = canvas.getHeight() / currentView.getHeight();
+
+    return cellMaxWidth <= cellMaxHeight ? cellMaxWidth : cellMaxHeight;
+  }
+
+  private void clearCanvas(GraphicsContext graphics) {
+    graphics.setFill(Color.WHITE);
+    graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+  }
+
+  private void drawCells(GraphicsContext graphics, double cellSize) {
+    for (int i = 0; i < currentView.getHeight(); i++) {
+      for (int j = 0; j < currentView.getWidth(); j++) {
+        if (currentView.getState(i, j) == BlackWhiteState.WHITE) {
+          graphics.setFill(Color.WHITE);
+        } else {
+          graphics.setFill(Color.BLACK);
+        }
+        graphics.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+      }
+    }
+  }
+
+  private void drawGrid(GraphicsContext graphics, double cellSize) {
+    for (int i = 0; i < currentView.getWidth(); i++) {
+      for (int j = 0; j < currentView.getHeight(); j++) {
+        graphics.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
+      }
+    }
+  }
+
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+    initGrid();
+  }
+
+  private void initGrid() {
     currentView = AutomatonViewFactory.getEmptyView();
     canvas.widthProperty().bind(parentLayout.widthProperty().subtract(20));
     canvas.heightProperty().bind(parentLayout.heightProperty().subtract(20));
@@ -37,50 +87,15 @@ public class GridCanvasController implements Initializable {
     GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
     graphicsContext.setStroke(Color.BLACK);
     graphicsContext.setLineWidth(0.5);
-    redraw();
-  }
-
-  private void redraw() {
-    GraphicsContext graphics = canvas.getGraphicsContext2D();
-    graphics.setFill(Color.WHITE);
-    graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-    drawGrid(graphics);
-  }
-
-  private void drawGrid(GraphicsContext graphics) {
-    for (int i = 0; i < currentView.getWidth(); i++) {
-      for (int j = 0; j < currentView.getHeight(); j++) {
-        graphics.strokeRect(i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-      }
-    }
-  }
-
-  private void drawCells(Automaton newAutomaton) {
-    currentView = newAutomaton.getAutomatonView();
-    GraphicsContext graphics = canvas.getGraphicsContext2D();
-
-
-    for (int i = 0; i < currentView.getHeight(); i++) {
-      for (int j = 0; j < currentView.getWidth(); j++) {
-        if (currentView.getState(i, j) == BlackWhiteState.WHITE) {
-          graphics.setFill(Color.WHITE);
-        } else {
-          graphics.setFill(Color.BLACK);
-        }
-        graphics.fillRect(j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-      }
-    }
-
-    drawGrid(graphics);
-  }
-
-  @Override
-  public void initialize(URL location, ResourceBundle resources) {
-    initGrid();
   }
 
   public void initModel(Model model) {
-    model.addChangeListener((observable, oldValue, newValue) -> Platform.runLater(() -> drawCells(newValue)));
+    model.addChangeListener((observable, oldValue, newValue) -> Platform.runLater(() -> setNewAutomaton(newValue)));
+  }
+
+  private void setNewAutomaton(Automaton automaton) {
+    this.currentView = automaton.getAutomatonView();
+    redraw();
   }
 
 }
