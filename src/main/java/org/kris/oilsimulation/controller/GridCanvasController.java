@@ -90,7 +90,8 @@ public class GridCanvasController implements Initializable {
   }
 
   public void initModel(Model model) {
-    model.addChangeListener((observable, oldValue, newValue) -> Platform.runLater(() -> setNewAutomaton(newValue)));
+    model.addChangeListener((observable, oldValue, newValue) ->
+        Platform.runLater(() -> setNewAutomaton(newValue)));
   }
 
   private void setNewAutomaton(Automaton automaton) {

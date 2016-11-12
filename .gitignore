@@ -209,3 +209,6 @@ local.properties
 
 # Code Recommenders
 .recommenders/
+
+# Logs
+*.log

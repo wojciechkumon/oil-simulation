@@ -2,13 +2,17 @@ package org.kris.oilsimulation.model;
 
 import java.util.Objects;
 
-public final class CellCoords {
+public class CellCoords {
   private final int row;
   private final int col;
 
-  public CellCoords(int row, int col) {
+  private CellCoords(int row, int col) {
     this.row = row;
     this.col = col;
+  }
+
+  public static CellCoords newCellCoords(int row, int col) {
+    return new CellCoords(row, col);
   }
 
   public int getRow() {

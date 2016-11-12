@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:id="parentLayout"
+      fx:controller="org.kris.oilsimulation.controller.GridCanvasController"
+      alignment="center" styleClass="root"
+      GridPane.columnIndex="0" GridPane.rowIndex="0"
+      GridPane.hgrow="always" GridPane.vgrow="always">
+
+    <Canvas fx:id="canvas"/>
+
+</VBox>
