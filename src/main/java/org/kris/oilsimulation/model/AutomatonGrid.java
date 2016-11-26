@@ -24,4 +24,8 @@ public class AutomatonGrid {
     return AutomatonViewFactory.create(grid, size);
   }
 
+  public Size getSize() {
+    return size;
+  }
+
 }

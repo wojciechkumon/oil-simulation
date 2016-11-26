@@ -1,16 +1,24 @@
 package org.kris.oilsimulation.model;
 
+import java.util.Collections;
+import java.util.List;
+
 public class OilCellState implements CellState {
-  private static OilCellState EMPTY_CELL = new OilCellState(0);
+  private static OilCellState EMPTY_CELL = new OilCellState(Collections.emptyList());
+  private final List<OilParticle> oilParticles;
 
-  private final int oilParticles;
-
-  public OilCellState(int oilParticles) {
-    this.oilParticles = oilParticles;
+  public OilCellState(List<OilParticle> oilParticles) {
+    this.oilParticles = Collections.unmodifiableList(oilParticles);
   }
 
-  public int getOilParticles() {
+  public List<OilParticle> getOilParticles() {
     return oilParticles;
+  }
+
+  public double getMass() {
+    return oilParticles.stream()
+        .map(OilParticle::getMass)
+        .reduce(0.0, Double::sum);
   }
 
   public static OilCellState emptyCell() {

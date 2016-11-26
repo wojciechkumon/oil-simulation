@@ -5,7 +5,6 @@ import org.kris.oilsimulation.model.Model;
 import org.kris.oilsimulation.model.OilCellState;
 import org.kris.oilsimulation.model.automatonview.AutomatonView;
 import org.kris.oilsimulation.model.automatonview.AutomatonViewFactory;
-import org.kris.oilsimulation.model.dummy.BlackWhiteState;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -55,25 +54,15 @@ public class GridCanvasController implements Initializable {
   private void drawCells(GraphicsContext graphics, double cellSize) {
     for (int i = 0; i < currentView.getHeight(); i++) {
       for (int j = 0; j < currentView.getWidth(); j++) {
-//        drawBlackWhiteCell(graphics, cellSize, i, j);
         drawOilCell(graphics, cellSize, i, j);
       }
     }
   }
 
   private void drawOilCell(GraphicsContext graphics, double cellSize, int i, int j) {
-    double max = 100.0;
+    double max = 10_000;
     OilCellState oilCellState = (OilCellState) currentView.getState(i, j);
-    graphics.setFill(Color.gray(-((oilCellState.getOilParticles() / max) - 1)));
-    graphics.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
-  }
-
-  private void drawBlackWhiteCell(GraphicsContext graphics, double cellSize, int i, int j) {
-    if (currentView.getState(i, j) == BlackWhiteState.WHITE) {
-      graphics.setFill(Color.WHITE);
-    } else {
-      graphics.setFill(Color.BLACK);
-    }
+    graphics.setFill(Color.gray(-((oilCellState.getMass() / max) - 1)));
     graphics.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
   }
 

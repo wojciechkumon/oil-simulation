@@ -22,9 +22,14 @@ public class StartUpSettings {
   }
 
   public static StartUpSettings getDefault() {
-    return new StartUpSettings(new Size(50, 50),
-        new ExternalConditions(new Vector(3, 3), new Vector(-3, -3)),
-        new OilSimulationConstants(835 ,30));
+    Size size = new Size(150, 150);
+    Vector current = new Vector(3, 3);
+    Vector wind = new Vector(-3, -3);
+    ExternalConditions externalConditions = new ExternalConditions(current, wind);
+    OilSimulationConstants constants =
+        new OilSimulationConstants(50, 600, 835, 30, 50, 50, 3);
+
+    return new StartUpSettings(size, externalConditions, constants);
   }
 
   public ExternalConditions getExternalConditions() {
@@ -32,6 +37,6 @@ public class StartUpSettings {
   }
 
   public OilSimulationConstants getOilSimulationConstants() {
-    return null;
+    return constants;
   }
 }
