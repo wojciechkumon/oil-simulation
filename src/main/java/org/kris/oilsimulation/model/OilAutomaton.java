@@ -1,51 +1,57 @@
 package org.kris.oilsimulation.model;
 
-import org.kris.oilsimulation.model.automatonview.AutomatonView;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.Collection;
+public class OilAutomaton extends AbstractAutomaton {
+  private final ExternalConditions externalConditions;
+  private final OilSimulationConstants constants;
 
-import static org.kris.oilsimulation.model.BlackWhiteState.BLACK;
-import static org.kris.oilsimulation.model.BlackWhiteState.WHITE;
-
-public class OilAutomaton implements Automaton {
-  private final AutomatonGrid grid;
-  private final Size size;
-
-  public OilAutomaton(Size size) {
-    this.grid = new AutomatonGrid(size);
-    this.size = size;
+  private OilAutomaton(Size size, ExternalConditions externalConditions,
+                       OilSimulationConstants constants) {
+    super(size);
+    this.externalConditions = externalConditions;
+    this.constants = constants;
 
     for (int i = 0; i < size.getHeight(); i++) {
       for (int j = 0; j < size.getWidth(); j++) {
-        CellState newCellState = (i + j) % 2 == 0 ? BLACK : WHITE;
-        grid.set(i, j, newCellState);
+        grid.set(i, j, OilCellState.emptyCell());
       }
     }
+  }
+
+  public static OilAutomaton newAutomaton(Size size, ExternalConditions externalConditions,
+                                          OilSimulationConstants constants) {
+    OilAutomaton automaton = new OilAutomaton(size, externalConditions, constants);
+    int middleHeight = size.getHeight() / 2;
+    int middleWidth = size.getWidth() / 2;
+
+    automaton.grid.set(middleHeight - 1, middleWidth - 1, getStartingPartiles(40, constants));
+    automaton.grid.set(middleHeight - 1, middleWidth, getStartingPartiles(60, constants));
+    automaton.grid.set(middleHeight, middleWidth - 1, getStartingPartiles(100, constants));
+    automaton.grid.set(middleHeight, middleWidth, getStartingPartiles(200, constants));
+    return automaton;
+  }
+
+  private static OilCellState getStartingPartiles(int amount, OilSimulationConstants constants) {
+    List<OilParticle> particles = new ArrayList<>(amount);
+    for (int i = 0; i < amount; i++) {
+      particles.add(constants.getStartingParticle());
+    }
+    return new OilCellState(particles);
   }
 
   @Override
   public Automaton nextState() {
-    OilAutomaton newAutomaton = new OilAutomaton(size);
-    for (int i = 0; i < size.getHeight(); i++) {
-      for (int j = 0; j < size.getWidth(); j++) {
-        CellState newCellState = grid.get(i, j) == WHITE ? BLACK : WHITE;
-        newAutomaton.grid.set(i, j, newCellState);
-      }
-    }
+    OilAutomaton newAutomaton = new OilAutomaton(size, externalConditions, constants);
+    runCalculators(newAutomaton);
     return newAutomaton;
   }
 
-  @Override
-  public void insertStructure(Collection<Cell> structure) {
-    structure.forEach(cell -> {
-      CellCoords coords = cell.getCoords();
-      grid.set(coords.getRow(), coords.getCol(), cell.getState());
-    });
-  }
+  private void runCalculators(OilAutomaton newAutomaton) {
+    SpredingCalculator.apply(grid, newAutomaton.grid);
 
-  @Override
-  public AutomatonView getAutomatonView() {
-    return grid.getAutomatonView();
+    AdvectionCalculator.apply(grid, newAutomaton.grid, externalConditions);
   }
 
 }
