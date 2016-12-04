@@ -18,6 +18,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class GridCanvasController implements Initializable {
+  private static final int BLUE_R = 67;
+  private static final int BLUE_G = 183;
+  private static final int BLUE_B = 222;
   private AutomatonView currentView;
 
   @FXML
@@ -60,10 +63,16 @@ public class GridCanvasController implements Initializable {
   }
 
   private void drawOilCell(GraphicsContext graphics, double cellSize, int i, int j) {
-    double max = 10_000;
-    OilCellState oilCellState = (OilCellState) currentView.getState(i, j);
-    graphics.setFill(Color.gray(-((oilCellState.getMass() / max) - 1)));
+    double max = 7_000;
+    graphics.setFill(calculateCellColor(max, (OilCellState) currentView.getState(i, j)));
     graphics.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+  }
+
+  private Color calculateCellColor(double max, OilCellState oilCellState) {
+    double cellMass = oilCellState.getMass();
+    double mass = cellMass < max ? cellMass : max;
+    double cleanPercent = 1 - (mass / max);
+    return Color.rgb((int) (BLUE_R * cleanPercent), (int) (BLUE_G * cleanPercent), (int) (BLUE_B * cleanPercent));
   }
 
   private void drawGrid(GraphicsContext graphics, double cellSize) {

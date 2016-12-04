@@ -22,7 +22,7 @@ public class StartUpSettings {
   }
 
   public static StartUpSettings getDefault() {
-    Size size = new Size(150, 150);
+    Size size = new Size(20, 20);
     Vector current = new Vector(3, 3);
     Vector wind = new Vector(-3, -3);
     ExternalConditions externalConditions = new ExternalConditions(current, wind);

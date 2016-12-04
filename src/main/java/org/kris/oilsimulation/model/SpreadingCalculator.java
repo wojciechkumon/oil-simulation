@@ -1,50 +1,143 @@
 package org.kris.oilsimulation.model;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+
 import static org.kris.oilsimulation.model.CellCoords.newCellCoords;
 
 public class SpreadingCalculator {
+  private static final double GRAVITY = 9.80665;
+  private final Random random;
 
-  public static void apply(AutomatonGrid oldAutomatonGrid, AutomatonGrid newAutomatonGrid) {
-    AutomatonGrid tmpGrid = new AutomatonGrid(oldAutomatonGrid.getSize());
-    oldAutomatonGrid.copyTo(tmpGrid);
-
-    firstHorizontalSpreading(oldAutomatonGrid, tmpGrid);
-    secondHorizontalSpreading(tmpGrid, newAutomatonGrid);
-    firstVerticalSpreading(newAutomatonGrid, tmpGrid);
-    secondVerticalSpreading(tmpGrid, newAutomatonGrid);
+  public SpreadingCalculator(Random random) {
+    this.random = random;
   }
 
-  private static void firstHorizontalSpreading(AutomatonGrid oldAutomatonGrid,
-                                               AutomatonGrid newAutomatonGrid) {
-    Size size = oldAutomatonGrid.getSize();
+  public void apply(AutomatonGrid automatonGrid, OilSimulationConstants constants) {
+    firstHorizontalSpreading(automatonGrid, constants);
+    secondHorizontalSpreading(automatonGrid, constants);
+    firstVerticalSpreading(automatonGrid, constants);
+    secondVerticalSpreading(automatonGrid, constants);
+  }
+
+  private void firstHorizontalSpreading(AutomatonGrid grid,
+                                        OilSimulationConstants constants) {
+    Size size = grid.getSize();
     for (int i = 0; i < size.getHeight(); i++) {
       for (int j = 2; j < size.getWidth(); j += 2) {
-        applySpreading((OilCellState) oldAutomatonGrid.get(i, j - 1),
-            (OilCellState) oldAutomatonGrid.get(i, j),
-            newAutomatonGrid, newCellCoords(i, j - 1), newCellCoords(i, j));
+        applySpreading((OilCellState) grid.get(i, j - 1),
+            (OilCellState) grid.get(i, j),
+            grid, newCellCoords(i, j - 1), newCellCoords(i, j), constants);
       }
     }
   }
 
-  private static void applySpreading(OilCellState first, OilCellState second,
-                                     AutomatonGrid newAutomatonGrid,
-                                     CellCoords firstCoords, CellCoords secondCoords) {
-
+  private void secondHorizontalSpreading(AutomatonGrid grid,
+                                         OilSimulationConstants constants) {
+    Size size = grid.getSize();
+    for (int i = 0; i < size.getHeight(); i++) {
+      for (int j = 1; j < size.getWidth(); j += 2) {
+        applySpreading((OilCellState) grid.get(i, j - 1),
+            (OilCellState) grid.get(i, j),
+            grid, newCellCoords(i, j - 1), newCellCoords(i, j), constants);
+      }
+    }
   }
 
-
-  private static void secondHorizontalSpreading(AutomatonGrid oldAutomatonGrid,
-                                                AutomatonGrid newAutomatonGrid) {
-
+  private void firstVerticalSpreading(AutomatonGrid grid,
+                                      OilSimulationConstants constants) {
+    Size size = grid.getSize();
+    for (int j = 0; j < size.getWidth(); j++) {
+      for (int i = 2; i < size.getWidth(); i += 2) {
+        applySpreading((OilCellState) grid.get(i - 1, j),
+            (OilCellState) grid.get(i, j),
+            grid, newCellCoords(i - 1, j), newCellCoords(i, j), constants);
+      }
+    }
   }
 
-  private static void firstVerticalSpreading(AutomatonGrid oldAutomatonGrid,
-                                             AutomatonGrid newAutomatonGrid) {
-
+  private void secondVerticalSpreading(AutomatonGrid grid,
+                                       OilSimulationConstants constants) {
+    Size size = grid.getSize();
+    for (int j = 0; j < size.getWidth(); j++) {
+      for (int i = 1; i < size.getWidth(); i += 2) {
+        applySpreading((OilCellState) grid.get(i - 1, j),
+            (OilCellState) grid.get(i, j),
+            grid, newCellCoords(i - 1, j), newCellCoords(i, j), constants);
+      }
+    }
   }
 
-  private static void secondVerticalSpreading(AutomatonGrid oldAutomatonGrid,
-                                              AutomatonGrid newAutomatonGrid) {
-
+  private void applySpreading(OilCellState first, OilCellState second,
+                              AutomatonGrid grid,
+                              CellCoords firstCoords, CellCoords secondCoords,
+                              OilSimulationConstants constants) {
+    double massChange = calculateMassChange(first, second, constants);
+    if (massChange > 0) {
+      moveMass(massChange, second, first, grid, secondCoords, firstCoords);
+    } else if (massChange < 0) {
+      moveMass(massChange, first, second, grid, firstCoords, secondCoords);
+    }
   }
+
+  private double calculateMassChange(OilCellState first, OilCellState second,
+                                     OilSimulationConstants constants) {
+    double firstMass = first.getMass();
+    double secondMass = second.getMass();
+    double timeStep = constants.getTimeStep();
+    double cellLengthSquared = constants.getCellSize() * constants.getCellSize();
+    double coefficient = calculateCoefficient(constants, first, second);
+    return ((secondMass - firstMass) / 2) *
+        (1 - Math.exp(-2 * timeStep * coefficient / cellLengthSquared));
+  }
+
+  private double calculateCoefficient(OilSimulationConstants constants, OilCellState first,
+                                      OilCellState second) {
+    double propagationFactorSquared = constants.getPropagationFactor()
+        * constants.getPropagationFactor();
+    double timeStep = constants.getTimeStep();
+    double oilVolumeSquared = calculateOilVolumeSquared(first, second);
+    double density = constants.getDensity(); // TODO check
+    double viscosity = 15.0;
+    return (0.48 / propagationFactorSquared) * Math.pow(timeStep, -0.5)
+        * Math.pow(oilVolumeSquared * GRAVITY * density / viscosity, 1.0 / 3);
+  }
+
+  private static double calculateOilVolumeSquared(OilCellState first, OilCellState second) {
+    double volume = first.getVolume() + second.getVolume();
+    return volume * volume;
+  }
+
+  private void moveMass(double massChange, OilCellState source, OilCellState target,
+                        AutomatonGrid grid, CellCoords sourceCoords, CellCoords targetCoords) {
+    double r = Math.abs(massChange) / source.getMass();
+
+    List<OilParticle> sourceParticles = new ArrayList<>(source.getOilParticles());
+    List<OilParticle> targetParticles = new ArrayList<>(target.getOilParticles());
+
+    moveParticles(source, grid, sourceCoords, targetCoords, r, sourceParticles, targetParticles);
+  }
+
+  private void moveParticles(OilCellState source, AutomatonGrid grid,
+                             CellCoords sourceCoords, CellCoords targetCoords, double r,
+                             List<OilParticle> sourceParticles, List<OilParticle> targetParticles) {
+    Iterator<OilParticle> iterator = sourceParticles.iterator();
+
+    while (iterator.hasNext()) {
+      OilParticle oilParticle = iterator.next();
+      double randomValue = random.nextDouble();
+      if (randomValue < r) {
+        iterator.remove();
+        targetParticles.add(oilParticle);
+      }
+    }
+
+    if (source.getOilParticles().size() != sourceParticles.size()) {
+      grid.set(sourceCoords.getRow(), sourceCoords.getCol(), new OilCellState(sourceParticles));
+      grid.set(targetCoords.getRow(), targetCoords.getCol(), new OilCellState(targetParticles));
+    }
+  }
+
 }

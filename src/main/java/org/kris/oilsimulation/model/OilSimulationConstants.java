@@ -22,6 +22,14 @@ public class OilSimulationConstants {
         particleMass / density, evaporationRate);
   }
 
+  public double getCellSize() {
+    return cellSize;
+  }
+
+  public double getTimeStep() {
+    return timeStep;
+  }
+
   public double getDensity() {
     return density;
   }
@@ -37,4 +45,5 @@ public class OilSimulationConstants {
   public double getPropagationFactor() {
     return propagationFactor;
   }
+
 }

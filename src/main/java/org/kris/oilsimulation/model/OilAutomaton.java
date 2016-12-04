@@ -2,16 +2,19 @@ package org.kris.oilsimulation.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class OilAutomaton extends AbstractAutomaton {
   private final ExternalConditions externalConditions;
   private final OilSimulationConstants constants;
+  private final Calculators calculators;
 
   private OilAutomaton(Size size, ExternalConditions externalConditions,
-                       OilSimulationConstants constants) {
+                       OilSimulationConstants constants, Calculators calculators) {
     super(size);
     this.externalConditions = externalConditions;
     this.constants = constants;
+    this.calculators = calculators;
 
     for (int i = 0; i < size.getHeight(); i++) {
       for (int j = 0; j < size.getWidth(); j++) {
@@ -22,7 +25,9 @@ public class OilAutomaton extends AbstractAutomaton {
 
   public static OilAutomaton newAutomaton(Size size, ExternalConditions externalConditions,
                                           OilSimulationConstants constants) {
-    OilAutomaton automaton = new OilAutomaton(size, externalConditions, constants);
+    Random random = new Random();
+    Calculators calculators = new Calculators(new SpreadingCalculator(random), new AdvectionCalculator(random));
+    OilAutomaton automaton = new OilAutomaton(size, externalConditions, constants, calculators);
     int middleHeight = size.getHeight() / 2;
     int middleWidth = size.getWidth() / 2;
 
@@ -43,15 +48,19 @@ public class OilAutomaton extends AbstractAutomaton {
 
   @Override
   public Automaton nextState() {
-    OilAutomaton newAutomaton = new OilAutomaton(size, externalConditions, constants);
+    OilAutomaton newAutomaton = new OilAutomaton(size, externalConditions, constants, calculators);
     runCalculators(newAutomaton);
     return newAutomaton;
   }
 
   private void runCalculators(OilAutomaton newAutomaton) {
-    SpreadingCalculator.apply(grid, newAutomaton.grid);
+    AutomatonGrid tmpGrid = new AutomatonGrid(size);
+    grid.copyTo(tmpGrid);
 
-//    AdvectionCalculator.apply(grid, newAutomaton.grid, externalConditions);
+    calculators.getSpreadingCalculator().apply(tmpGrid, constants);
+
+    calculators.getAdvectionCalculator().apply(tmpGrid, newAutomaton.grid,
+        externalConditions, constants.getCellSize());
   }
 
 }

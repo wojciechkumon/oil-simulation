@@ -21,6 +21,12 @@ public class OilCellState implements CellState {
         .reduce(0.0, Double::sum);
   }
 
+  public double getVolume() {
+    return oilParticles.stream()
+        .map(OilParticle::getVolume)
+        .reduce(0.0, Double::sum);
+  }
+
   public static OilCellState emptyCell() {
     return EMPTY_CELL;
   }
