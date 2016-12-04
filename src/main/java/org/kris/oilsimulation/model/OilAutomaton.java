@@ -26,14 +26,14 @@ public class OilAutomaton extends AbstractAutomaton {
     int middleHeight = size.getHeight() / 2;
     int middleWidth = size.getWidth() / 2;
 
-    automaton.grid.set(middleHeight - 1, middleWidth - 1, getStartingPartiles(40, constants));
-    automaton.grid.set(middleHeight - 1, middleWidth, getStartingPartiles(60, constants));
-    automaton.grid.set(middleHeight, middleWidth - 1, getStartingPartiles(100, constants));
-    automaton.grid.set(middleHeight, middleWidth, getStartingPartiles(200, constants));
+    automaton.grid.set(middleHeight - 1, middleWidth - 1, getStartingParticles(40, constants));
+    automaton.grid.set(middleHeight - 1, middleWidth, getStartingParticles(60, constants));
+    automaton.grid.set(middleHeight, middleWidth - 1, getStartingParticles(100, constants));
+    automaton.grid.set(middleHeight, middleWidth, getStartingParticles(200, constants));
     return automaton;
   }
 
-  private static OilCellState getStartingPartiles(int amount, OilSimulationConstants constants) {
+  private static OilCellState getStartingParticles(int amount, OilSimulationConstants constants) {
     List<OilParticle> particles = new ArrayList<>(amount);
     for (int i = 0; i < amount; i++) {
       particles.add(constants.getStartingParticle());
@@ -49,9 +49,9 @@ public class OilAutomaton extends AbstractAutomaton {
   }
 
   private void runCalculators(OilAutomaton newAutomaton) {
-    SpredingCalculator.apply(grid, newAutomaton.grid);
+    SpreadingCalculator.apply(grid, newAutomaton.grid);
 
-    AdvectionCalculator.apply(grid, newAutomaton.grid, externalConditions);
+//    AdvectionCalculator.apply(grid, newAutomaton.grid, externalConditions);
   }
 
 }
