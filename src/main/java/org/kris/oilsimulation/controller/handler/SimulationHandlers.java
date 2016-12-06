@@ -27,4 +27,9 @@ public class SimulationHandlers {
     afterStepHandlers.forEach(Handler::run);
   }
 
+  public void clear() {
+    onStartHandlers.forEach(Handler::clear);
+    onStopHandlers.forEach(Handler::clear);
+    afterStepHandlers.forEach(Handler::clear);
+  }
 }

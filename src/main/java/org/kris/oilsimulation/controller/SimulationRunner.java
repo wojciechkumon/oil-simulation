@@ -78,6 +78,7 @@ public class SimulationRunner {
     if (isRunning()) {
       stop();
     }
+    handlers.clear();
 
     StartUpSettings startUpSettings = StartUpSettings.getDefault();
     model.setAutomaton(OilAutomaton.newAutomaton(

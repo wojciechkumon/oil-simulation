@@ -14,11 +14,20 @@ public class SimulationTimeLogger {
   }
 
   public Handler onStopHandler() {
-    return () -> {
-      long lastSimulationTime = System.currentTimeMillis() - startMillis;
-      totalTime += lastSimulationTime;
-      LOG.info("Last simulation time: {}", lastSimulationTime);
-      LOG.info("Total simulation time: {}", totalTime);
+    return new Handler() {
+      @Override
+      public void run() {
+        long lastSimulationTime = System.currentTimeMillis() - startMillis;
+        totalTime += lastSimulationTime;
+        LOG.info("Last simulation time: {}", lastSimulationTime);
+        LOG.info("Total simulation time: {}", totalTime);
+      }
+
+      @Override
+      public void clear() {
+        startMillis = 0;
+        totalTime = 0;
+      }
     };
   }
 

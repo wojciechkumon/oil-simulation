@@ -57,7 +57,7 @@ public class AutomatonStartController {
         singletonList(new IterationCounter(iterations, resources).afterStepHandler()));
   }
 
-  public void clear(ActionEvent actionEvent) {
+  public void clear() {
     simulationRunner.clear();
   }
 }

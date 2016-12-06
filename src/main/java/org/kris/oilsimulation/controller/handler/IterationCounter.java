@@ -17,10 +17,22 @@ public class IterationCounter {
   }
 
   public Handler afterStepHandler() {
-    return () ->
-        Platform.runLater(() ->
-            iterationsLabel.setText(
-                resources.getString("iteration") + " " + iterationCounter.incrementAndGet()));
+    return new Handler() {
+      @Override
+      public void run() {
+        Platform.runLater(() -> setIterationText(iterationCounter.incrementAndGet()));
+      }
+
+      @Override
+      public void clear() {
+        iterationCounter.set(0);
+        Platform.runLater(() -> setIterationText(0));
+      }
+    };
+  }
+
+  private void setIterationText(int iteration) {
+    iterationsLabel.setText(resources.getString("iteration") + " " + iteration);
   }
 
 }
