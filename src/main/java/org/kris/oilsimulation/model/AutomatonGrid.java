@@ -34,9 +34,7 @@ public class AutomatonGrid {
       throw new IllegalArgumentException("Size doesn't match: " + size + " " + newGrid.size);
     }
     for (int i = 0; i < size.getHeight(); i++) {
-      for (int j = 0; j < size.getWidth(); j++) {
-        newGrid.grid[i][j] = grid[i][j];
-      }
+      System.arraycopy(grid[i], 0, newGrid.grid[i], 0, size.getWidth());
     }
   }
 }

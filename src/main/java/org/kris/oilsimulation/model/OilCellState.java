@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class OilCellState implements CellState {
-  private static OilCellState EMPTY_CELL = new OilCellState(Collections.emptyList());
+  private static final OilCellState EMPTY_CELL = new OilCellState(Collections.emptyList());
   private final List<OilParticle> oilParticles;
 
   public OilCellState(List<OilParticle> oilParticles) {
