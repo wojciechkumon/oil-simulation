@@ -1,11 +1,10 @@
 package org.kris.oilsimulation.controller.handler;
 
-import org.kris.oilsimulation.controller.AutomatonStartController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SimulationTimeLogger {
-  private static final Logger LOG = LoggerFactory.getLogger(AutomatonStartController.class);
+  private static final Logger LOG = LoggerFactory.getLogger(SimulationTimeLogger.class);
 
   private volatile long totalTime = 0;
   private volatile long startMillis;

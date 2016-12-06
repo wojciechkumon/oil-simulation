@@ -2,7 +2,10 @@ package org.kris.oilsimulation.controller;
 
 import org.kris.oilsimulation.controller.handler.SimulationHandlers;
 import org.kris.oilsimulation.model.Model;
+import org.kris.oilsimulation.model.OilAutomaton;
 import org.kris.oilsimulation.util.ExecutorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -11,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 import javafx.scene.control.ToggleGroup;
 
 public class SimulationRunner {
+  private static final Logger LOG = LoggerFactory.getLogger(SimulationRunner.class);
+
   private final ScheduledExecutorService scheduler;
   private final Model model;
   private final ToggleGroup iterationDelayMillis;
@@ -66,6 +71,20 @@ public class SimulationRunner {
   private void runSingleStep() {
     model.setAutomaton(model.getAutomaton().nextState());
     handlers.fireAfterStepHandlers();
+  }
+
+  public void clear() {
+    LOG.info("Clear button pressed");
+    if (isRunning()) {
+      stop();
+    }
+
+    StartUpSettings startUpSettings = StartUpSettings.getDefault();
+    model.setAutomaton(OilAutomaton.newAutomaton(
+        startUpSettings.getSize(),
+        startUpSettings.getExternalConditions(),
+        startUpSettings.getOilSimulationConstants(),
+        startUpSettings.getInitialCellStates()));
   }
 
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <GridPane xmlns:fx="http://javafx.com/fxml"
@@ -14,8 +15,8 @@
     <fx:include fx:id="gridCanvas" source="gridCanvas.fxml"/>
     <fx:include fx:id="menu" source="menu.fxml"/>
 
-    <!--<stylesheets>-->
-    <!--<URL value="@style.css"/>-->
-    <!--</stylesheets>-->
+    <stylesheets>
+        <URL value="@../css/style.css"/>
+    </stylesheets>
 
 </GridPane>

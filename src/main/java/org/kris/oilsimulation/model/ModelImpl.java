@@ -1,7 +1,6 @@
 package org.kris.oilsimulation.model;
 
 import org.kris.oilsimulation.controller.StartUpSettings;
-import org.kris.oilsimulation.model.dummy.DummyAutomaton;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -34,9 +33,11 @@ public class ModelImpl implements Model {
   @Override
   public void init() {
     automatonProperty.set(
-        OilAutomaton.newAutomaton(startUpSettings.getSize(),
+        OilAutomaton.newAutomaton(
+            startUpSettings.getSize(),
             startUpSettings.getExternalConditions(),
-            startUpSettings.getOilSimulationConstants()));
+            startUpSettings.getOilSimulationConstants(),
+            startUpSettings.getInitialCellStates()));
   }
 
 }

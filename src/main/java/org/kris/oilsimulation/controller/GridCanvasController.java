@@ -21,6 +21,8 @@ public class GridCanvasController implements Initializable {
   private static final int BLUE_R = 67;
   private static final int BLUE_G = 183;
   private static final int BLUE_B = 222;
+  private static final Color BACKGROUND_COLOR = Color.rgb(240, 240, 240);
+
   private AutomatonView currentView;
 
   @FXML
@@ -50,7 +52,7 @@ public class GridCanvasController implements Initializable {
   }
 
   private void clearCanvas(GraphicsContext graphics) {
-    graphics.setFill(Color.WHITE);
+    graphics.setFill(BACKGROUND_COLOR);
     graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
   }
 

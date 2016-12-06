@@ -31,8 +31,7 @@ public class AdvectionCalculator {
   }
 
   private void setNewCellState(AutomatonGrid oldAutomatonGrid, AutomatonGrid newAutomatonGrid,
-                               double horizontal, double vertical,
-                               int i, int j) {
+                               double horizontal, double vertical, int i, int j) {
     OilCellState source = ((OilCellState) oldAutomatonGrid.get(i, j));
     if (source.getOilParticles().isEmpty()) {
       return;
@@ -65,11 +64,11 @@ public class AdvectionCalculator {
 
   private void addToNewGrid(AutomatonGrid oldAutomatonGrid, AutomatonGrid newAutomatonGrid,
                             int i, int j, int newI, int newJ) {
-    OilCellState oilCellState = (OilCellState) newAutomatonGrid.get(i, j);
+    OilCellState oilCellState = (OilCellState) newAutomatonGrid.get(newI, newJ);
     if (oilCellState.getOilParticles().isEmpty()) {
       newAutomatonGrid.set(newI, newJ, oldAutomatonGrid.get(i, j));
     } else {
-      List<OilParticle> oldGridParticles = ((OilCellState) oldAutomatonGrid.get(i, j)).getOilParticles();
+      List<OilParticle> oldGridParticles = ((OilCellState) newAutomatonGrid.get(i, j)).getOilParticles();
       List<OilParticle> totalParticles = new ArrayList<>(oilCellState.getOilParticles());
       totalParticles.addAll(oldGridParticles);
       newAutomatonGrid.set(newI, newJ, new OilCellState(totalParticles));

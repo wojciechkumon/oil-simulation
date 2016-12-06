@@ -8,6 +8,7 @@ import org.kris.oilsimulation.model.Model;
 
 import java.util.ResourceBundle;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,6 +18,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 public class AutomatonStartController {
+
   private SimulationRunner simulationRunner;
 
   @FXML
@@ -25,6 +27,8 @@ public class AutomatonStartController {
   private ToggleGroup iterationDelayMillis;
   @FXML
   private Button startButton;
+  @FXML
+  private Button clearButton;
   @FXML
   private ResourceBundle resources;
 
@@ -38,7 +42,8 @@ public class AutomatonStartController {
 
   private void createSimulationRunner(Model model) {
     SimulationTimeLogger logger = new SimulationTimeLogger();
-    ViewRefresher viewRefresher = new ViewRefresher(startButton, iterationDelayMillis, resources);
+    ViewRefresher viewRefresher =
+        new ViewRefresher(startButton, clearButton, iterationDelayMillis, resources);
     SimulationHandlers handlers = createSimulationHandlers(resources, logger, viewRefresher);
     this.simulationRunner = new SimulationRunner(model, iterationDelayMillis, handlers);
   }
@@ -52,4 +57,7 @@ public class AutomatonStartController {
         singletonList(new IterationCounter(iterations, resources).afterStepHandler()));
   }
 
+  public void clear(ActionEvent actionEvent) {
+    simulationRunner.clear();
+  }
 }

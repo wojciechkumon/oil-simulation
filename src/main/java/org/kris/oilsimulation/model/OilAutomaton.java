@@ -1,7 +1,7 @@
 package org.kris.oilsimulation.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Random;
 
 public class OilAutomaton extends AbstractAutomaton {
@@ -25,25 +25,21 @@ public class OilAutomaton extends AbstractAutomaton {
 
   public static OilAutomaton newAutomaton(Size size, ExternalConditions externalConditions,
                                           OilSimulationConstants constants) {
+    return newAutomaton(size, externalConditions, constants, Collections.emptyMap());
+  }
+
+  public static OilAutomaton newAutomaton(Size size, ExternalConditions externalConditions,
+                                          OilSimulationConstants constants,
+                                          Map<CellCoords, CellState> initialStates) {
     Random random = new Random();
     Calculators calculators = new Calculators(new SpreadingCalculator(random), new AdvectionCalculator(random));
     OilAutomaton automaton = new OilAutomaton(size, externalConditions, constants, calculators);
-    int middleHeight = size.getHeight() / 2;
-    int middleWidth = size.getWidth() / 2;
 
-    automaton.grid.set(middleHeight - 1, middleWidth - 1, getStartingParticles(40, constants));
-    automaton.grid.set(middleHeight - 1, middleWidth, getStartingParticles(60, constants));
-    automaton.grid.set(middleHeight, middleWidth - 1, getStartingParticles(100, constants));
-    automaton.grid.set(middleHeight, middleWidth, getStartingParticles(200, constants));
+    initialStates.entrySet().forEach(
+        entry -> automaton.grid.set(entry.getKey().getRow(), entry.getKey().getCol(), entry.getValue())
+    );
+
     return automaton;
-  }
-
-  private static OilCellState getStartingParticles(int amount, OilSimulationConstants constants) {
-    List<OilParticle> particles = new ArrayList<>(amount);
-    for (int i = 0; i < amount; i++) {
-      particles.add(constants.getStartingParticle());
-    }
-    return new OilCellState(particles);
   }
 
   @Override

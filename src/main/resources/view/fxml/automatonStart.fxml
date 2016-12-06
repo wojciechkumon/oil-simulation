@@ -40,4 +40,8 @@
         <Button fx:id="startButton" text="%start" onAction="#startOrStopClicked"/>
     </HBox>
 
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="clearButton" text="%clear" onAction="#clear"/>
+    </HBox>
+
 </VBox>
