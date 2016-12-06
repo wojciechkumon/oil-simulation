@@ -37,7 +37,7 @@ public class ModelImpl implements Model {
             startUpSettings.getSize(),
             startUpSettings.getExternalConditions(),
             startUpSettings.getOilSimulationConstants(),
-            startUpSettings.getInitialCellStates()));
+            startUpSettings.getInitialStates()));
   }
 
 }

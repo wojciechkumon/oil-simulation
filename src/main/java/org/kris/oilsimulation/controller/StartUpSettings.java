@@ -3,9 +3,12 @@ package org.kris.oilsimulation.controller;
 import org.kris.oilsimulation.model.CellCoords;
 import org.kris.oilsimulation.model.CellState;
 import org.kris.oilsimulation.model.ExternalConditions;
+import org.kris.oilsimulation.model.InitialStates;
 import org.kris.oilsimulation.model.OilCellState;
 import org.kris.oilsimulation.model.OilParticle;
 import org.kris.oilsimulation.model.OilSimulationConstants;
+import org.kris.oilsimulation.model.OilSource;
+import org.kris.oilsimulation.model.OilSourceImpl;
 import org.kris.oilsimulation.model.Size;
 import org.kris.oilsimulation.model.Vector;
 
@@ -51,23 +54,41 @@ public class StartUpSettings {
     return constants;
   }
 
-  public Map<CellCoords, CellState> getInitialCellStates() {
+  public InitialStates getInitialStates() {
+    return new InitialStates(getInitialCellStates(), getInitialSources());
+  }
+
+  private Map<CellCoords, CellState> getInitialCellStates() {
     int middleHeight = size.getHeight() / 2;
     int middleWidth = size.getWidth() / 2;
     Map<CellCoords, CellState> initialStates = new HashMap<>();
-    initialStates.put(newCellCoords(middleHeight - 1, middleWidth - 1), getStartingParticles(140, constants));
-    initialStates.put(newCellCoords(middleHeight - 1, middleWidth), getStartingParticles(260, constants));
-    initialStates.put(newCellCoords(middleHeight, middleWidth - 1), getStartingParticles(400, constants));
-    initialStates.put(newCellCoords(middleHeight, middleWidth), getStartingParticles(2600, constants));
+    initialStates.put(newCellCoords(middleHeight - 1, middleWidth - 1), getStartingState(140, constants));
+    initialStates.put(newCellCoords(middleHeight - 1, middleWidth), getStartingState(260, constants));
+    initialStates.put(newCellCoords(middleHeight, middleWidth - 1), getStartingState(400, constants));
+    initialStates.put(newCellCoords(middleHeight, middleWidth), getStartingState(2600, constants));
 
     return initialStates;
   }
 
-  private OilCellState getStartingParticles(int amount, OilSimulationConstants constants) {
+  private OilCellState getStartingState(int amount, OilSimulationConstants constants) {
+    return new OilCellState(getParticles(amount, constants));
+  }
+
+  private List<OilParticle> getParticles(int amount, OilSimulationConstants constants) {
     List<OilParticle> particles = new ArrayList<>(amount);
     for (int i = 0; i < amount; i++) {
       particles.add(constants.getStartingParticle());
     }
-    return new OilCellState(particles);
+    return particles;
+  }
+
+  private Map<CellCoords, OilSource> getInitialSources() {
+    int middleHeight = size.getHeight() / 2;
+    int middleWidth = size.getWidth() / 2;
+    Map<CellCoords, OilSource> sources = new HashMap<>();
+    sources.put(newCellCoords(middleHeight, middleWidth),
+        new OilSourceImpl(getParticles(100_000, constants), 100));
+
+    return sources;
   }
 }

@@ -85,7 +85,7 @@ public class SimulationRunner {
         startUpSettings.getSize(),
         startUpSettings.getExternalConditions(),
         startUpSettings.getOilSimulationConstants(),
-        startUpSettings.getInitialCellStates()));
+        startUpSettings.getInitialStates()));
   }
 
 }

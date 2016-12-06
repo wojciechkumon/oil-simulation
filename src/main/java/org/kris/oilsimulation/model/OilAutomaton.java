@@ -1,6 +1,5 @@
 package org.kris.oilsimulation.model;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Random;
 
@@ -8,13 +7,16 @@ public class OilAutomaton extends AbstractAutomaton {
   private final ExternalConditions externalConditions;
   private final OilSimulationConstants constants;
   private final Calculators calculators;
+  private final Map<CellCoords, OilSource> sources;
 
   private OilAutomaton(Size size, ExternalConditions externalConditions,
-                       OilSimulationConstants constants, Calculators calculators) {
+                       OilSimulationConstants constants, Calculators calculators,
+                       Map<CellCoords, OilSource> sources) {
     super(size);
     this.externalConditions = externalConditions;
     this.constants = constants;
     this.calculators = calculators;
+    this.sources = sources;
 
     for (int i = 0; i < size.getHeight(); i++) {
       for (int j = 0; j < size.getWidth(); j++) {
@@ -25,18 +27,24 @@ public class OilAutomaton extends AbstractAutomaton {
 
   public static OilAutomaton newAutomaton(Size size, ExternalConditions externalConditions,
                                           OilSimulationConstants constants) {
-    return newAutomaton(size, externalConditions, constants, Collections.emptyMap());
+    return newAutomaton(size, externalConditions, constants, InitialStates.emptyStates());
   }
 
   public static OilAutomaton newAutomaton(Size size, ExternalConditions externalConditions,
                                           OilSimulationConstants constants,
-                                          Map<CellCoords, CellState> initialStates) {
+                                          InitialStates initialStates) {
     Random random = new Random();
-    Calculators calculators = new Calculators(new SpreadingCalculator(random), new AdvectionCalculator(random));
-    OilAutomaton automaton = new OilAutomaton(size, externalConditions, constants, calculators);
+    Calculators calculators = new Calculators(new SpreadingCalculator(random),
+        new AdvectionCalculator(random), new OilSourcesCalculator());
+    OilAutomaton automaton = new OilAutomaton(size, externalConditions,
+        constants, calculators, initialStates.getInitialSources());
 
-    initialStates.entrySet().forEach(
-        entry -> automaton.grid.set(entry.getKey().getRow(), entry.getKey().getCol(), entry.getValue())
+    initialStates.getInitialCellStates().entrySet().forEach(
+        entry -> {
+          CellCoords coords = entry.getKey();
+          CellState state = entry.getValue();
+          automaton.grid.set(coords.getRow(), coords.getCol(), state);
+        }
     );
 
     return automaton;
@@ -44,12 +52,17 @@ public class OilAutomaton extends AbstractAutomaton {
 
   @Override
   public Automaton nextState() {
-    OilAutomaton newAutomaton = new OilAutomaton(size, externalConditions, constants, calculators);
-    runCalculators(newAutomaton);
+    OilAutomaton newAutomaton = new OilAutomaton(size, externalConditions,
+        constants, calculators, getSourcesNextState());
+    setNewAutomatonGridState(newAutomaton);
     return newAutomaton;
   }
 
-  private void runCalculators(OilAutomaton newAutomaton) {
+  private Map<CellCoords, OilSource> getSourcesNextState() {
+    return calculators.getOilSourcesCalculator().getSourcesNextState(sources);
+  }
+
+  private void setNewAutomatonGridState(OilAutomaton newAutomaton) {
     AutomatonGrid tmpGrid = new AutomatonGrid(size);
     grid.copyTo(tmpGrid);
 
@@ -57,6 +70,8 @@ public class OilAutomaton extends AbstractAutomaton {
 
     calculators.getAdvectionCalculator().apply(tmpGrid, newAutomaton.grid,
         externalConditions, constants.getCellSize());
+
+    calculators.getOilSourcesCalculator().apply(newAutomaton.grid, sources);
   }
 
 }
