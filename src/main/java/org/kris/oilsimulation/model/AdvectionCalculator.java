@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 public class AdvectionCalculator {
+  private static final double CURRENT_COEFFICIENT = 1.1;
+  private static final double WIND_COEFFICIENT = 0.3;
   private final Random random;
 
   public AdvectionCalculator(Random random) {
@@ -25,8 +27,8 @@ public class AdvectionCalculator {
   }
 
   private Vector calculateResultantVector(ExternalConditions externalConditions) {
-    Vector current = externalConditions.getCurrent().scalarMul(1.1);
-    Vector wind = externalConditions.getWind().scalarMul(0.3);
+    Vector current = externalConditions.getCurrent().scalarMul(CURRENT_COEFFICIENT);
+    Vector wind = externalConditions.getWind().scalarMul(WIND_COEFFICIENT);
     return current.add(wind);
   }
 
