@@ -37,8 +37,8 @@ public class JavaFxApplication extends Application {
   private void initStage(Stage stage, GridPane root) {
     stage.setTitle("Oil simulation");
     stage.setScene(new Scene(root));
-    stage.setMinHeight(400);
-    stage.setMinWidth(600);
+    stage.setMinHeight(450);
+    stage.setMinWidth(700);
     stage.show();
   }
 

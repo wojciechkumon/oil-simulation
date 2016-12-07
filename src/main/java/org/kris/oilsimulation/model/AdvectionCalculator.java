@@ -68,7 +68,7 @@ public class AdvectionCalculator {
     if (oilCellState.getOilParticles().isEmpty()) {
       newAutomatonGrid.set(newI, newJ, oldAutomatonGrid.get(i, j));
     } else {
-      List<OilParticle> oldGridParticles = ((OilCellState) newAutomatonGrid.get(i, j)).getOilParticles();
+      List<OilParticle> oldGridParticles = ((OilCellState) oldAutomatonGrid.get(i, j)).getOilParticles();
       List<OilParticle> totalParticles = new ArrayList<>(oilCellState.getOilParticles());
       totalParticles.addAll(oldGridParticles);
       newAutomatonGrid.set(newI, newJ, new OilCellState(totalParticles));

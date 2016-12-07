@@ -11,23 +11,21 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import javafx.scene.control.ToggleGroup;
-
 public class SimulationRunner {
   private static final Logger LOG = LoggerFactory.getLogger(SimulationRunner.class);
 
   private final ScheduledExecutorService scheduler;
   private final Model model;
-  private final ToggleGroup iterationDelayMillis;
   private final SimulationHandlers handlers;
+  private final ViewData viewData;
 
   private ScheduledFuture<?> currentTask;
 
-  public SimulationRunner(Model model, ToggleGroup iterationDelayMillis,
+  public SimulationRunner(Model model, ViewData viewData,
                           SimulationHandlers handlers) {
+    this.viewData = viewData;
     this.scheduler = ExecutorFactory.createScheduledSingleThreadDaemonExecutor();
     this.model = model;
-    this.iterationDelayMillis = iterationDelayMillis;
     this.handlers = handlers;
     this.currentTask = new DummyScheduledFuture<>();
   }
@@ -41,9 +39,7 @@ public class SimulationRunner {
   }
 
   private int calculateDelayMillis() {
-    SimulationSpeed simulationSpeed =
-        (SimulationSpeed) iterationDelayMillis.getSelectedToggle().getUserData();
-    return simulationSpeed.getGetIterationDelayMillis();
+    return viewData.getIterationDelayMillis();
   }
 
   private boolean isRunning() {
@@ -69,7 +65,7 @@ public class SimulationRunner {
   }
 
   private void runSingleStep() {
-    model.setAutomaton(model.getAutomaton().nextState());
+    model.setAutomaton(model.getAutomaton().nextState(viewData.getOilAutomatonNextSettings()));
     handlers.fireAfterStepHandlers();
   }
 

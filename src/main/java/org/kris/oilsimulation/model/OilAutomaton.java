@@ -52,7 +52,17 @@ public class OilAutomaton extends AbstractAutomaton {
 
   @Override
   public Automaton nextState() {
-    OilAutomaton newAutomaton = new OilAutomaton(size, externalConditions,
+    return produceNextState(externalConditions);
+  }
+
+  @Override
+  public Automaton nextState(NextStateSettings stateSettings) {
+    OilAutomatonNextSettings settings = (OilAutomatonNextSettings) stateSettings;
+    return produceNextState(settings.getExternalConditions());
+  }
+
+  private Automaton produceNextState(ExternalConditions newExternalConditions) {
+    OilAutomaton newAutomaton = new OilAutomaton(size, newExternalConditions,
         constants, calculators, getSourcesNextState());
     setNewAutomatonGridState(newAutomaton);
     return newAutomaton;
@@ -72,6 +82,18 @@ public class OilAutomaton extends AbstractAutomaton {
         externalConditions, constants.getCellSize());
 
     calculators.getOilSourcesCalculator().apply(newAutomaton.grid, sources);
+  }
+
+  // to test in debugger
+  private int countParticles() {
+    int sum = 0;
+    for (int i = 0; i < size.getHeight(); i++) {
+      for (int j = 0; j < size.getWidth(); j++) {
+        OilCellState cellState = (OilCellState) grid.get(i, j);
+        sum += cellState.getOilParticles().size();
+      }
+    }
+    return sum;
   }
 
 }

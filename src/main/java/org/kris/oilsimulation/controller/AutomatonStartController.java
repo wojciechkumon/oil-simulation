@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleGroup;
 
 import static java.util.Arrays.asList;
@@ -29,6 +30,14 @@ public class AutomatonStartController {
   @FXML
   private Button clearButton;
   @FXML
+  private Slider currentSliderX;
+  @FXML
+  private Slider currentSliderY;
+  @FXML
+  private Slider windSliderX;
+  @FXML
+  private Slider windSliderY;
+  @FXML
   private ResourceBundle resources;
 
   public void startOrStopClicked() {
@@ -40,11 +49,14 @@ public class AutomatonStartController {
   }
 
   private void createSimulationRunner(Model model) {
+    WindCurrentSliders sliders =
+        new WindCurrentSliders(currentSliderX, currentSliderY, windSliderX, windSliderY);
+    ViewData viewData = new ViewData(iterationDelayMillis, sliders);
     SimulationTimeLogger logger = new SimulationTimeLogger();
     ViewRefresher viewRefresher =
         new ViewRefresher(startButton, clearButton, iterationDelayMillis, resources);
     SimulationHandlers handlers = createSimulationHandlers(resources, logger, viewRefresher);
-    this.simulationRunner = new SimulationRunner(model, iterationDelayMillis, handlers);
+    this.simulationRunner = new SimulationRunner(model, viewData, handlers);
   }
 
   private SimulationHandlers createSimulationHandlers(ResourceBundle resources,

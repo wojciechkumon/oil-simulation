@@ -8,6 +8,8 @@ public interface Automaton {
 
   Automaton nextState();
 
+  Automaton nextState(NextStateSettings stateSettings);
+
   void insertStructure(Collection<Cell> structure);
 
   AutomatonView getAutomatonView();

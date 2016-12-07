@@ -10,14 +10,14 @@ public enum SimulationSpeed {
   PER_SECOND_50(20),
   PER_SECOND_100(10);
 
-  private final int getIterationDelayMillis;
+  private final int iterationDelayMillis;
 
-  SimulationSpeed(int getIterationDelayMillis) {
-    this.getIterationDelayMillis = getIterationDelayMillis;
+  SimulationSpeed(int iterationDelayMillis) {
+    this.iterationDelayMillis = iterationDelayMillis;
   }
 
-  public int getGetIterationDelayMillis() {
-    return getIterationDelayMillis;
+  public int getIterationDelayMillis() {
+    return iterationDelayMillis;
   }
 
 }
