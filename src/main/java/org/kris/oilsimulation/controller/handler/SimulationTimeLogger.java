@@ -19,8 +19,8 @@ public class SimulationTimeLogger {
       public void run() {
         long lastSimulationTime = System.currentTimeMillis() - startMillis;
         totalTime += lastSimulationTime;
-        LOG.info("Last simulation time: {}", lastSimulationTime);
-        LOG.info("Total simulation time: {}", totalTime);
+        LOG.info("Last simulation time: {}ms", lastSimulationTime);
+        LOG.info("Total simulation time: {}ms", totalTime);
       }
 
       @Override
