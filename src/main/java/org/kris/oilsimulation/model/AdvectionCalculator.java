@@ -1,8 +1,12 @@
 package org.kris.oilsimulation.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+
+import static org.kris.oilsimulation.model.CellCoords.newCellCoords;
 
 public class AdvectionCalculator {
   private static final double CURRENT_COEFFICIENT = 1.1;
@@ -15,15 +19,23 @@ public class AdvectionCalculator {
 
   public void apply(AutomatonGrid oldAutomatonGrid, AutomatonGrid newAutomatonGrid,
                     ExternalConditions externalConditions, double cellSize) {
+    Map<CellCoords, List<OilParticle>> particlesMap =
+        createParticlesMap(oldAutomatonGrid, externalConditions, cellSize);
+    copyFromMapToGrid(particlesMap, newAutomatonGrid);
+  }
+
+  private Map<CellCoords, List<OilParticle>> createParticlesMap(AutomatonGrid oldAutomatonGrid, ExternalConditions externalConditions, double cellSize) {
     Size size = oldAutomatonGrid.getSize();
     Vector resultantVector = calculateResultantVector(externalConditions);
     double horizontal = resultantVector.getX() / cellSize;
     double vertical = resultantVector.getY() / cellSize;
+    Map<CellCoords, List<OilParticle>> particlesMap = new HashMap<>();
     for (int i = 0; i < size.getHeight(); i++) {
       for (int j = 0; j < size.getWidth(); j++) {
-        setNewCellState(oldAutomatonGrid, newAutomatonGrid, horizontal, vertical, i, j);
+        putParticlesToMap(oldAutomatonGrid, particlesMap, horizontal, vertical, i, j);
       }
     }
+    return particlesMap;
   }
 
   private Vector calculateResultantVector(ExternalConditions externalConditions) {
@@ -32,49 +44,76 @@ public class AdvectionCalculator {
     return current.add(wind);
   }
 
-  private void setNewCellState(AutomatonGrid oldAutomatonGrid, AutomatonGrid newAutomatonGrid,
-                               double horizontal, double vertical, int i, int j) {
+  private void putParticlesToMap(AutomatonGrid oldAutomatonGrid,
+                                 Map<CellCoords, List<OilParticle>> particlesMap,
+                                 double horizontal, double vertical, int i, int j) {
     OilCellState source = ((OilCellState) oldAutomatonGrid.get(i, j));
     if (source.getOilParticles().isEmpty()) {
       return;
     }
 
-    int newI = calculateNewPos(i, vertical);
-    int newJ = calculateNewPos(j, horizontal);
-    if (isInsideGrid(newI, newJ, newAutomatonGrid.getSize())) {
-      addToNewGrid(oldAutomatonGrid, newAutomatonGrid, i, j, newI, newJ);
-    }
+    CellCoords closerPos = newCellCoords(closerPos(i, vertical), closerPos(j, horizontal));
+    CellCoords furtherPos = newCellCoords(furtherPos(i, vertical), furtherPos(j, horizontal));
+    double verticalThreshold = getThreshold(vertical);
+    double horizontalThreshold = getThreshold(horizontal);
+
+    source.getOilParticles().forEach(particle -> {
+      int newRow = getNewIndex(verticalThreshold,
+          closerPos.getRow(), furtherPos.getRow());
+      int newCol = getNewIndex(horizontalThreshold,
+          closerPos.getCol(), furtherPos.getCol());
+      addToMap(particlesMap, newCellCoords(newRow, newCol), particle);
+    });
   }
 
-  private int calculateNewPos(int i, double distance) {
-    int roundedDistance = (int) distance;
-    double diff = distance - roundedDistance;
-
-    double absDiff = Math.abs(diff);
-    double randomValue = random.nextDouble();
-    if (randomValue < absDiff) {
-      return i + roundedDistance + (diff >= 0 ? 1 : -1);
+  private void addToMap(Map<CellCoords, List<OilParticle>> particlesMap,
+                        CellCoords coords, OilParticle newParticle) {
+    List<OilParticle> particles = particlesMap.get(coords);
+    if (particles != null) {
+      particles.add(newParticle);
+      return;
     }
+    particles = new ArrayList<>();
+    particles.add(newParticle);
+    particlesMap.put(coords, particles);
+  }
 
+  private int getNewIndex(double threshold, int closerIndex, int furtherIndex) {
+    if (random.nextDouble() < threshold) {
+      return furtherIndex;
+    }
+    return closerIndex;
+  }
+
+  private void copyFromMapToGrid(Map<CellCoords, List<OilParticle>> particlesMap,
+                                 AutomatonGrid newAutomatonGrid) {
+    particlesMap.entrySet()
+        .stream()
+        .filter(entry -> isInsideGrid(entry.getKey(), newAutomatonGrid.getSize()))
+        .forEach(entry -> {
+          CellCoords coords = entry.getKey();
+          newAutomatonGrid.set(coords.getRow(), coords.getCol(), new OilCellState(entry.getValue()));
+        });
+  }
+
+  private boolean isInsideGrid(CellCoords coords, Size size) {
+    return coords.getRow() >= 0 && coords.getRow() < size.getHeight()
+        && coords.getCol() >= 0 && coords.getCol() < size.getWidth();
+  }
+
+  private int closerPos(int i, double distance) {
+    int roundedDistance = (int) distance;
     return i + roundedDistance;
   }
 
-  private boolean isInsideGrid(int newI, int newJ, Size size) {
-    return newI >= 0 && newI < size.getHeight()
-        && newJ >= 0 && newJ < size.getWidth();
+  private int furtherPos(int i, double distance) {
+    int roundedDistance = (int) distance;
+    double diff = distance - roundedDistance;
+    return i + roundedDistance + (diff >= 0 ? 1 : -1);
   }
 
-  private void addToNewGrid(AutomatonGrid oldAutomatonGrid, AutomatonGrid newAutomatonGrid,
-                            int i, int j, int newI, int newJ) {
-    OilCellState oilCellState = (OilCellState) newAutomatonGrid.get(newI, newJ);
-    if (oilCellState.getOilParticles().isEmpty()) {
-      newAutomatonGrid.set(newI, newJ, oldAutomatonGrid.get(i, j));
-    } else {
-      List<OilParticle> oldGridParticles = ((OilCellState) oldAutomatonGrid.get(i, j)).getOilParticles();
-      List<OilParticle> totalParticles = new ArrayList<>(oilCellState.getOilParticles());
-      totalParticles.addAll(oldGridParticles);
-      newAutomatonGrid.set(newI, newJ, new OilCellState(totalParticles));
-    }
+  private double getThreshold(double distance) {
+    int roundedDistance = (int) distance;
+    return Math.abs(distance - roundedDistance);
   }
-
 }

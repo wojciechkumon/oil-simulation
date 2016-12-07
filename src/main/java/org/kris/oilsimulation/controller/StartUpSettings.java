@@ -37,8 +37,8 @@ public class StartUpSettings {
 
   public static StartUpSettings getDefault() {
     Size size = new Size(50, 50);
-    Vector current = new Vector(1.2, 1.2);
-    Vector wind = new Vector(-3, -3);
+    Vector current = new Vector(0, 0);
+    Vector wind = new Vector(0, 0);
     ExternalConditions externalConditions = new ExternalConditions(current, wind);
     OilSimulationConstants constants =
         new OilSimulationConstants(50, 600, 835, 30, 50, 50, 3);
