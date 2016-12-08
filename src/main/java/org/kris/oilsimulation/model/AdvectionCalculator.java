@@ -24,7 +24,9 @@ public class AdvectionCalculator {
     copyFromMapToGrid(particlesMap, newAutomatonGrid);
   }
 
-  private Map<CellCoords, List<OilParticle>> createParticlesMap(AutomatonGrid oldAutomatonGrid, ExternalConditions externalConditions, double cellSize) {
+  private Map<CellCoords, List<OilParticle>> createParticlesMap(AutomatonGrid oldAutomatonGrid,
+                                                                ExternalConditions externalConditions,
+                                                                double cellSize) {
     Size size = oldAutomatonGrid.getSize();
     Vector resultantVector = calculateResultantVector(externalConditions);
     double horizontal = resultantVector.getX() / cellSize;

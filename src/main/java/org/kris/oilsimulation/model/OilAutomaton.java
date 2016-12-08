@@ -84,7 +84,7 @@ public class OilAutomaton extends AbstractAutomaton {
     calculators.getOilSourcesCalculator().apply(newAutomaton.grid, sources);
   }
 
-  // to test in debugger
+  // TODO remove after implementation (to test in debugger)
   private int countParticles() {
     int sum = 0;
     for (int i = 0; i < size.getHeight(); i++) {

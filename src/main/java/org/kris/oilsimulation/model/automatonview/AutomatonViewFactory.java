@@ -12,11 +12,11 @@ public class AutomatonViewFactory {
   }
 
   public static AutomatonView getEmptyView() {
-    return Holder.emptyAutomatonView;
+    return Holder.EMPTY_AUTOMATON_VIEW;
   }
 
   private static class Holder {
-    private static final EmptyAutomatonView emptyAutomatonView = new EmptyAutomatonView();
+    private static final EmptyAutomatonView EMPTY_AUTOMATON_VIEW = new EmptyAutomatonView();
   }
 
 }

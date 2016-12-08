@@ -62,10 +62,7 @@ public class StartUpSettings {
     int middleHeight = size.getHeight() / 2;
     int middleWidth = size.getWidth() / 2;
     Map<CellCoords, CellState> initialStates = new HashMap<>();
-    initialStates.put(newCellCoords(middleHeight - 1, middleWidth - 1), getStartingState(140, constants));
-    initialStates.put(newCellCoords(middleHeight - 1, middleWidth), getStartingState(260, constants));
-    initialStates.put(newCellCoords(middleHeight, middleWidth - 1), getStartingState(400, constants));
-    initialStates.put(newCellCoords(middleHeight, middleWidth), getStartingState(2600, constants));
+    initialStates.put(newCellCoords(middleHeight, middleWidth), getStartingState(100, constants));
 
     return initialStates;
   }
@@ -87,7 +84,7 @@ public class StartUpSettings {
     int middleWidth = size.getWidth() / 2;
     Map<CellCoords, OilSource> sources = new HashMap<>();
     sources.put(newCellCoords(middleHeight, middleWidth),
-        new OilSourceImpl(getParticles(100_000, constants), 100));
+        new OilSourceImpl(getParticles(64_000, constants), 40));
 
     return sources;
   }
