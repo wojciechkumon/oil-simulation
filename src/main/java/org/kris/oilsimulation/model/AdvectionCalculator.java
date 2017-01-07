@@ -49,7 +49,7 @@ public class AdvectionCalculator {
   private void putParticlesToMap(AutomatonGrid oldAutomatonGrid,
                                  Map<CellCoords, List<OilParticle>> particlesMap,
                                  double horizontal, double vertical, int i, int j) {
-    CellState source = (oldAutomatonGrid.get(i, j));
+    CellState source = oldAutomatonGrid.get(i, j);
     if (source.getOilParticles().isEmpty()) {
       return;
     }

@@ -27,8 +27,7 @@ public class SpreadingCalculator {
     Size size = grid.getSize();
     for (int i = 0; i < size.getHeight(); i++) {
       for (int j = 2; j < size.getWidth(); j += 2) {
-        applySpreading(grid.get(i, j - 1),
-            grid.get(i, j),
+        applySpreading(grid.get(i, j - 1), grid.get(i, j),
             grid, newCellCoords(i, j - 1), newCellCoords(i, j), constants);
       }
     }
@@ -39,8 +38,7 @@ public class SpreadingCalculator {
     Size size = grid.getSize();
     for (int i = 0; i < size.getHeight(); i++) {
       for (int j = 1; j < size.getWidth(); j += 2) {
-        applySpreading(grid.get(i, j - 1),
-            grid.get(i, j),
+        applySpreading(grid.get(i, j - 1), grid.get(i, j),
             grid, newCellCoords(i, j - 1), newCellCoords(i, j), constants);
       }
     }
@@ -51,8 +49,7 @@ public class SpreadingCalculator {
     Size size = grid.getSize();
     for (int j = 0; j < size.getWidth(); j++) {
       for (int i = 2; i < size.getWidth(); i += 2) {
-        applySpreading(grid.get(i - 1, j),
-            grid.get(i, j),
+        applySpreading(grid.get(i - 1, j), grid.get(i, j),
             grid, newCellCoords(i - 1, j), newCellCoords(i, j), constants);
       }
     }
@@ -63,8 +60,7 @@ public class SpreadingCalculator {
     Size size = grid.getSize();
     for (int j = 0; j < size.getWidth(); j++) {
       for (int i = 1; i < size.getWidth(); i += 2) {
-        applySpreading(grid.get(i - 1, j),
-            grid.get(i, j),
+        applySpreading(grid.get(i - 1, j), grid.get(i, j),
             grid, newCellCoords(i - 1, j), newCellCoords(i, j), constants);
       }
     }

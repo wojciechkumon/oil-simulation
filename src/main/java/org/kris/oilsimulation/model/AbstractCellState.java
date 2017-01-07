@@ -22,7 +22,7 @@ public abstract class AbstractCellState implements CellState {
         .reduce(0.0, Double::sum);
   }
 
-
+  @Override
   public double getVolume() {
     return oilParticles.stream()
         .map(OilParticle::getVolume)
