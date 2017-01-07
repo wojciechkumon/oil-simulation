@@ -12,15 +12,15 @@ public class Calculators {
     this.oilSourcesCalculator = oilSourcesCalculator;
   }
 
-  public SpreadingCalculator getSpreadingCalculator() {
+  public SpreadingCalculator spreading() {
     return spreadingCalculator;
   }
 
-  public AdvectionCalculator getAdvectionCalculator() {
+  public AdvectionCalculator advection() {
     return advectionCalculator;
   }
 
-  public OilSourcesCalculator getOilSourcesCalculator() {
+  public OilSourcesCalculator oilSources() {
     return oilSourcesCalculator;
   }
 }

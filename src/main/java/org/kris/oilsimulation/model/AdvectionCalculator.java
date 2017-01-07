@@ -96,13 +96,13 @@ public class AdvectionCalculator {
         .forEach(entry -> {
           CellCoords coords = entry.getKey();
           CellState newCellState = getNewCellState(oldAutomatonGrid, entry, coords);
-          newAutomatonGrid.set(coords.getRow(), coords.getCol(), newCellState);
+          newAutomatonGrid.set(coords, newCellState);
         });
   }
 
   private CellState getNewCellState(AutomatonGrid oldAutomatonGrid,
                                     Map.Entry<CellCoords, List<OilParticle>> entry, CellCoords coords) {
-    CellState cellState = oldAutomatonGrid.get(coords.getRow(), coords.getCol());
+    CellState cellState = oldAutomatonGrid.get(coords);
     return cellState.newSameTypeState(entry.getValue());
   }
 

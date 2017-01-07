@@ -43,7 +43,7 @@ public class OilAutomaton extends AbstractAutomaton {
         entry -> {
           CellCoords coords = entry.getKey();
           CellState state = entry.getValue();
-          automaton.grid.set(coords.getRow(), coords.getCol(), state);
+          automaton.grid.set(coords, state);
         }
     );
 
@@ -69,7 +69,7 @@ public class OilAutomaton extends AbstractAutomaton {
   }
 
   private Map<CellCoords, OilSource> getSourcesNextState() {
-    return calculators.getOilSourcesCalculator().getSourcesNextState(sources);
+    return calculators.oilSources().getSourcesNextState(sources);
   }
 
   private void setNewAutomatonGridState(OilAutomaton newAutomaton) {
@@ -77,12 +77,12 @@ public class OilAutomaton extends AbstractAutomaton {
     AutomatonGrid tmpGrid = new AutomatonGrid(size);
     grid.copyTo(tmpGrid);
 
-    calculators.getSpreadingCalculator().apply(tmpGrid, constants);
+    calculators.spreading().apply(tmpGrid, constants);
 
-    calculators.getAdvectionCalculator().apply(tmpGrid, newAutomaton.grid,
+    calculators.advection().apply(tmpGrid, newAutomaton.grid,
         externalConditions, constants.getCellSize());
 
-    calculators.getOilSourcesCalculator().apply(newAutomaton.grid, sources);
+    calculators.oilSources().apply(newAutomaton.grid, sources);
   }
 
   private void copyLandToNewAutomaton(OilAutomaton newAutomaton) {

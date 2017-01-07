@@ -30,13 +30,13 @@ public class OilSourcesCalculator {
   }
 
   private void addToGrid(AutomatonGrid grid, CellCoords coords, List<OilParticle> particles) {
-    CellState cellState = grid.get(coords.getRow(), coords.getCol());
+    CellState cellState = grid.get(coords);
     if (cellState.getOilParticles().isEmpty()) {
-      grid.set(coords.getRow(), coords.getCol(), new WaterCellState(particles));
+      grid.set(coords, new WaterCellState(particles));
     } else {
       List<OilParticle> newParticles = new ArrayList<>(cellState.getOilParticles());
       newParticles.addAll(particles);
-      grid.set(coords.getRow(), coords.getCol(), new WaterCellState(newParticles));
+      grid.set(coords, new WaterCellState(newParticles));
     }
   }
 

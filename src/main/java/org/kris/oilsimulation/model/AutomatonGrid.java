@@ -16,8 +16,16 @@ public class AutomatonGrid {
     return grid[row][col];
   }
 
+  public CellState get(CellCoords coords) {
+    return grid[coords.getRow()][coords.getCol()];
+  }
+
   public void set(int row, int col, CellState newState) {
     grid[row][col] = newState;
+  }
+
+  public void set(CellCoords coords, CellState newState) {
+    grid[coords.getRow()][coords.getCol()] = newState;
   }
 
   public AutomatonView getAutomatonView() {

@@ -131,9 +131,14 @@ public class SpreadingCalculator {
     }
 
     if (source.getOilParticles().size() != sourceParticles.size()) {
-      grid.set(sourceCoords.getRow(), sourceCoords.getCol(), new WaterCellState(sourceParticles));
-      grid.set(targetCoords.getRow(), targetCoords.getCol(), new WaterCellState(targetParticles));
+      grid.set(sourceCoords, getNewCellState(grid, sourceCoords, sourceParticles));
+      grid.set(targetCoords, getNewCellState(grid, targetCoords, targetParticles));
     }
+  }
+
+  private CellState getNewCellState(AutomatonGrid grid, CellCoords coords,
+                                    List<OilParticle> particles) {
+    return grid.get(coords).newSameTypeState(particles);
   }
 
 }

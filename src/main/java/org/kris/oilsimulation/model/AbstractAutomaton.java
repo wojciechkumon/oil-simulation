@@ -17,7 +17,7 @@ public abstract class AbstractAutomaton implements Automaton {
   public void insertStructure(Collection<Cell> structure) {
     structure.forEach(cell -> {
       CellCoords coords = cell.getCoords();
-      grid.set(coords.getRow(), coords.getCol(), cell.getState());
+      grid.set(coords, cell.getState());
     });
   }
 
