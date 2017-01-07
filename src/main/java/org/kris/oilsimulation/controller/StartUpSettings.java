@@ -42,7 +42,7 @@ public class StartUpSettings {
     Vector wind = new Vector(0, 0);
     ExternalConditions externalConditions = new ExternalConditions(current, wind);
     OilSimulationConstants constants =
-        new OilSimulationConstants(50, 600, 835, 30, 50, 50, 3);
+        new OilSimulationConstants(50, 600, 835, 30, 50, 50, 3, 1_000);
 
     return new StartUpSettings(size, externalConditions, constants);
   }
@@ -64,7 +64,7 @@ public class StartUpSettings {
     int middleWidth = size.getWidth() / 2;
     Map<CellCoords, CellState> initialStates = new HashMap<>();
     initialStates.put(newCellCoords(middleHeight, middleWidth), getStartingWaterState(100, constants));
-    addStartingLand(initialStates);
+    addStartingLand(initialStates, size);
 
     return initialStates;
   }
@@ -73,10 +73,11 @@ public class StartUpSettings {
     return new WaterCellState(getParticles(amount, constants));
   }
 
-  private void addStartingLand(Map<CellCoords, CellState> initialStates) {
-    for (int i = 0; i < 5; i++) {
+  private void addStartingLand(Map<CellCoords, CellState> initialStates, Size size) {
+    int length = size.getWidth() - 5;
+    for (int i = 0; i <= length; i++) {
       for (int j = 0; j < i; j++) {
-        initialStates.put(newCellCoords(4 - i, j), LandCellState.emptyCell());
+        initialStates.put(newCellCoords(length - i, j), LandCellState.emptyCell());
       }
     }
   }

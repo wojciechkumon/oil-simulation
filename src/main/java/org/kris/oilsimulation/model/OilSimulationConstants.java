@@ -7,12 +7,15 @@ public class OilSimulationConstants {
   private final double surfaceTension; // dyne/s
   private final double propagationFactor; // dyne/s
   private final OilParticle startingParticle;
+  private final double maxLandMass; // kg
+  private final int maxLandParticlesNumber; // kg
 
   public OilSimulationConstants(double cellSize, double timeStep,
                                 double density, double surfaceTension,
                                 double particleMass /* kg */,
                                 double evaporationRate/* kg/(s*m^2) */,
-                                double propagationFactor) {
+                                double propagationFactor,
+                                int maxLandParticlesNumber) {
     this.density = density;
     this.surfaceTension = surfaceTension;
     this.cellSize = cellSize;
@@ -20,6 +23,8 @@ public class OilSimulationConstants {
     this.propagationFactor = propagationFactor;
     this.startingParticle = new OilParticle(particleMass, 0,
         particleMass / density, evaporationRate);
+    this.maxLandParticlesNumber = maxLandParticlesNumber;
+    maxLandMass = cellSize * maxLandParticlesNumber;
   }
 
   public double getCellSize() {
@@ -46,4 +51,11 @@ public class OilSimulationConstants {
     return propagationFactor;
   }
 
+  public double getMaxLandMass() {
+    return maxLandMass;
+  }
+
+  public int getMaxLandParticlesNumber() {
+    return maxLandParticlesNumber;
+  }
 }

@@ -18,23 +18,23 @@ public class AdvectionCalculator {
   }
 
   public void apply(AutomatonGrid oldAutomatonGrid, AutomatonGrid newAutomatonGrid,
-                    ExternalConditions externalConditions, double cellSize) {
+                    ExternalConditions externalConditions, OilSimulationConstants constants) {
     Map<CellCoords, List<OilParticle>> particlesMap =
-        createParticlesMap(oldAutomatonGrid, externalConditions, cellSize);
+        createParticlesMap(oldAutomatonGrid, externalConditions, constants);
     copyFromMapToGrid(oldAutomatonGrid, particlesMap, newAutomatonGrid);
   }
 
   private Map<CellCoords, List<OilParticle>> createParticlesMap(AutomatonGrid oldAutomatonGrid,
                                                                 ExternalConditions externalConditions,
-                                                                double cellSize) {
+                                                                OilSimulationConstants constants) {
     Size size = oldAutomatonGrid.getSize();
     Vector resultantVector = calculateResultantVector(externalConditions);
-    double horizontal = resultantVector.getX() / cellSize;
-    double vertical = resultantVector.getY() / cellSize;
+    double horizontal = resultantVector.getX() / constants.getCellSize();
+    double vertical = resultantVector.getY() / constants.getCellSize();
     Map<CellCoords, List<OilParticle>> particlesMap = new HashMap<>();
     for (int i = 0; i < size.getHeight(); i++) {
       for (int j = 0; j < size.getWidth(); j++) {
-        putParticlesToMap(oldAutomatonGrid, particlesMap, horizontal, vertical, i, j);
+        putParticlesToMap(oldAutomatonGrid, particlesMap, constants, horizontal, vertical, i, j);
       }
     }
     return particlesMap;
@@ -48,9 +48,15 @@ public class AdvectionCalculator {
 
   private void putParticlesToMap(AutomatonGrid oldAutomatonGrid,
                                  Map<CellCoords, List<OilParticle>> particlesMap,
+                                 OilSimulationConstants constants,
                                  double horizontal, double vertical, int i, int j) {
     CellState source = oldAutomatonGrid.get(i, j);
     if (source.getOilParticles().isEmpty()) {
+      return;
+    }
+    if (!source.isWater()) {
+      CellCoords landCoords = newCellCoords(i, j);
+      source.getOilParticles().forEach(particle -> addToMap(particlesMap, landCoords, particle));
       return;
     }
 
@@ -64,8 +70,23 @@ public class AdvectionCalculator {
           closerPos.getRow(), furtherPos.getRow());
       int newCol = getNewIndex(horizontalThreshold,
           closerPos.getCol(), furtherPos.getCol());
-      addToMap(particlesMap, newCellCoords(newRow, newCol), particle);
+
+      CellCoords newCellCoords = getCheckedCellCoords(particlesMap, oldAutomatonGrid,
+          constants.getMaxLandParticlesNumber(), newCellCoords(i, j), newCellCoords(newRow, newCol));
+      addToMap(particlesMap, newCellCoords, particle);
     });
+  }
+
+  private CellCoords getCheckedCellCoords(Map<CellCoords, List<OilParticle>> particlesMap,
+                                          AutomatonGrid oldAutomatonGrid, int maxLandParticles,
+                                          CellCoords source, CellCoords target) {
+    if (isInsideGrid(target, oldAutomatonGrid.getSize()) && !oldAutomatonGrid.get(target).isWater()) {
+      List<OilParticle> oilParticles = particlesMap.get(target);
+      if (oilParticles != null && oilParticles.size() > maxLandParticles) {
+        return source;
+      }
+    }
+    return target;
   }
 
   private void addToMap(Map<CellCoords, List<OilParticle>> particlesMap,
@@ -102,8 +123,7 @@ public class AdvectionCalculator {
 
   private CellState getNewCellState(AutomatonGrid oldAutomatonGrid,
                                     Map.Entry<CellCoords, List<OilParticle>> entry, CellCoords coords) {
-    CellState cellState = oldAutomatonGrid.get(coords);
-    return cellState.newSameTypeState(entry.getValue());
+    return oldAutomatonGrid.get(coords).newSameTypeState(entry.getValue());
   }
 
   private boolean isInsideGrid(CellCoords coords, Size size) {

@@ -80,7 +80,7 @@ public class OilAutomaton extends AbstractAutomaton {
     calculators.spreading().apply(tmpGrid, constants);
 
     calculators.advection().apply(tmpGrid, newAutomaton.grid,
-        externalConditions, constants.getCellSize());
+        externalConditions, constants);
 
     calculators.oilSources().apply(newAutomaton.grid, sources);
   }

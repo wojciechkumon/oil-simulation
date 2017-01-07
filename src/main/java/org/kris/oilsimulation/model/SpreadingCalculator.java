@@ -7,8 +7,15 @@ import java.util.Random;
 
 import static org.kris.oilsimulation.model.CellCoords.newCellCoords;
 
+/**
+ * Land to land = no mass change
+ * Land to water = no mass change
+ * Water to water = calculated mass change
+ * Water to land = if land not full -> FACTOR * (water to water change)
+ */
 public class SpreadingCalculator {
   private static final double GRAVITY = 9.80665;
+  public static final double LAND_WATER_FACTOR = 0.3;
   private final Random random;
 
   public SpreadingCalculator(Random random) {
@@ -70,12 +77,23 @@ public class SpreadingCalculator {
                               AutomatonGrid grid,
                               CellCoords firstCoords, CellCoords secondCoords,
                               OilSimulationConstants constants) {
+    if (bothLand(first, second) || bothEmpty(first, second)) {
+      return;
+    }
     double massChange = calculateMassChange(first, second, constants);
     if (massChange > 0) {
-      moveMass(massChange, second, first, grid, secondCoords, firstCoords);
+      moveMass(massChange, second, first, grid, secondCoords, firstCoords, constants.getMaxLandMass());
     } else if (massChange < 0) {
-      moveMass(massChange, first, second, grid, firstCoords, secondCoords);
+      moveMass(massChange, first, second, grid, firstCoords, secondCoords, constants.getMaxLandMass());
     }
+  }
+
+  private boolean bothLand(CellState first, CellState second) {
+    return !first.isWater() && !second.isWater();
+  }
+
+  private boolean bothEmpty(CellState first, CellState second) {
+    return first.getOilParticles().isEmpty() && second.getOilParticles().isEmpty();
   }
 
   private double calculateMassChange(CellState first, CellState second,
@@ -85,8 +103,16 @@ public class SpreadingCalculator {
     double timeStep = constants.getTimeStep();
     double cellLengthSquared = constants.getCellSize() * constants.getCellSize();
     double coefficient = calculateCoefficient(constants, first, second);
-    return ((secondMass - firstMass) / 2) *
+    double massChange = ((secondMass - firstMass) / 2) *
         (1 - Math.exp(-2 * timeStep * coefficient / cellLengthSquared));
+    if (waterAndLand(first, second)) {
+      massChange *= LAND_WATER_FACTOR;
+    }
+    return massChange;
+  }
+
+  private boolean waterAndLand(CellState first, CellState second) {
+    return first.isWater() ^ first.isWater();
   }
 
   private double calculateCoefficient(OilSimulationConstants constants, CellState first,
@@ -106,14 +132,30 @@ public class SpreadingCalculator {
     return volume * volume;
   }
 
-  private void moveMass(double massChange, CellState source, CellState target,
-                        AutomatonGrid grid, CellCoords sourceCoords, CellCoords targetCoords) {
+  private void moveMass(double massChange, CellState source, CellState target, AutomatonGrid grid,
+                        CellCoords sourceCoords, CellCoords targetCoords, double maxLandMass) {
+    if (fromLandToWater(source, target) ||
+        (fromWaterToLand(source, target) && maxMassOnLand(target, maxLandMass))) {
+      return;
+    }
     double r = Math.abs(massChange) / source.getMass();
 
     List<OilParticle> sourceParticles = new ArrayList<>(source.getOilParticles());
     List<OilParticle> targetParticles = new ArrayList<>(target.getOilParticles());
 
     moveParticles(source, grid, sourceCoords, targetCoords, r, sourceParticles, targetParticles);
+  }
+
+  private boolean fromLandToWater(CellState source, CellState target) {
+    return !source.isWater() && target.isWater();
+  }
+
+  private boolean fromWaterToLand(CellState source, CellState target) {
+    return source.isWater() && !target.isWater();
+  }
+
+  private boolean maxMassOnLand(CellState landState, double maxLandMass) {
+    return landState.getMass() >= maxLandMass;
   }
 
   private void moveParticles(CellState source, AutomatonGrid grid,

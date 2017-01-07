@@ -8,6 +8,7 @@ import org.kris.oilsimulation.model.ModelImpl;
 import java.util.ResourceBundle;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -37,6 +38,8 @@ public class JavaFxApplication extends Application {
   }
 
   private void initStage(Stage stage, GridPane root) {
+    Platform.setImplicitExit(false);
+    stage.setOnCloseRequest(e -> Platform.exit());
     stage.setTitle("Oil simulation");
     stage.setScene(new Scene(root));
     stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream(ICON_PATH)));

@@ -6,6 +6,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import javax.naming.OperationNotSupportedException;
+
 public class DummyScheduledFuture<T> implements ScheduledFuture<T> {
 
   @Override
@@ -35,13 +37,13 @@ public class DummyScheduledFuture<T> implements ScheduledFuture<T> {
 
   @Override
   public T get() throws InterruptedException, ExecutionException {
-    return null;
+    throw new RuntimeException(new OperationNotSupportedException());
   }
 
   @Override
   public T get(long timeout, TimeUnit unit)
       throws InterruptedException, ExecutionException, TimeoutException {
-    return null;
+    throw new RuntimeException(new OperationNotSupportedException());
   }
 
 }
