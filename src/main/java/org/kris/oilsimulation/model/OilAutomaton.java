@@ -20,7 +20,7 @@ public class OilAutomaton extends AbstractAutomaton {
 
     for (int i = 0; i < size.getHeight(); i++) {
       for (int j = 0; j < size.getWidth(); j++) {
-        grid.set(i, j, OilCellState.emptyCell());
+        grid.set(i, j, WaterCellState.emptyCell());
       }
     }
   }
@@ -73,6 +73,7 @@ public class OilAutomaton extends AbstractAutomaton {
   }
 
   private void setNewAutomatonGridState(OilAutomaton newAutomaton) {
+    copyLandToNewAutomaton(newAutomaton);
     AutomatonGrid tmpGrid = new AutomatonGrid(size);
     grid.copyTo(tmpGrid);
 
@@ -84,12 +85,22 @@ public class OilAutomaton extends AbstractAutomaton {
     calculators.getOilSourcesCalculator().apply(newAutomaton.grid, sources);
   }
 
+  private void copyLandToNewAutomaton(OilAutomaton newAutomaton) {
+    for (int i = 0; i < size.getHeight(); i++) {
+      for (int j = 0; j < size.getWidth(); j++) {
+        if (!grid.get(i, j).isWater()) {
+          newAutomaton.grid.set(i, j, LandCellState.emptyCell());
+        }
+      }
+    }
+  }
+
   // TODO remove after implementation (to test in debugger)
   private int countParticles() {
     int sum = 0;
     for (int i = 0; i < size.getHeight(); i++) {
       for (int j = 0; j < size.getWidth(); j++) {
-        OilCellState cellState = (OilCellState) grid.get(i, j);
+        CellState cellState = grid.get(i, j);
         sum += cellState.getOilParticles().size();
       }
     }

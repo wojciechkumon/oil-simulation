@@ -10,6 +10,8 @@ import static java.util.stream.Collectors.toMap;
 
 public class OilSourcesCalculator {
 
+  private CellState cellState;
+
   public void apply(AutomatonGrid grid, Map<CellCoords, OilSource> sources) {
     toParticlesMap(sources)
         .entrySet()
@@ -30,13 +32,13 @@ public class OilSourcesCalculator {
   }
 
   private void addToGrid(AutomatonGrid grid, CellCoords coords, List<OilParticle> particles) {
-    OilCellState oilCellState = (OilCellState) grid.get(coords.getRow(), coords.getCol());
-    if (oilCellState.getOilParticles().isEmpty()) {
-      grid.set(coords.getRow(), coords.getCol(), new OilCellState(particles));
+    cellState = grid.get(coords.getRow(), coords.getCol());
+    if (cellState.getOilParticles().isEmpty()) {
+      grid.set(coords.getRow(), coords.getCol(), new WaterCellState(particles));
     } else {
-      List<OilParticle> newParticles = new ArrayList<>(oilCellState.getOilParticles());
+      List<OilParticle> newParticles = new ArrayList<>(cellState.getOilParticles());
       newParticles.addAll(particles);
-      grid.set(coords.getRow(), coords.getCol(), new OilCellState(newParticles));
+      grid.set(coords.getRow(), coords.getCol(), new WaterCellState(newParticles));
     }
   }
 

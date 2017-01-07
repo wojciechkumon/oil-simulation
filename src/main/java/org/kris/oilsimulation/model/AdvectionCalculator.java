@@ -21,7 +21,7 @@ public class AdvectionCalculator {
                     ExternalConditions externalConditions, double cellSize) {
     Map<CellCoords, List<OilParticle>> particlesMap =
         createParticlesMap(oldAutomatonGrid, externalConditions, cellSize);
-    copyFromMapToGrid(particlesMap, newAutomatonGrid);
+    copyFromMapToGrid(oldAutomatonGrid, particlesMap, newAutomatonGrid);
   }
 
   private Map<CellCoords, List<OilParticle>> createParticlesMap(AutomatonGrid oldAutomatonGrid,
@@ -49,7 +49,7 @@ public class AdvectionCalculator {
   private void putParticlesToMap(AutomatonGrid oldAutomatonGrid,
                                  Map<CellCoords, List<OilParticle>> particlesMap,
                                  double horizontal, double vertical, int i, int j) {
-    OilCellState source = ((OilCellState) oldAutomatonGrid.get(i, j));
+    CellState source = (oldAutomatonGrid.get(i, j));
     if (source.getOilParticles().isEmpty()) {
       return;
     }
@@ -87,15 +87,23 @@ public class AdvectionCalculator {
     return closerIndex;
   }
 
-  private void copyFromMapToGrid(Map<CellCoords, List<OilParticle>> particlesMap,
+  private void copyFromMapToGrid(AutomatonGrid oldAutomatonGrid,
+                                 Map<CellCoords, List<OilParticle>> particlesMap,
                                  AutomatonGrid newAutomatonGrid) {
     particlesMap.entrySet()
         .stream()
         .filter(entry -> isInsideGrid(entry.getKey(), newAutomatonGrid.getSize()))
         .forEach(entry -> {
           CellCoords coords = entry.getKey();
-          newAutomatonGrid.set(coords.getRow(), coords.getCol(), new OilCellState(entry.getValue()));
+          CellState newCellState = getNewCellState(oldAutomatonGrid, entry, coords);
+          newAutomatonGrid.set(coords.getRow(), coords.getCol(), newCellState);
         });
+  }
+
+  private CellState getNewCellState(AutomatonGrid oldAutomatonGrid,
+                                    Map.Entry<CellCoords, List<OilParticle>> entry, CellCoords coords) {
+    CellState cellState = oldAutomatonGrid.get(coords.getRow(), coords.getCol());
+    return cellState.newSameTypeState(entry.getValue());
   }
 
   private boolean isInsideGrid(CellCoords coords, Size size) {

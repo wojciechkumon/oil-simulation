@@ -1,8 +1,8 @@
 package org.kris.oilsimulation.controller;
 
 import org.kris.oilsimulation.model.Automaton;
+import org.kris.oilsimulation.model.CellState;
 import org.kris.oilsimulation.model.Model;
-import org.kris.oilsimulation.model.OilCellState;
 import org.kris.oilsimulation.model.automatonview.AutomatonView;
 import org.kris.oilsimulation.model.automatonview.AutomatonViewFactory;
 
@@ -18,9 +18,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class GridCanvasController implements Initializable {
-  private static final int BLUE_R = 67;
-  private static final int BLUE_G = 183;
-  private static final int BLUE_B = 222;
+  private static final Color WATER_COLOR = Color.rgb(67, 183, 222);
+  private static final Color LAND_COLOR = Color.rgb(245, 189, 81);
   private static final Color BACKGROUND_COLOR = Color.rgb(240, 240, 240);
   private static final int MAX_MASS = 10_000;
 
@@ -66,15 +65,16 @@ public class GridCanvasController implements Initializable {
   }
 
   private void drawOilCell(GraphicsContext graphics, double cellSize, int i, int j) {
-    graphics.setFill(calculateCellColor((OilCellState) currentView.getState(i, j)));
+    graphics.setFill(calculateCellColor(currentView.getState(i, j)));
     graphics.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
   }
 
-  private Color calculateCellColor(OilCellState oilCellState) {
-    double cellMass = oilCellState.getMass();
+  private Color calculateCellColor(CellState cellState) {
+    Color cellColor = cellState.isWater() ? WATER_COLOR : LAND_COLOR;
+    double cellMass = cellState.getMass();
     double mass = cellMass < MAX_MASS ? cellMass : MAX_MASS;
-    double cleanPercent = 1 - (mass / MAX_MASS);
-    return Color.rgb((int) (BLUE_R * cleanPercent), (int) (BLUE_G * cleanPercent), (int) (BLUE_B * cleanPercent));
+    double oilPercent = mass / MAX_MASS;
+    return cellColor.interpolate(Color.BLACK, oilPercent);
   }
 
   private void drawGrid(GraphicsContext graphics, double cellSize) {

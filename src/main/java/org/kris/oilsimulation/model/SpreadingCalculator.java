@@ -27,8 +27,8 @@ public class SpreadingCalculator {
     Size size = grid.getSize();
     for (int i = 0; i < size.getHeight(); i++) {
       for (int j = 2; j < size.getWidth(); j += 2) {
-        applySpreading((OilCellState) grid.get(i, j - 1),
-            (OilCellState) grid.get(i, j),
+        applySpreading(grid.get(i, j - 1),
+            grid.get(i, j),
             grid, newCellCoords(i, j - 1), newCellCoords(i, j), constants);
       }
     }
@@ -39,8 +39,8 @@ public class SpreadingCalculator {
     Size size = grid.getSize();
     for (int i = 0; i < size.getHeight(); i++) {
       for (int j = 1; j < size.getWidth(); j += 2) {
-        applySpreading((OilCellState) grid.get(i, j - 1),
-            (OilCellState) grid.get(i, j),
+        applySpreading(grid.get(i, j - 1),
+            grid.get(i, j),
             grid, newCellCoords(i, j - 1), newCellCoords(i, j), constants);
       }
     }
@@ -51,8 +51,8 @@ public class SpreadingCalculator {
     Size size = grid.getSize();
     for (int j = 0; j < size.getWidth(); j++) {
       for (int i = 2; i < size.getWidth(); i += 2) {
-        applySpreading((OilCellState) grid.get(i - 1, j),
-            (OilCellState) grid.get(i, j),
+        applySpreading(grid.get(i - 1, j),
+            grid.get(i, j),
             grid, newCellCoords(i - 1, j), newCellCoords(i, j), constants);
       }
     }
@@ -63,14 +63,14 @@ public class SpreadingCalculator {
     Size size = grid.getSize();
     for (int j = 0; j < size.getWidth(); j++) {
       for (int i = 1; i < size.getWidth(); i += 2) {
-        applySpreading((OilCellState) grid.get(i - 1, j),
-            (OilCellState) grid.get(i, j),
+        applySpreading(grid.get(i - 1, j),
+            grid.get(i, j),
             grid, newCellCoords(i - 1, j), newCellCoords(i, j), constants);
       }
     }
   }
 
-  private void applySpreading(OilCellState first, OilCellState second,
+  private void applySpreading(CellState first, CellState second,
                               AutomatonGrid grid,
                               CellCoords firstCoords, CellCoords secondCoords,
                               OilSimulationConstants constants) {
@@ -82,7 +82,7 @@ public class SpreadingCalculator {
     }
   }
 
-  private double calculateMassChange(OilCellState first, OilCellState second,
+  private double calculateMassChange(CellState first, CellState second,
                                      OilSimulationConstants constants) {
     double firstMass = first.getMass();
     double secondMass = second.getMass();
@@ -93,8 +93,8 @@ public class SpreadingCalculator {
         (1 - Math.exp(-2 * timeStep * coefficient / cellLengthSquared));
   }
 
-  private double calculateCoefficient(OilSimulationConstants constants, OilCellState first,
-                                      OilCellState second) {
+  private double calculateCoefficient(OilSimulationConstants constants, CellState first,
+                                      CellState second) {
     double propagationFactorSquared = constants.getPropagationFactor()
         * constants.getPropagationFactor();
     double timeStep = constants.getTimeStep();
@@ -105,12 +105,12 @@ public class SpreadingCalculator {
         * Math.pow(oilVolumeSquared * GRAVITY * density / viscosity, 1.0 / 3);
   }
 
-  private static double calculateOilVolumeSquared(OilCellState first, OilCellState second) {
+  private static double calculateOilVolumeSquared(CellState first, CellState second) {
     double volume = first.getVolume() + second.getVolume();
     return volume * volume;
   }
 
-  private void moveMass(double massChange, OilCellState source, OilCellState target,
+  private void moveMass(double massChange, CellState source, CellState target,
                         AutomatonGrid grid, CellCoords sourceCoords, CellCoords targetCoords) {
     double r = Math.abs(massChange) / source.getMass();
 
@@ -120,7 +120,7 @@ public class SpreadingCalculator {
     moveParticles(source, grid, sourceCoords, targetCoords, r, sourceParticles, targetParticles);
   }
 
-  private void moveParticles(OilCellState source, AutomatonGrid grid,
+  private void moveParticles(CellState source, AutomatonGrid grid,
                              CellCoords sourceCoords, CellCoords targetCoords, double r,
                              List<OilParticle> sourceParticles, List<OilParticle> targetParticles) {
     Iterator<OilParticle> iterator = sourceParticles.iterator();
@@ -135,8 +135,8 @@ public class SpreadingCalculator {
     }
 
     if (source.getOilParticles().size() != sourceParticles.size()) {
-      grid.set(sourceCoords.getRow(), sourceCoords.getCol(), new OilCellState(sourceParticles));
-      grid.set(targetCoords.getRow(), targetCoords.getCol(), new OilCellState(targetParticles));
+      grid.set(sourceCoords.getRow(), sourceCoords.getCol(), new WaterCellState(sourceParticles));
+      grid.set(targetCoords.getRow(), targetCoords.getCol(), new WaterCellState(targetParticles));
     }
   }
 
