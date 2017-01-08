@@ -1,5 +1,6 @@
 package org.kris.oilsimulation;
 
+import org.kris.oilsimulation.controller.CellTooltipController;
 import org.kris.oilsimulation.controller.RootController;
 import org.kris.oilsimulation.controller.StartUpSettings;
 import org.kris.oilsimulation.model.Model;
@@ -34,6 +35,7 @@ public class JavaFxApplication extends Application {
   private void initControllers(Model model, FXMLLoader rootLoader) {
     RootController rootController = rootLoader.getController();
     rootController.getGridCanvasController().initModel(model);
+    rootController.getGridCanvasController().initCellTooltip(new CellTooltipController());
     rootController.getMenuController().getAutomatonStartController().initModel(model);
   }
 

@@ -40,7 +40,7 @@ public class GridCanvasController implements Initializable {
     drawGrid(graphics, cellSize);
   }
 
-  private double calculateCellSize() {
+  double calculateCellSize() {
     if (currentView.getWidth() == 0) {
       return 0;
     }
@@ -102,6 +102,10 @@ public class GridCanvasController implements Initializable {
     graphicsContext.setLineWidth(0.5);
   }
 
+  AutomatonView getCurrentView() {
+    return currentView;
+  }
+
   public void initModel(Model model) {
     model.addChangeListener((observable, oldValue, newValue) ->
         Platform.runLater(() -> setNewAutomaton(newValue)));
@@ -112,4 +116,7 @@ public class GridCanvasController implements Initializable {
     redraw();
   }
 
+  public void initCellTooltip(CellTooltipController cellTooltipController) {
+    cellTooltipController.start(canvas, this);
+  }
 }

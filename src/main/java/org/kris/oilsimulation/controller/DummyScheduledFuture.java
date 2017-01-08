@@ -37,13 +37,13 @@ public class DummyScheduledFuture<T> implements ScheduledFuture<T> {
 
   @Override
   public T get() throws InterruptedException, ExecutionException {
-    throw new RuntimeException(new OperationNotSupportedException());
+    throw new UnsupportedOperationException();
   }
 
   @Override
   public T get(long timeout, TimeUnit unit)
       throws InterruptedException, ExecutionException, TimeoutException {
-    throw new RuntimeException(new OperationNotSupportedException());
+    throw new UnsupportedOperationException();
   }
 
 }
