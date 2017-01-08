@@ -14,6 +14,7 @@ public class ExecutorFactory {
   public static ScheduledExecutorService createScheduledSingleThreadDaemonExecutor() {
     return Executors.newSingleThreadScheduledExecutor(runnable -> {
       Thread thread = Executors.defaultThreadFactory().newThread(runnable);
+      thread.setName("SingleThreadScheduledExecutor Thread");
       thread.setUncaughtExceptionHandler((t, e) -> LOG.error("Thread uncaught exception", e));
       thread.setDaemon(true);
       return thread;
