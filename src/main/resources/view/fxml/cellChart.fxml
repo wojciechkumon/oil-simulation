@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<LineChart fx:id="cellChart" styleClass="root" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.kris.oilsimulation.controller.CellChartController"
+           createSymbols="false">
+    <xAxis>
+        <NumberAxis side="BOTTOM" label="%iterationChart"/>
+    </xAxis>
+    <yAxis>
+        <NumberAxis side="LEFT" label="%massChart"/>
+    </yAxis>
+</LineChart>

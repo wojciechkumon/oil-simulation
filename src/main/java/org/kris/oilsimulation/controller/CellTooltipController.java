@@ -53,11 +53,11 @@ public class CellTooltipController {
   }
 
   private String getTooltipText(GridView gridView, int col, int row, ResourceBundle bundle) {
-    CellView cellView = gridView.getState(row, col);
+    CellView cellView = gridView.getCellView(row, col);
 
     return bundle.getString("Mass") + ": " + cellView.getMass() + "kg\n"
         + bundle.getString("Volume") + ": " + roundToThirdPlace(cellView.getVolume()) + "m^3\n"
-        + bundle.getString("Oil_particles") + ": " + cellView.getNumberOfParticles();
+        + bundle.getString("OilParticles") + ": " + cellView.getNumberOfParticles();
   }
 
   private double roundToThirdPlace(double value) {

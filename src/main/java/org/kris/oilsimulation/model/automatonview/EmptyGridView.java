@@ -5,7 +5,7 @@ class EmptyGridView implements GridView {
   EmptyGridView() {}
 
   @Override
-  public CellView getState(int row, int col) {
+  public CellView getCellView(int row, int col) {
     throw new UnsupportedOperationException();
   }
 

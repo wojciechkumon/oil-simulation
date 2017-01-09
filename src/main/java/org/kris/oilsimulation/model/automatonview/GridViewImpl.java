@@ -23,7 +23,7 @@ class GridViewImpl implements GridView {
   }
 
   @Override
-  public CellView getState(int row, int col) {
+  public CellView getCellView(int row, int col) {
     return cellViewGrid[row][col];
   }
 

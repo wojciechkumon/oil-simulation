@@ -68,7 +68,7 @@ public class GridCanvasController implements Initializable {
 
   private void drawOilCell(GridView gridView, GraphicsContext graphics,
                            double cellSize, int i, int j) {
-    graphics.setFill(calculateCellColor(gridView.getState(i, j)));
+    graphics.setFill(calculateCellColor(gridView.getCellView(i, j)));
     graphics.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
   }
 
@@ -124,7 +124,7 @@ public class GridCanvasController implements Initializable {
     cellTooltipController.start(canvas, this, bundle);
   }
 
-  public void initChartController(ChartController chartController) {
+  public void initCellChartController(CellChartController chartController) {
     chartController.start(canvas, this);
   }
 }

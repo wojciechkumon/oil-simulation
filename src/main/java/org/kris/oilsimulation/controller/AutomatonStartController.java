@@ -38,6 +38,8 @@ public class AutomatonStartController {
   @FXML
   private Slider windSliderY;
   @FXML
+  private CellChartController cellChartController;
+  @FXML
   private ResourceBundle resources;
 
   public void startOrStopClicked() {
@@ -72,5 +74,9 @@ public class AutomatonStartController {
 
   public void clear() {
     simulationRunner.clear();
+  }
+
+  public CellChartController getCellChartController() {
+    return cellChartController;
   }
 }
