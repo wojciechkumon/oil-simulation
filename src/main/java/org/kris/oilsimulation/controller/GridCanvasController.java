@@ -1,10 +1,11 @@
 package org.kris.oilsimulation.controller;
 
 import org.kris.oilsimulation.model.Automaton;
-import org.kris.oilsimulation.model.CellState;
 import org.kris.oilsimulation.model.Model;
 import org.kris.oilsimulation.model.automatonview.AutomatonView;
 import org.kris.oilsimulation.model.automatonview.AutomatonViewFactory;
+import org.kris.oilsimulation.model.automatonview.CellView;
+import org.kris.oilsimulation.model.automatonview.GridView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,23 +32,23 @@ public class GridCanvasController implements Initializable {
   @FXML
   public Canvas canvas;
 
-  private void redraw() {
-    double cellSize = calculateCellSize();
+  private void redraw(GridView gridView) {
+    double cellSize = calculateCellSize(gridView);
 
     GraphicsContext graphics = canvas.getGraphicsContext2D();
     clearCanvas(graphics);
 
-    drawCells(graphics, cellSize);
-    drawGrid(graphics, cellSize);
+    drawCells(gridView, graphics, cellSize);
+    drawGrid(gridView, graphics, cellSize);
   }
 
-  double calculateCellSize() {
-    if (currentView.getWidth() == 0) {
+  double calculateCellSize(GridView gridView) {
+    if (gridView.getWidth() == 0) {
       return 0;
     }
 
-    double cellMaxWidth = canvas.getWidth() / currentView.getWidth();
-    double cellMaxHeight = canvas.getHeight() / currentView.getHeight();
+    double cellMaxWidth = canvas.getWidth() / gridView.getWidth();
+    double cellMaxHeight = canvas.getHeight() / gridView.getHeight();
 
     return cellMaxWidth <= cellMaxHeight ? cellMaxWidth : cellMaxHeight;
   }
@@ -57,30 +58,31 @@ public class GridCanvasController implements Initializable {
     graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
   }
 
-  private void drawCells(GraphicsContext graphics, double cellSize) {
-    for (int i = 0; i < currentView.getHeight(); i++) {
-      for (int j = 0; j < currentView.getWidth(); j++) {
-        drawOilCell(graphics, cellSize, i, j);
+  private void drawCells(GridView gridView, GraphicsContext graphics, double cellSize) {
+    for (int i = 0; i < gridView.getHeight(); i++) {
+      for (int j = 0; j < gridView.getWidth(); j++) {
+        drawOilCell(gridView, graphics, cellSize, i, j);
       }
     }
   }
 
-  private void drawOilCell(GraphicsContext graphics, double cellSize, int i, int j) {
-    graphics.setFill(calculateCellColor(currentView.getState(i, j)));
+  private void drawOilCell(GridView gridView, GraphicsContext graphics,
+                           double cellSize, int i, int j) {
+    graphics.setFill(calculateCellColor(gridView.getCellView(i, j)));
     graphics.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
   }
 
-  private Color calculateCellColor(CellState cellState) {
-    Color cellColor = cellState.isWater() ? WATER_COLOR : LAND_COLOR;
-    double cellMass = cellState.getMass();
+  private Color calculateCellColor(CellView cellView) {
+    Color cellColor = cellView.isWater() ? WATER_COLOR : LAND_COLOR;
+    double cellMass = cellView.getMass();
     double mass = cellMass < MAX_MASS ? cellMass : MAX_MASS;
     double oilPercent = mass / MAX_MASS;
     return cellColor.interpolate(Color.BLACK, oilPercent);
   }
 
-  private void drawGrid(GraphicsContext graphics, double cellSize) {
-    for (int i = 0; i < currentView.getWidth(); i++) {
-      for (int j = 0; j < currentView.getHeight(); j++) {
+  private void drawGrid(GridView gridView, GraphicsContext graphics, double cellSize) {
+    for (int i = 0; i < gridView.getWidth(); i++) {
+      for (int j = 0; j < gridView.getHeight(); j++) {
         graphics.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
       }
     }
@@ -93,12 +95,12 @@ public class GridCanvasController implements Initializable {
   }
 
   private void initGrid() {
-    currentView = AutomatonViewFactory.getEmptyView();
+    this.currentView = AutomatonViewFactory.getEmptyView();
     canvas.widthProperty().bind(parentLayout.widthProperty().subtract(20));
     canvas.heightProperty().bind(parentLayout.heightProperty().subtract(20));
 
-    canvas.widthProperty().addListener((observable) -> redraw());
-    canvas.heightProperty().addListener((observable) -> redraw());
+    canvas.widthProperty().addListener((observable) -> redraw(this.currentView.getGridView()));
+    canvas.heightProperty().addListener((observable) -> redraw(this.currentView.getGridView()));
     GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
     graphicsContext.setStroke(Color.BLACK);
     graphicsContext.setLineWidth(0.5);
@@ -115,10 +117,14 @@ public class GridCanvasController implements Initializable {
 
   private void setNewAutomaton(Automaton automaton) {
     this.currentView = automaton.getAutomatonView();
-    redraw();
+    redraw(currentView.getGridView());
   }
 
   public void initCellTooltip(CellTooltipController cellTooltipController) {
     cellTooltipController.start(canvas, this, bundle);
+  }
+
+  public void initCellChartController(CellChartController chartController) {
+    chartController.start(canvas, this);
   }
 }

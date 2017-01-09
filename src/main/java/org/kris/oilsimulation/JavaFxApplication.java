@@ -1,6 +1,8 @@
 package org.kris.oilsimulation;
 
+import org.kris.oilsimulation.controller.CellChartController;
 import org.kris.oilsimulation.controller.CellTooltipController;
+import org.kris.oilsimulation.controller.GridCanvasController;
 import org.kris.oilsimulation.controller.RootController;
 import org.kris.oilsimulation.controller.StartUpSettings;
 import org.kris.oilsimulation.model.Model;
@@ -33,10 +35,14 @@ public class JavaFxApplication extends Application {
   }
 
   private void initControllers(Model model, FXMLLoader rootLoader) {
-    RootController rootController = rootLoader.getController();
-    rootController.getGridCanvasController().initModel(model);
-    rootController.getGridCanvasController().initCellTooltip(new CellTooltipController());
-    rootController.getMenuController().getAutomatonStartController().initModel(model);
+    RootController root = rootLoader.getController();
+    GridCanvasController canvas = root.getGridCanvasController();
+    canvas.initModel(model);
+    canvas.initCellTooltip(new CellTooltipController());
+    CellChartController chart = root.getMenuController().getAutomatonStartController()
+        .getCellChartController();
+    canvas.initCellChartController(chart);
+    root.getMenuController().getAutomatonStartController().initModel(model);
   }
 
   private void initStage(Stage stage, GridPane root) {
@@ -46,7 +52,7 @@ public class JavaFxApplication extends Application {
     stage.setScene(new Scene(root));
     stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream(ICON_PATH)));
     stage.setMinHeight(450);
-    stage.setMinWidth(700);
+    stage.setMinWidth(800);
     stage.show();
   }
 

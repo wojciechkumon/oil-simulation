@@ -1,7 +1,7 @@
 package org.kris.oilsimulation.controller;
 
-import org.kris.oilsimulation.model.CellState;
-import org.kris.oilsimulation.model.automatonview.AutomatonView;
+import org.kris.oilsimulation.model.automatonview.CellView;
+import org.kris.oilsimulation.model.automatonview.GridView;
 
 import java.util.ResourceBundle;
 
@@ -36,14 +36,14 @@ public class CellTooltipController {
 
   private void refreshTooltip(Canvas canvas, GridCanvasController canvasController,
                               MouseEvent event, ResourceBundle bundle) {
-    AutomatonView automatonView = canvasController.getCurrentView();
-    double cellSize = canvasController.calculateCellSize();
+    GridView gridView = canvasController.getCurrentView().getGridView();
+    double cellSize = canvasController.calculateCellSize(gridView);
     int col = (int) Math.floor(event.getX() / cellSize);
     int row = (int) Math.floor(event.getY() / cellSize);
 
-    if (col < automatonView.getWidth() && row < automatonView.getHeight()) {
+    if (col < gridView.getWidth() && row < gridView.getHeight()) {
       if (lastCol != col || lastRow != row) {
-        tooltip.setText(getTooltipText(automatonView, col, row, bundle));
+        tooltip.setText(getTooltipText(gridView, col, row, bundle));
         tooltip.show(canvas, event.getScreenX(), event.getScreenY());
         tooltipHider.playFromStart();
       }
@@ -52,12 +52,12 @@ public class CellTooltipController {
     }
   }
 
-  private String getTooltipText(AutomatonView automatonView, int col, int row, ResourceBundle bundle) {
-    CellState state = automatonView.getState(row, col);
+  private String getTooltipText(GridView gridView, int col, int row, ResourceBundle bundle) {
+    CellView cellView = gridView.getCellView(row, col);
 
-    return bundle.getString("Mass") + ": " + state.getMass() + "kg\n"
-        + bundle.getString("Volume") + ": " + roundToThirdPlace(state.getVolume()) + "m^3\n"
-        + bundle.getString("Oil_particles") + ": " + state.getOilParticles().size();
+    return bundle.getString("Mass") + ": " + cellView.getMass() + "kg\n"
+        + bundle.getString("Volume") + ": " + roundToThirdPlace(cellView.getVolume()) + "m^3\n"
+        + bundle.getString("OilParticles") + ": " + cellView.getNumberOfParticles();
   }
 
   private double roundToThirdPlace(double value) {
@@ -65,10 +65,10 @@ public class CellTooltipController {
   }
 
   private void hideTooltipIfPossible(GridCanvasController canvasController, MouseEvent event) {
-    AutomatonView automatonView = canvasController.getCurrentView();
-    double cellSize = canvasController.calculateCellSize();
-    if (event.getX() <= 0 || event.getX() >= cellSize * automatonView.getWidth()
-        || event.getY() <= 0 || event.getY() >= cellSize * automatonView.getHeight()) {
+    GridView gridView = canvasController.getCurrentView().getGridView();
+    double cellSize = canvasController.calculateCellSize(gridView);
+    if (event.getX() <= 0 || event.getX() >= cellSize * gridView.getWidth()
+        || event.getY() <= 0 || event.getY() >= cellSize * gridView.getHeight()) {
       tooltip.hide();
     }
   }

@@ -1,14 +1,11 @@
 package org.kris.oilsimulation.model.automatonview;
 
-import org.kris.oilsimulation.model.CellState;
-import org.kris.oilsimulation.model.Size;
-
 public class AutomatonViewFactory {
 
   private AutomatonViewFactory() {}
 
-  public static AutomatonView create(CellState[][] grid, Size size) {
-    return new AutomatonViewImpl(grid, size);
+  public static AutomatonView create(GridView gridView, History currentHistory) {
+    return new AutomatonViewImpl(gridView, currentHistory);
   }
 
   public static AutomatonView getEmptyView() {
@@ -18,5 +15,4 @@ public class AutomatonViewFactory {
   private static class Holder {
     private static final EmptyAutomatonView EMPTY_AUTOMATON_VIEW = new EmptyAutomatonView();
   }
-
 }

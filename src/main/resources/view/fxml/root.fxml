@@ -9,7 +9,7 @@
 
     <columnConstraints>
         <ColumnConstraints minWidth="460" />
-        <ColumnConstraints minWidth="250" prefWidth="250" maxWidth="250"/>
+        <ColumnConstraints minWidth="350" prefWidth="350" maxWidth="350"/>
     </columnConstraints>
 
     <fx:include fx:id="gridCanvas" source="gridCanvas.fxml"/>
