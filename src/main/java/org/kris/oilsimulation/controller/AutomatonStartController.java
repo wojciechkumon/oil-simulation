@@ -55,17 +55,19 @@ public class AutomatonStartController {
     SimulationTimeLogger logger = new SimulationTimeLogger();
     ViewRefresher viewRefresher =
         new ViewRefresher(startButton, clearButton, iterationDelayMillis, resources);
-    SimulationHandlers handlers = createSimulationHandlers(resources, logger, viewRefresher);
+    SimulationHandlers handlers = createSimulationHandlers(resources, logger, viewRefresher, viewData);
     this.simulationRunner = new SimulationRunner(model, viewData, handlers);
   }
 
   private SimulationHandlers createSimulationHandlers(ResourceBundle resources,
                                                       SimulationTimeLogger logger,
-                                                      ViewRefresher viewRefresher) {
+                                                      ViewRefresher viewRefresher,
+                                                      ViewData viewData) {
     return new SimulationHandlers(
         asList(logger.onStartHandler(), viewRefresher.onStartHandler()),
         asList(logger.onStopHandler(), viewRefresher.onStopHandler()),
-        singletonList(new IterationCounter(iterations, resources).afterStepHandler()));
+        singletonList(new IterationCounter(iterations, resources).afterStepHandler()),
+        singletonList(viewData.onClearHandler()));
   }
 
   public void clear() {

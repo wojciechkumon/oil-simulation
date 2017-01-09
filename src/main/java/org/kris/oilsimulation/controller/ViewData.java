@@ -1,5 +1,6 @@
 package org.kris.oilsimulation.controller;
 
+import org.kris.oilsimulation.controller.handler.Handler;
 import org.kris.oilsimulation.model.OilAutomatonNextSettings;
 import org.kris.oilsimulation.model.Vector;
 
@@ -7,6 +8,7 @@ import javafx.scene.control.ToggleGroup;
 
 public class ViewData {
   private final ToggleGroup iterationDelayMillis;
+  private final Handler onClearHandler;
 
   private OilAutomatonNextSettings currentSettings;
 
@@ -14,7 +16,6 @@ public class ViewData {
     this.iterationDelayMillis = iterationDelayMillis;
     this.currentSettings = newSettings(sliders.currentX().getValue(), sliders.currentY().getValue(),
         sliders.windX().getValue(), sliders.windY().getValue());
-
 
     sliders.currentX().valueProperty().addListener((observable, old, newXValue) ->
         currentSettings = newSettings(newXValue.doubleValue(), sliders.currentY().getValue(),
@@ -32,6 +33,13 @@ public class ViewData {
         currentSettings = newSettings(sliders.currentX().getValue(), sliders.currentY().getValue(),
             sliders.windX().getValue(), newYValue.doubleValue())
     );
+
+    this.onClearHandler = () -> {
+      sliders.currentX().setValue(0);
+      sliders.currentY().setValue(0);
+      sliders.windX().setValue(0);
+      sliders.windY().setValue(0);
+    };
   }
 
   private OilAutomatonNextSettings newSettings(double currentXValue, double currentYValue,
@@ -48,5 +56,9 @@ public class ViewData {
     SimulationSpeed simulationSpeed =
         (SimulationSpeed) iterationDelayMillis.getSelectedToggle().getUserData();
     return simulationSpeed.getIterationDelayMillis();
+  }
+
+  public Handler onClearHandler() {
+    return onClearHandler;
   }
 }
