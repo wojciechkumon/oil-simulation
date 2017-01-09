@@ -39,7 +39,6 @@ public class CellChartController {
   }
 
   private void updateChart(GridView gridView, History history, int col, int row) {
-    System.out.println(col + " " + row + " " + gridView.getCellView(row, col).getMass());
     XYChart.Series<Double, Double> newSeries = prepareSeries(gridView, history, col, row);
     Platform.runLater(() -> {
       cellChart.getData().clear();
