@@ -123,4 +123,8 @@ public class GridCanvasController implements Initializable {
   public void initCellTooltip(CellTooltipController cellTooltipController) {
     cellTooltipController.start(canvas, this, bundle);
   }
+
+  public void initChartController(ChartController chartController) {
+    chartController.start(canvas, this);
+  }
 }
