@@ -1,22 +1,16 @@
 package org.kris.oilsimulation.model.automatonview;
 
-import org.kris.oilsimulation.model.CellState;
-
 class EmptyAutomatonView implements AutomatonView {
 
+  EmptyAutomatonView() {}
+
   @Override
-  public CellState getState(int row, int col) {
-    throw new UnsupportedOperationException();
+  public GridView getGridView() {
+    return GridViewFactory.getEmptyView();
   }
 
   @Override
-  public int getWidth() {
-    return 0;
+  public History getHistory() {
+    return HistoryFactory.getEmptyHistory();
   }
-
-  @Override
-  public int getHeight() {
-    return 0;
-  }
-
 }

@@ -1,5 +1,10 @@
 package org.kris.oilsimulation.model;
 
+import org.kris.oilsimulation.model.automatonview.AutomatonView;
+import org.kris.oilsimulation.model.automatonview.AutomatonViewFactory;
+import org.kris.oilsimulation.model.automatonview.History;
+import org.kris.oilsimulation.model.automatonview.HistoryFactory;
+
 import java.util.Map;
 import java.util.Random;
 
@@ -8,10 +13,18 @@ public class OilAutomaton extends AbstractAutomaton {
   private final OilSimulationConstants constants;
   private final Calculators calculators;
   private final Map<CellCoords, OilSource> sources;
+  private final History history;
 
   private OilAutomaton(Size size, ExternalConditions externalConditions,
                        OilSimulationConstants constants, Calculators calculators,
                        Map<CellCoords, OilSource> sources) {
+    this(size, externalConditions, constants, calculators, sources,
+        HistoryFactory.getEmptyHistory());
+  }
+
+  private OilAutomaton(Size size, ExternalConditions externalConditions,
+                       OilSimulationConstants constants, Calculators calculators,
+                       Map<CellCoords, OilSource> sources, History history) {
     super(size);
     this.externalConditions = externalConditions;
     this.constants = constants;
@@ -23,6 +36,7 @@ public class OilAutomaton extends AbstractAutomaton {
         grid.set(i, j, WaterCellState.emptyCell());
       }
     }
+    this.history = history;
   }
 
   public static OilAutomaton newAutomaton(Size size, ExternalConditions externalConditions,
@@ -62,9 +76,12 @@ public class OilAutomaton extends AbstractAutomaton {
   }
 
   private Automaton produceNextState(ExternalConditions newExternalConditions) {
+    AutomatonView view = getAutomatonView();
+    History newHistory = view.getHistory().add(view.getGridView());
     OilAutomaton newAutomaton = new OilAutomaton(size, newExternalConditions,
-        constants, calculators, getSourcesNextState());
+        constants, calculators, getSourcesNextState(), newHistory);
     setNewAutomatonGridState(newAutomaton);
+
     return newAutomaton;
   }
 
@@ -107,4 +124,8 @@ public class OilAutomaton extends AbstractAutomaton {
     return sum;
   }
 
+  @Override
+  protected AutomatonView createView() {
+    return AutomatonViewFactory.create(grid.getGridView(), history);
+  }
 }

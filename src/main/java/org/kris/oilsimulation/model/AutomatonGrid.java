@@ -1,7 +1,7 @@
 package org.kris.oilsimulation.model;
 
-import org.kris.oilsimulation.model.automatonview.AutomatonView;
-import org.kris.oilsimulation.model.automatonview.AutomatonViewFactory;
+import org.kris.oilsimulation.model.automatonview.GridView;
+import org.kris.oilsimulation.model.automatonview.GridViewFactory;
 
 public class AutomatonGrid {
   private final CellState[][] grid;
@@ -28,8 +28,8 @@ public class AutomatonGrid {
     grid[coords.getRow()][coords.getCol()] = newState;
   }
 
-  public AutomatonView getAutomatonView() {
-    return AutomatonViewFactory.create(grid, size);
+  public GridView getGridView() {
+    return GridViewFactory.create(grid, size);
   }
 
   public Size getSize() {

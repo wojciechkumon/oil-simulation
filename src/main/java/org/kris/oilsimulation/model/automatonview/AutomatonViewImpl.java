@@ -1,27 +1,21 @@
 package org.kris.oilsimulation.model.automatonview;
 
-import org.kris.oilsimulation.model.CellState;
-import org.kris.oilsimulation.model.Size;
-
 class AutomatonViewImpl implements AutomatonView {
-  private final CellState[][] grid;
-  private final Size size;
+  private final GridView gridView;
+  private final History history;
 
-  AutomatonViewImpl(CellState[][] grid, Size size) {
-    this.grid = grid;
-    this.size = size;
+  AutomatonViewImpl(GridView gridView, History currentHistory) {
+    this.gridView = gridView;
+    this.history = currentHistory;
   }
 
-  public CellState getState(int row, int col) {
-    return grid[row][col];
+  @Override
+  public GridView getGridView() {
+    return gridView;
   }
 
-  public int getWidth() {
-    return size.getWidth();
+  @Override
+  public History getHistory() {
+    return history;
   }
-
-  public int getHeight() {
-    return size.getHeight();
-  }
-
 }

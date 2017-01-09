@@ -1,13 +1,8 @@
 package org.kris.oilsimulation.model.automatonview;
 
-import org.kris.oilsimulation.model.CellState;
-
 public interface AutomatonView {
 
-  CellState getState(int row, int col);
+  GridView getGridView();
 
-  int getWidth();
-
-  int getHeight();
-
+  History getHistory();
 }
