@@ -23,6 +23,7 @@ public class GridCanvasController implements Initializable {
   private static final Color BACKGROUND_COLOR = Color.rgb(240, 240, 240);
   private static final int MAX_MASS = 10_000;
 
+  private ResourceBundle bundle;
   private AutomatonView currentView;
 
   @FXML
@@ -87,6 +88,7 @@ public class GridCanvasController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    bundle = resources;
     initGrid();
   }
 
@@ -117,6 +119,6 @@ public class GridCanvasController implements Initializable {
   }
 
   public void initCellTooltip(CellTooltipController cellTooltipController) {
-    cellTooltipController.start(canvas, this);
+    cellTooltipController.start(canvas, this, bundle);
   }
 }

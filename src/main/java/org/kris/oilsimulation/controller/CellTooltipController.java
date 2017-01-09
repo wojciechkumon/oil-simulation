@@ -3,6 +3,8 @@ package org.kris.oilsimulation.controller;
 import org.kris.oilsimulation.model.CellState;
 import org.kris.oilsimulation.model.automatonview.AutomatonView;
 
+import java.util.ResourceBundle;
+
 import javafx.animation.PauseTransition;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Tooltip;
@@ -27,12 +29,13 @@ public class CellTooltipController {
     return pause;
   }
 
-  public void start(Canvas canvas, GridCanvasController canvasController) {
-    canvas.setOnMouseMoved(event -> refreshTooltip(canvas, canvasController, event));
+  public void start(Canvas canvas, GridCanvasController canvasController, ResourceBundle bundle) {
+    canvas.setOnMouseMoved(event -> refreshTooltip(canvas, canvasController, event, bundle));
     canvas.setOnMouseExited(event -> hideTooltipIfPossible(canvasController, event));
   }
 
-  private void refreshTooltip(Canvas canvas, GridCanvasController canvasController, MouseEvent event) {
+  private void refreshTooltip(Canvas canvas, GridCanvasController canvasController,
+                              MouseEvent event, ResourceBundle bundle) {
     AutomatonView automatonView = canvasController.getCurrentView();
     double cellSize = canvasController.calculateCellSize();
     int col = (int) Math.floor(event.getX() / cellSize);
@@ -40,7 +43,7 @@ public class CellTooltipController {
 
     if (col < automatonView.getWidth() && row < automatonView.getHeight()) {
       if (lastCol != col || lastRow != row) {
-        tooltip.setText(getTooltipText(automatonView, col, row));
+        tooltip.setText(getTooltipText(automatonView, col, row, bundle));
         tooltip.show(canvas, event.getScreenX(), event.getScreenY());
         tooltipHider.playFromStart();
       }
@@ -49,10 +52,12 @@ public class CellTooltipController {
     }
   }
 
-  private String getTooltipText(AutomatonView automatonView, int col, int row) {
+  private String getTooltipText(AutomatonView automatonView, int col, int row, ResourceBundle bundle) {
     CellState state = automatonView.getState(row, col);
-    return "Mass: " + state.getMass() + "kg\nVolume: " + roundToThirdPlace(state.getVolume())
-        + "m^3\nOil particles: " + state.getOilParticles().size();
+
+    return bundle.getString("Mass") + ": " + state.getMass() + "kg\n"
+        + bundle.getString("Volume") + ": " + roundToThirdPlace(state.getVolume()) + "m^3\n"
+        + bundle.getString("Oil_particles") + ": " + state.getOilParticles().size();
   }
 
   private double roundToThirdPlace(double value) {
