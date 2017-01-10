@@ -97,7 +97,7 @@
         </VBox>
     </HBox>
 
-    <VBox minHeight="200" prefHeight="200" maxHeight="200">
+    <VBox minHeight="200">
         <fx:include fx:id="cellChart" source="cellChart.fxml"/>
     </VBox>
 
