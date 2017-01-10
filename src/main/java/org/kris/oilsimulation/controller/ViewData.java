@@ -34,12 +34,7 @@ public class ViewData {
             sliders.windX().getValue(), newYValue.doubleValue())
     );
 
-    this.onClearHandler = () -> {
-      sliders.currentX().setValue(0);
-      sliders.currentY().setValue(0);
-      sliders.windX().setValue(0);
-      sliders.windY().setValue(0);
-    };
+    this.onClearHandler = () -> sliders.getSliders().forEach(slider -> slider.setValue(0));
   }
 
   private OilAutomatonNextSettings newSettings(double currentXValue, double currentYValue,

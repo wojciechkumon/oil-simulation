@@ -1,5 +1,8 @@
 package org.kris.oilsimulation.controller;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javafx.scene.control.Slider;
 
 public class WindCurrentSliders {
@@ -30,5 +33,9 @@ public class WindCurrentSliders {
 
   public Slider windY() {
     return windSliderY;
+  }
+
+  public List<Slider> getSliders() {
+    return Arrays.asList(currentSliderX, currentSliderY, windSliderX, windSliderY);
   }
 }
