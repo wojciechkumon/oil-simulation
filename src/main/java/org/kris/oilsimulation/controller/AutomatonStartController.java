@@ -26,6 +26,8 @@ public class AutomatonStartController {
   @FXML
   private ToggleGroup iterationDelayMillis;
   @FXML
+  private Button startSettingsButton;
+  @FXML
   private Button startButton;
   @FXML
   private Button clearButton;
@@ -46,6 +48,11 @@ public class AutomatonStartController {
     simulationRunner.startOrStopClicked();
   }
 
+  public void startSettingsClicked() throws Exception{
+    GenerateMapController mapController = new GenerateMapController();
+    mapController.LoadGenerationMenu();
+  }
+
   public void initModel(Model model) {
     createSimulationRunner(model);
   }
@@ -56,7 +63,7 @@ public class AutomatonStartController {
     ViewData viewData = new ViewData(iterationDelayMillis, sliders);
     SimulationTimeLogger logger = new SimulationTimeLogger();
     ViewRefresher viewRefresher =
-        new ViewRefresher(startButton, clearButton, iterationDelayMillis, resources);
+        new ViewRefresher(startSettingsButton, startButton, clearButton, iterationDelayMillis, resources);
     SimulationHandlers handlers = createSimulationHandlers(resources, logger, viewRefresher, viewData);
     this.simulationRunner = new SimulationRunner(model, viewData, handlers);
   }
@@ -73,6 +80,7 @@ public class AutomatonStartController {
   }
 
   public void clear() {
+    startSettingsButton.setDisable(false);
     simulationRunner.clear();
   }
 

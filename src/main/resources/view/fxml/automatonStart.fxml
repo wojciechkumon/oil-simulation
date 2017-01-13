@@ -24,6 +24,14 @@
     </fx:define>
 
     <HBox>
+        <HBox alignment="CENTER">
+            <VBox>
+                <padding>
+                    <Insets right="10"/>
+                </padding>
+
+            </VBox>
+        </HBox>
         <VBox>
             <padding>
                 <Insets right="10"/>
@@ -83,6 +91,12 @@
     </HBox>
 
     <HBox alignment="CENTER">
+        <VBox spacing="10">
+            <padding>
+                <Insets right="20"/>
+            </padding>
+            <Button fx:id="startSettingsButton" text="%startSettings" onAction="#startSettingsClicked"/>
+        </VBox>
         <VBox>
             <padding>
                 <Insets right="10"/>
@@ -95,6 +109,7 @@
             </padding>
             <Button fx:id="clearButton" text="%clear" onAction="#clear"/>
         </VBox>
+
     </HBox>
 
     <VBox minHeight="200" prefHeight="200" maxHeight="200">

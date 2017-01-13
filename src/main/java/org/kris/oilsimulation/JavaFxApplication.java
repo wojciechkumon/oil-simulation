@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.scene.layout.FlowPane;
 
 public class JavaFxApplication extends Application {
   private static final String ICON_PATH = "view/img/icon.png";
@@ -51,8 +52,8 @@ public class JavaFxApplication extends Application {
     stage.setTitle("Oil simulation");
     stage.setScene(new Scene(root));
     stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream(ICON_PATH)));
-    stage.setMinHeight(450);
-    stage.setMinWidth(800);
+    stage.setMinHeight(550);
+    stage.setMinWidth(850);
     stage.show();
   }
 
