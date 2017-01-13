@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<GridPane xmlns:fx="http://javafx.com/fxml"
+          fx:controller="org.kris.oilsimulation.controller.GenerateMapController"
+          alignment="center" maxHeight="Infinity" maxWidth="Infinity">
+
+    <columnConstraints>
+        <ColumnConstraints minWidth="460" />
+        <ColumnConstraints minWidth="350" prefWidth="350" maxWidth="350"/>
+    </columnConstraints>
+
+    <fx:include fx:id="gridCanvas" source="gridCanvas.fxml"/>
+
+    <stylesheets>
+        <URL value="@../css/style.css"/>
+    </stylesheets>
+
+</GridPane>
