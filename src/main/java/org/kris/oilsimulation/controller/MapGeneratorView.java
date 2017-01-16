@@ -1,4 +1,4 @@
-package org.kris.oilsimulation.model.automatonview;
+package org.kris.oilsimulation.controller;
 
 
 import javafx.fxml.FXMLLoader;
@@ -29,7 +29,7 @@ import javafx.scene.control.Slider;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class GenerateMapView {
+public class MapGeneratorView {
     private static final Color WATER_COLOR = Color.rgb(67, 183, 222);
     private static final Color LAND_COLOR = Color.rgb(245, 189, 81);
     private static final String MAPICON_PATH = "view/img/mapicon.png";
@@ -47,7 +47,7 @@ public class GenerateMapView {
     //private FlowPane pane1, pane2;
 
 
-    public GenerateMapView(){
+    public MapGeneratorView(){
         this.dim = 50;
         initMap();
         //make another stage for scene2
