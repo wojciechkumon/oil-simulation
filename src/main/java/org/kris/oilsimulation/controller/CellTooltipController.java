@@ -9,35 +9,30 @@ import javafx.animation.PauseTransition;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 public class CellTooltipController {
   private final Tooltip tooltip;
-  //private final PauseTransition tooltipHider;
+  private final PauseTransition tooltipHider;
   private int lastCol = -1;
   private int lastRow = -1;
 
   public CellTooltipController() {
     this.tooltip = new Tooltip();
     this.tooltip.setAutoHide(true);
-    String ttipStyle = "-fx-background-color: rgba(238,238,238,0.75);" +
-            " -fx-text-fill: #222222;" +
-            "-fx-font-size: 0.85em;" +
-            "-fx-border-color: #222222;" +
-            "-fx-font-size: 14";
-    this.tooltip.setStyle(ttipStyle);
-    //tooltipHider = initDelayedTooltipHider();
+    String tooltipStyle = "-fx-background-color: rgba(238,238,238,0.75);" +
+        " -fx-text-fill: #222222;" +
+        "-fx-border-color: #222222;" +
+        "-fx-font-size: 14";
+    this.tooltip.setStyle(tooltipStyle);
+    tooltipHider = initDelayedTooltipHider();
   }
 
-  /*
-    private PauseTransition initDelayedTooltipHider() {
+  private PauseTransition initDelayedTooltipHider() {
     PauseTransition pause = new PauseTransition(Duration.seconds(1));
     pause.setOnFinished(e -> tooltip.hide());
     return pause;
   }
-  */
 
   public void start(Canvas canvas, GridCanvasController canvasController, ResourceBundle bundle) {
     canvas.setOnMouseMoved(event -> refreshTooltip(canvas, canvasController, event, bundle));
@@ -54,30 +49,28 @@ public class CellTooltipController {
     if (col < gridView.getWidth() && row < gridView.getHeight()) {
       if (lastCol != col || lastRow != row) {
         tooltip.setText(getTooltipText(gridView, col, row, bundle));
-        tooltip.show(canvas, event.getScreenX()+6, event.getScreenY()-tooltip.getHeight()+6);
-        //tooltipHider.playFromStart();
+        tooltip.show(canvas, event.getScreenX() + 6, event.getScreenY() - tooltip.getHeight() + 6);
+        tooltipHider.playFromStart();
       }
       lastCol = col;
       lastRow = row;
-    }else{
-        tooltip.hide();
+    } else {
+      tooltip.hide();
     }
   }
 
   private String getTooltipText(GridView gridView, int col, int row, ResourceBundle bundle) {
     CellView cellView = gridView.getCellView(row, col);
     String landType;
-    if(cellView.isWater()){
-        landType = cellView.getNumberOfParticles()>0 ? bundle.getString("contaminated_water") : bundle.getString("clean_water");
-    }else{
-        landType = bundle.getString("land");
+    if (cellView.isWater()) {
+      landType = cellView.getNumberOfParticles() > 0 ? bundle.getString("contaminated_water") : bundle.getString("clean_water");
+    } else {
+      landType = bundle.getString("land");
     }
-
-
     return bundle.getString("type") + ": " + landType + "\n"
-            + bundle.getString("xCellPos") + ": " + (col+1) + "\n"
-            + bundle.getString("yCellPos") + ": " + (row+1) + "\n"
-            + bundle.getString("Mass") + ": " + cellView.getMass() + "kg\n"
+        + bundle.getString("xCellPos") + ": " + (col + 1) + "\n"
+        + bundle.getString("yCellPos") + ": " + (row + 1) + "\n"
+        + bundle.getString("Mass") + ": " + cellView.getMass() + "kg\n"
         + bundle.getString("Volume") + ": " + roundToThirdPlace(cellView.getVolume()) + "m^3\n"
         + bundle.getString("OilParticles") + ": " + cellView.getNumberOfParticles() + "\n";
   }

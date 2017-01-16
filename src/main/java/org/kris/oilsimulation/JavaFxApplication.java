@@ -17,7 +17,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javafx.scene.layout.FlowPane;
 
 public class JavaFxApplication extends Application {
   private static final String ICON_PATH = "view/img/icon.png";
