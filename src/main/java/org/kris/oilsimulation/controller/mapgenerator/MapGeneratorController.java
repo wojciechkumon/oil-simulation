@@ -23,7 +23,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -80,19 +79,18 @@ public class MapGeneratorController implements Initializable {
     System.out.println("save pressed");
   }
 
-  public void reset() {
+  public final void reset() {
     handleNewMapSize((int) mapSizeSlider.getValue());
   }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    canvas.setOnMousePressed(this::onMousePressed);
-    canvas.setOnMouseDragged(this::onMouseDrag);
-    canvas.setOnMouseReleased(this::onMouseRelease);
+    new CanvasDragger(this, canvas,
+        (i, j) -> cellStatesMatrix[i][j] = chooseCorrectCell());
 
     mapSizeSlider.valueProperty().addListener(
         (observable, oldValue, newValue) -> handleNewMapSize(newValue.intValue()));
-    handleNewMapSize((int) mapSizeSlider.getValue());
+    reset();
   }
 
   private void handleNewMapSize(int newMapSize) {
@@ -107,6 +105,10 @@ public class MapGeneratorController implements Initializable {
         this.cellStatesMatrix[i][j] = WaterCellState.emptyCell();
       }
     }
+  }
+
+  void redraw() {
+    redraw(cellStatesMatrix.length);
   }
 
   private void redraw(int mapSize) {
@@ -160,65 +162,7 @@ public class MapGeneratorController implements Initializable {
       return Color.BLACK;
   }
 
-  private void onMousePressed(MouseEvent event) {
-    MapGeneratorController.this.mousePressed = true;
-    MapGeneratorController.this.startMovePosX = event.getSceneX();
-    MapGeneratorController.this.startMovePosY = event.getSceneY();
-  }
-
-  private void onMouseDrag(MouseEvent event) {
-    if (!mousePressed) {
-      return;
-    }
-    Coords coords = Coords.ascendingCoords(event.getSceneX(), startMovePosX);
-    if (coords.second > cellStatesMatrix.length * cellSize) {
-      coords.second = cellStatesMatrix.length * cellSize;
-    }
-    double xSize = coords.second - coords.first;
-    double xStart = coords.first;
-
-    coords = Coords.ascendingCoords(event.getSceneY(), startMovePosY);
-    if (coords.second > cellStatesMatrix.length * cellSize) {
-      coords.second = cellStatesMatrix.length * cellSize;
-    }
-    double ySize = coords.second - coords.first;
-    GraphicsContext graphics = canvas.getGraphicsContext2D();
-    redraw(cellStatesMatrix.length);
-    graphics.setStroke(Color.BLACK);
-    graphics.strokeRect(xStart, coords.first, xSize, ySize);
-  }
-
-  private void onMouseRelease(MouseEvent event) {
-    Coords coordsX = Coords.ascendingCoords(event.getSceneX(), startMovePosX);
-    Coords coordsY = Coords.ascendingCoords(event.getSceneY(), startMovePosY);
-
-    coordsX.first = findPosition(coordsX.first);
-    coordsX.second = findPosition(coordsX.second);
-    coordsY.first = findPosition(coordsY.first);
-    coordsY.second = findPosition(coordsY.second);
-
-    for (int i = (int) coordsX.first; i <= (int) coordsX.second; i++) {
-      for (int j = (int) coordsY.first; j <= (int) coordsY.second; j++) {
-        if (checkCell(i, j)) {
-          cellStatesMatrix[i][j] = chooseCorectCell();
-        }
-      }
-    }
-
-    this.mousePressed = false;
-    redraw(cellStatesMatrix.length);
-  }
-
-  private double findPosition(double pixel) {
-    return pixel / cellSize;
-  }
-
-  private boolean checkCell(int x, int y) {
-    return x >= 0 && x < cellStatesMatrix.length
-        && y >= 0 && y < cellStatesMatrix.length;
-  }
-
-  private CellState chooseCorectCell() {
+  private CellState chooseCorrectCell() {
     if (cellClickType.getSelectedToggle().getUserData() == CellType.LAND) {
       return LandCellState.emptyCell();
     } else if (cellClickType.getSelectedToggle().getUserData() == CellType.WATER) {
@@ -229,20 +173,11 @@ public class MapGeneratorController implements Initializable {
     }
   }
 
-  private static class Coords {
-    private double first;
-    private double second;
+  int getCellMatrixSize() {
+    return cellStatesMatrix.length;
+  }
 
-    private Coords(double first, double second) {
-      this.first = first;
-      this.second = second;
-    }
-
-    static Coords ascendingCoords(double first, double second) {
-      if (first <= second) {
-        return new Coords(first, second);
-      }
-      return new Coords(second, first);
-    }
+  double getCellSize() {
+    return cellSize;
   }
 }
