@@ -48,7 +48,7 @@ public class AutomatonStartController {
     simulationRunner.startOrStopClicked();
   }
 
-  public void startSettingsClicked() throws Exception{
+  public void startSettingsClicked() throws Exception {
     GenerateMapController mapController = new GenerateMapController();
     mapController.LoadGenerationMenu();
   }
@@ -76,11 +76,10 @@ public class AutomatonStartController {
         asList(logger.onStartHandler(), viewRefresher.onStartHandler()),
         asList(logger.onStopHandler(), viewRefresher.onStopHandler()),
         singletonList(new IterationCounter(iterations, resources).afterStepHandler()),
-        singletonList(viewData.onClearHandler()));
+        asList(viewData.onClearHandler(), viewRefresher.onClearHandler()));
   }
 
   public void clear() {
-    startSettingsButton.setDisable(false);
     simulationRunner.clear();
   }
 

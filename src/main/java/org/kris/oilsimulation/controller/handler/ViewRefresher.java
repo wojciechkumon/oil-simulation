@@ -14,8 +14,8 @@ public class ViewRefresher {
   private final ToggleGroup iterationDelayMillis;
   private final ResourceBundle resources;
 
-  public ViewRefresher(Button startSettingsButton, Button startButton, Button clearButton, ToggleGroup iterationDelayMillis,
-                       ResourceBundle resources) {
+  public ViewRefresher(Button startSettingsButton, Button startButton, Button clearButton,
+                       ToggleGroup iterationDelayMillis, ResourceBundle resources) {
     this.startSettingsButton = startSettingsButton;
     this.startButton = startButton;
     this.clearButton = clearButton;
@@ -41,4 +41,7 @@ public class ViewRefresher {
     });
   }
 
+  public Handler onClearHandler() {
+    return () -> Platform.runLater(() -> startSettingsButton.setDisable(false));
+  }
 }
