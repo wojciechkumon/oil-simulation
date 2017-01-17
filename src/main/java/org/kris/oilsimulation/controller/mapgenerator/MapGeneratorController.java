@@ -5,8 +5,6 @@ import org.kris.oilsimulation.model.CellState;
 import org.kris.oilsimulation.model.LandCellState;
 import org.kris.oilsimulation.model.OilParticle;
 import org.kris.oilsimulation.model.WaterCellState;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.Collections;
@@ -22,12 +20,12 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.paint.Color;
 import javafx.stage.Window;
 
+import static org.kris.oilsimulation.controller.Colors.BACKGROUND_COLOR;
+import static org.kris.oilsimulation.controller.Colors.LAND_COLOR;
+import static org.kris.oilsimulation.controller.Colors.WATER_COLOR;
+
 public class MapGeneratorController implements Initializable {
-  private static final Logger LOG = LoggerFactory.getLogger(MapGeneratorController.class);
   private static final String ICON_PATH = "view/img/mapicon.png";
-  private static final Color BACKGROUND_COLOR = Color.rgb(240, 240, 240);
-  private static final Color WATER_COLOR = Color.rgb(67, 183, 222);
-  private static final Color LAND_COLOR = Color.rgb(245, 189, 81);
 
   @FXML
   private Canvas canvas;

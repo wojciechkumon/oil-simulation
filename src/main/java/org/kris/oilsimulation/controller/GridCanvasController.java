@@ -18,10 +18,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import static org.kris.oilsimulation.controller.Colors.BACKGROUND_COLOR;
+import static org.kris.oilsimulation.controller.Colors.LAND_COLOR;
+import static org.kris.oilsimulation.controller.Colors.WATER_COLOR;
+
 public class GridCanvasController implements Initializable {
-  private static final Color WATER_COLOR = Color.rgb(67, 183, 222);
-  private static final Color LAND_COLOR = Color.rgb(245, 189, 81);
-  private static final Color BACKGROUND_COLOR = Color.rgb(240, 240, 240);
   private static final int MAX_MASS = 10_000;
 
   private ResourceBundle bundle;

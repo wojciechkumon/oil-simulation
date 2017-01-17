@@ -74,7 +74,7 @@
                 <Label text="%south"/>
             </HBox>
         </VBox>
-        <VBox>
+        <VBox spacing="2">
             <Label text="%iterationDelayMillis"/>
 
             <RadioButton userData="$SINGLE_STEP" text="%singleStep"
