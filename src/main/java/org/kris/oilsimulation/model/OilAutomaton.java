@@ -114,18 +114,6 @@ public class OilAutomaton extends AbstractAutomaton {
     }
   }
 
-  // TODO remove after implementation (to test in debugger)
-  private int countParticles() {
-    int sum = 0;
-    for (int i = 0; i < size.getHeight(); i++) {
-      for (int j = 0; j < size.getWidth(); j++) {
-        CellState cellState = grid.get(i, j);
-        sum += cellState.getOilParticles().size();
-      }
-    }
-    return sum;
-  }
-
   @Override
   protected AutomatonView createView() {
     return AutomatonViewFactory.create(grid.getGridView(), history);
