@@ -95,26 +95,22 @@
     </HBox>
 
     <HBox alignment="CENTER">
-        <VBox spacing="10">
-            <padding>
-                <Insets right="20"/>
-            </padding>
-            <Button fx:id="startSettingsButton" text="%startSettings"
-                    onAction="#startSettingsClicked"/>
-        </VBox>
-        <VBox>
+        <VBox spacing="10" alignment="CENTER">
             <padding>
                 <Insets right="10"/>
             </padding>
             <Button fx:id="startButton" text="%start" onAction="#startOrStopClicked"/>
+            <Button fx:id="startSettingsButton" text="%startSettings"
+                    onAction="#startSettingsClicked"/>
         </VBox>
-        <VBox spacing="10">
+        <VBox spacing="10" alignment="CENTER">
             <padding>
                 <Insets left="10"/>
             </padding>
             <Button fx:id="clearButton" text="%clear" onAction="#clear"/>
+            <Button fx:id="pollutionMapButton" text="%pollutionMap"
+                    onAction="#pollutionMapButtonClicked"/>
         </VBox>
-
     </HBox>
 
     <VBox minHeight="200" prefHeight="200" maxHeight="200">

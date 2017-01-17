@@ -9,14 +9,16 @@ import javafx.scene.control.ToggleGroup;
 
 public class ViewRefresher {
   private final Button startSettingsButton;
+  private final Button pollutionMapButton;
   private final Button startButton;
   private final Button clearButton;
   private final ToggleGroup iterationDelayMillis;
   private final ResourceBundle resources;
 
-  public ViewRefresher(Button startSettingsButton, Button startButton, Button clearButton,
+  public ViewRefresher(Button startSettingsButton, Button pollutionMapButton, Button startButton, Button clearButton,
                        ToggleGroup iterationDelayMillis, ResourceBundle resources) {
     this.startSettingsButton = startSettingsButton;
+    this.pollutionMapButton = pollutionMapButton;
     this.startButton = startButton;
     this.clearButton = clearButton;
     this.iterationDelayMillis = iterationDelayMillis;
@@ -29,6 +31,7 @@ public class ViewRefresher {
           startButton.setText(resources.getString("stop"));
           clearButton.setDisable(true);
           startSettingsButton.setDisable(true);
+          pollutionMapButton.setDisable(true);
           iterationDelayMillis.getToggles().forEach(toggle -> ((RadioButton) toggle).setDisable(true));
         });
   }
@@ -37,6 +40,7 @@ public class ViewRefresher {
     return () -> Platform.runLater(() -> {
       startButton.setText(resources.getString("start"));
       clearButton.setDisable(false);
+      pollutionMapButton.setDisable(false);
       iterationDelayMillis.getToggles().forEach(toggle -> ((RadioButton) toggle).setDisable(false));
     });
   }

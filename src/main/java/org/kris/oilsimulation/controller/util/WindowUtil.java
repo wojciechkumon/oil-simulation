@@ -31,8 +31,8 @@ public class WindowUtil {
       ResourceBundle bundle = ResourceBundle.getBundle("i18n/lang");
       FXMLLoader fxmlLoader = new FXMLLoader(WindowUtil.class.getClassLoader()
           .getResource(fxmlPath), bundle);
-      adjustFxml.accept(fxmlLoader);
       Parent root = fxmlLoader.load();
+      adjustFxml.accept(fxmlLoader);
       Stage stage = new Stage();
       stage.initModality(Modality.WINDOW_MODAL);
       stage.initStyle(StageStyle.DECORATED);

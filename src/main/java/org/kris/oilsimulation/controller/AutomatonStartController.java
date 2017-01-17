@@ -29,6 +29,8 @@ public class AutomatonStartController {
   @FXML
   private Button startSettingsButton;
   @FXML
+  private Button pollutionMapButton;
+  @FXML
   private Button startButton;
   @FXML
   private Button clearButton;
@@ -54,6 +56,10 @@ public class AutomatonStartController {
     System.out.println(i);
   }
 
+  public void pollutionMapButtonClicked() {
+    simulationRunner.pollutionMapButtonClicked(iterations.getScene().getWindow());
+  }
+
   public void initModel(Model model) {
     createSimulationRunner(model);
   }
@@ -64,7 +70,8 @@ public class AutomatonStartController {
     ViewData viewData = new ViewData(iterationDelayMillis, sliders);
     SimulationTimeLogger logger = new SimulationTimeLogger();
     ViewRefresher viewRefresher =
-        new ViewRefresher(startSettingsButton, startButton, clearButton, iterationDelayMillis, resources);
+        new ViewRefresher(startSettingsButton, pollutionMapButton, startButton,
+            clearButton, iterationDelayMillis, resources);
     SimulationHandlers handlers = createSimulationHandlers(resources, logger, viewRefresher, viewData);
     this.simulationRunner = new SimulationRunner(model, viewData, handlers);
   }
