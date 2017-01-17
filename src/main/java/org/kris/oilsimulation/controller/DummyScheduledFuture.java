@@ -6,8 +6,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import javax.naming.OperationNotSupportedException;
-
 public class DummyScheduledFuture<T> implements ScheduledFuture<T> {
 
   @Override

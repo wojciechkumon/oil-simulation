@@ -1,5 +1,7 @@
 package org.kris.oilsimulation.controller.pollutionmap;
 
+import java.util.Arrays;
+
 public class PollutionMap {
   private final PollutionCell[][] cells;
   private final int maxIterations;
@@ -10,15 +12,10 @@ public class PollutionMap {
   }
 
   private int findMaxIterations(PollutionCell[][] cells) {
-    int max = 0;
-    for (int i = 0; i < cells.length; i++) {
-      for (int j = 0; j < cells[0].length; j++) {
-        if (cells[i][j].getPollutedIterations() > max) {
-          max = cells[i][j].getPollutedIterations();
-        }
-      }
-    }
-    return max;
+    return Arrays.stream(cells)
+        .flatMap(Arrays::stream)
+        .map(PollutionCell::getPollutedIterations)
+        .reduce(0, Math::max);
   }
 
   public PollutionCell get(int i, int j) {

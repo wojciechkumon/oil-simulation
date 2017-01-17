@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public abstract class AbstractAutomaton implements Automaton {
   protected final AutomatonGrid grid;
   protected final Size size;
-  private AtomicReference<AutomatonView> viewReference = new AtomicReference<>();
+  private final AtomicReference<AutomatonView> viewReference = new AtomicReference<>();
 
   public AbstractAutomaton(Size size) {
     this.grid = new AutomatonGrid(size);
