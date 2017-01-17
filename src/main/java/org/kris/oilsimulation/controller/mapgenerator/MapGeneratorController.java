@@ -1,5 +1,6 @@
 package org.kris.oilsimulation.controller.mapgenerator;
 
+import org.kris.oilsimulation.controller.util.WindowUtil;
 import org.kris.oilsimulation.model.CellState;
 import org.kris.oilsimulation.model.LandCellState;
 import org.kris.oilsimulation.model.OilParticle;
@@ -7,26 +8,18 @@ import org.kris.oilsimulation.model.WaterCellState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
 public class MapGeneratorController implements Initializable {
@@ -55,24 +48,9 @@ public class MapGeneratorController implements Initializable {
 
 
   public static int getGeneratedMap(Window mainWindow) {
-    try {
-      ResourceBundle bundle = ResourceBundle.getBundle("i18n/lang");
-      FXMLLoader fxmlLoader = new FXMLLoader(MapGeneratorController.class.getClassLoader()
-          .getResource("view/fxml/mapGenerator.fxml"), bundle);
-      Parent root = fxmlLoader.load();
-      Stage stage = new Stage();
-      stage.initModality(Modality.WINDOW_MODAL);
-      stage.initStyle(StageStyle.DECORATED);
-      stage.setTitle(bundle.getString("startSettings"));
-      stage.getIcons().add(new Image(MapGeneratorController.class.getClassLoader().getResourceAsStream(ICON_PATH)));
-      stage.setScene(new Scene(root));
-      stage.setResizable(false);
-      stage.initOwner(mainWindow);
-      stage.showAndWait();
-    } catch (IOException e) {
-      LOG.error("Error while creating map generator window", e);
-    }
-    return 666;
+    MapGeneratorController controller = WindowUtil
+        .showWindowAndGetController(mainWindow, "view/fxml/mapGenerator.fxml", "startSettings", ICON_PATH);
+    return controller.getCellMatrixSize();
   }
 
   public void save() {
