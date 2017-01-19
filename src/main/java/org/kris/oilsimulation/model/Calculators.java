@@ -4,12 +4,16 @@ public class Calculators {
   private final SpreadingCalculator spreadingCalculator;
   private final AdvectionCalculator advectionCalculator;
   private final OilSourcesCalculator oilSourcesCalculator;
+  private final EvaporationCalculator evaporationCalculator;
 
   public Calculators(SpreadingCalculator spreadingCalculator,
-                     AdvectionCalculator advectionCalculator, OilSourcesCalculator oilSourcesCalculator) {
+                     AdvectionCalculator advectionCalculator,
+                     OilSourcesCalculator oilSourcesCalculator,
+                     EvaporationCalculator evaporationCalculator) {
     this.spreadingCalculator = spreadingCalculator;
     this.advectionCalculator = advectionCalculator;
     this.oilSourcesCalculator = oilSourcesCalculator;
+    this.evaporationCalculator = evaporationCalculator;
   }
 
   public SpreadingCalculator spreading() {
@@ -22,5 +26,9 @@ public class Calculators {
 
   public OilSourcesCalculator oilSources() {
     return oilSourcesCalculator;
+  }
+
+  public EvaporationCalculator evaporation() {
+    return evaporationCalculator;
   }
 }

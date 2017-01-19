@@ -42,7 +42,7 @@ public class StartUpSettings {
     Vector wind = new Vector(0, 0);
     ExternalConditions externalConditions = new ExternalConditions(current, wind);
     OilSimulationConstants constants =
-        new OilSimulationConstants(50, 600, 835, 30, 50, 50, 3, 1_000);
+        new OilSimulationConstants(50, 600, 835, 30, 50, 1 - 0.99811, 3, 1_000);
 
     return new StartUpSettings(size, externalConditions, constants);
   }

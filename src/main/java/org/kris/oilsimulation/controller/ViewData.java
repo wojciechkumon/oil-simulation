@@ -19,27 +19,21 @@ public class ViewData {
 
     sliders.currentX().valueProperty().addListener((observable, old, newXValue) ->
         currentSettings = newSettings(newXValue.doubleValue(), sliders.currentY().getValue(),
-            sliders.windX().getValue(), sliders.windY().getValue())
-    );
+            sliders.windX().getValue(), sliders.windY().getValue()));
+
     sliders.currentY().valueProperty().addListener((observable, old, newYValue) ->
         currentSettings = newSettings(sliders.currentX().getValue(), newYValue.doubleValue(),
-            sliders.windX().getValue(), sliders.windY().getValue())
-    );
+            sliders.windX().getValue(), sliders.windY().getValue()));
+
     sliders.windX().valueProperty().addListener((observable, old, newXValue) ->
         currentSettings = newSettings(sliders.currentX().getValue(), sliders.currentY().getValue(),
-            newXValue.doubleValue(), sliders.windY().getValue())
-    );
+            newXValue.doubleValue(), sliders.windY().getValue()));
+
     sliders.windY().valueProperty().addListener((observable, old, newYValue) ->
         currentSettings = newSettings(sliders.currentX().getValue(), sliders.currentY().getValue(),
-            sliders.windX().getValue(), newYValue.doubleValue())
-    );
+            sliders.windX().getValue(), newYValue.doubleValue()));
 
-    this.onClearHandler = () -> {
-      sliders.currentX().setValue(0);
-      sliders.currentY().setValue(0);
-      sliders.windX().setValue(0);
-      sliders.windY().setValue(0);
-    };
+    this.onClearHandler = () -> sliders.getSliders().forEach(slider -> slider.setValue(0));
   }
 
   private OilAutomatonNextSettings newSettings(double currentXValue, double currentYValue,

@@ -126,6 +126,6 @@ public class GridCanvasController implements Initializable {
   }
 
   public void initCellChartController(CellChartController chartController) {
-    chartController.start(canvas, this);
+    chartController.start(canvas, this, bundle);
   }
 }

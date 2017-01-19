@@ -8,8 +8,8 @@
           alignment="center" styleClass="root" maxHeight="Infinity" maxWidth="Infinity">
 
     <columnConstraints>
-        <ColumnConstraints minWidth="460" />
-        <ColumnConstraints minWidth="350" prefWidth="350" maxWidth="350"/>
+        <ColumnConstraints minWidth="460"/>
+        <ColumnConstraints minWidth="350" maxWidth="600"/>
     </columnConstraints>
 
     <fx:include fx:id="gridCanvas" source="gridCanvas.fxml"/>

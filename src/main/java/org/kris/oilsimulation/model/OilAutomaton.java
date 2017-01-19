@@ -49,7 +49,7 @@ public class OilAutomaton extends AbstractAutomaton {
                                           InitialStates initialStates) {
     Random random = new Random();
     Calculators calculators = new Calculators(new SpreadingCalculator(random),
-        new AdvectionCalculator(random), new OilSourcesCalculator());
+        new AdvectionCalculator(random), new OilSourcesCalculator(), new EvaporationCalculator());
     OilAutomaton automaton = new OilAutomaton(size, externalConditions,
         constants, calculators, initialStates.getInitialSources());
 
@@ -94,6 +94,8 @@ public class OilAutomaton extends AbstractAutomaton {
     AutomatonGrid tmpGrid = new AutomatonGrid(size);
     grid.copyTo(tmpGrid);
 
+    calculators.evaporation().apply(tmpGrid);
+
     calculators.spreading().apply(tmpGrid, constants);
 
     calculators.advection().apply(tmpGrid, newAutomaton.grid,
@@ -110,18 +112,6 @@ public class OilAutomaton extends AbstractAutomaton {
         }
       }
     }
-  }
-
-  // TODO remove after implementation (to test in debugger)
-  private int countParticles() {
-    int sum = 0;
-    for (int i = 0; i < size.getHeight(); i++) {
-      for (int j = 0; j < size.getWidth(); j++) {
-        CellState cellState = grid.get(i, j);
-        sum += cellState.getOilParticles().size();
-      }
-    }
-    return sum;
   }
 
   @Override
