@@ -3,7 +3,6 @@ TODO:
 4. Dane startowe (ile kg wycieku, jaki czas wyciekalo, jakies informacje jak to wygladalo)
 7. Globalne statystki o obecnym wycieku (kg, ile komórek ponad progiem skażenie obecnie, globlanie przez dowolny moment symulacji)
 8. Tworzenie własnej mapki (ląd/woda, ilość ropy, źródła)
-9. Zapory?
 10. Porównanie z rzeczywistymi danymi
 
 GOTOWE:
