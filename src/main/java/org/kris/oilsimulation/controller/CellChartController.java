@@ -1,5 +1,6 @@
 package org.kris.oilsimulation.controller;
 
+import org.kris.oilsimulation.controller.pollutionmap.PollutionMeter;
 import org.kris.oilsimulation.model.automatonview.CellView;
 import org.kris.oilsimulation.model.automatonview.GridView;
 import org.kris.oilsimulation.model.automatonview.History;
@@ -17,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 
 public class CellChartController {
   private final Executor executor = ExecutorFactory.createSingleThreadDaemonExecutor();
+  private final PollutionMeter pollutionMeter = new PollutionMeter();
 
   @FXML
   private LineChart<Double, Double> cellChart;
@@ -75,8 +77,8 @@ public class CellChartController {
     XYChart.Series<Double, Double> constLine = new XYChart.Series<>();
     constLine.setName(bundle.getString("pollutionState"));
 
-    constLine.getData().add(new XYChart.Data<>(0.0, 500.0));
-    constLine.getData().add(new XYChart.Data<>(size, 500.0));
+    constLine.getData().add(new XYChart.Data<>(0.0, pollutionMeter.getOilKgThreshold()));
+    constLine.getData().add(new XYChart.Data<>(size, pollutionMeter.getOilKgThreshold()));
     return constLine;
   }
 }
