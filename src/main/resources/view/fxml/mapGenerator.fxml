@@ -5,8 +5,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -70,10 +72,31 @@
                 <RadioButton userData="$WATER" text="%water" toggleGroup="$cellClickType"/>
                 <RadioButton userData="$OIL_SOURCE" text="%oilLeakSource"
                              toggleGroup="$cellClickType"/>
+                <HBox fx:id="oilSourcesFields" visible="false" spacing="5">
+                    <padding>
+                        <Insets right="10"/>
+                    </padding>
+                    <VBox>
+                        <Label text="%particlesNumber"/>
+                        <TextField fx:id="particlesNumber" text="1000"/>
+                    </VBox>
+                    <VBox>
+                        <Label text="%particlesPerStep"/>
+                        <TextField fx:id="particlesPerIteration" text="10"/>
+                    </VBox>
+                </HBox>
 
-                <Slider fx:id="mapSizeSlider" min="20" max="180" value="50" showTickLabels="true" showTickMarks="true"
-                        majorTickUnit="40" blockIncrement="20"
-                        prefWidth="200" maxWidth="200" minWidth="200"/>
+                <VBox>
+                    <padding>
+                        <Insets top="10"/>
+                    </padding>
+                    <Label text="%mapSize"/>
+                    <Slider fx:id="mapSizeSlider" min="20" max="180" value="50" showTickLabels="true"
+                            showTickMarks="true"
+                            majorTickUnit="40" blockIncrement="20"
+                            prefWidth="200" maxWidth="200" minWidth="200"/>
+                </VBox>
+
             </VBox>
         </VBox>
     </VBox>

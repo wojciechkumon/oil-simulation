@@ -21,6 +21,16 @@ import java.util.Map;
 import static org.kris.oilsimulation.model.CellCoords.newCellCoords;
 
 public class StartUpSettings {
+  private static final int START_MAP_SIZE = 50;
+  private static final int START_CELL_SIZE = 50;
+  private static final int START_TIME_STEP = 600;
+  private static final int START_DENSITY = 835;
+  private static final int START_SURFACE_TENSION = 30;
+  private static final int START_PARTICLE_MASS = 50;
+  private static final double START_EVAPORATION_RATE = 1 - 0.99811;
+  private static final int START_PROPAGATION_FACTOR = 3;
+  private static final int START_MAX_LAND_PARTICLES = 1_000;
+
   private final Size size;
   private final ExternalConditions externalConditions;
   private final OilSimulationConstants constants;
@@ -37,12 +47,14 @@ public class StartUpSettings {
   }
 
   public static StartUpSettings getDefault() {
-    Size size = new Size(50, 50);
-    Vector current = new Vector(0, 0);
-    Vector wind = new Vector(0, 0);
+    Size size = new Size(START_MAP_SIZE, START_MAP_SIZE);
+    Vector current = Vector.zeroVector();
+    Vector wind = Vector.zeroVector();
     ExternalConditions externalConditions = new ExternalConditions(current, wind);
     OilSimulationConstants constants =
-        new OilSimulationConstants(50, 600, 835, 30, 50, 1 - 0.99811, 3, 1_000);
+        new OilSimulationConstants(START_CELL_SIZE, START_TIME_STEP, START_DENSITY,
+            START_SURFACE_TENSION, START_PARTICLE_MASS, START_EVAPORATION_RATE,
+            START_PROPAGATION_FACTOR, START_MAX_LAND_PARTICLES);
 
     return new StartUpSettings(size, externalConditions, constants);
   }

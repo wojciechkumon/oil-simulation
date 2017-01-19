@@ -1,6 +1,7 @@
 package org.kris.oilsimulation.model;
 
 public class Vector {
+  private static final Vector ZERO_VECTOR = new Vector(0, 0);
   private final double x;
   private final double y;
 
@@ -23,5 +24,9 @@ public class Vector {
 
   public double getY() {
     return y;
+  }
+
+  public static Vector zeroVector() {
+    return ZERO_VECTOR;
   }
 }

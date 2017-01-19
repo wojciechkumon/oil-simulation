@@ -1,48 +1,59 @@
 package org.kris.oilsimulation.controller.mapgenerator;
 
+
+import org.kris.oilsimulation.controller.Colors;
+import org.kris.oilsimulation.controller.StartUpSettings;
 import org.kris.oilsimulation.controller.util.WindowUtil;
+import org.kris.oilsimulation.model.CellCoords;
 import org.kris.oilsimulation.model.CellState;
 import org.kris.oilsimulation.model.LandCellState;
 import org.kris.oilsimulation.model.OilParticle;
+import org.kris.oilsimulation.model.OilSource;
+import org.kris.oilsimulation.model.OilSourceImpl;
 import org.kris.oilsimulation.model.WaterCellState;
 
 import java.net.URL;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Window;
 
 import static org.kris.oilsimulation.controller.Colors.BACKGROUND_COLOR;
 import static org.kris.oilsimulation.controller.Colors.LAND_COLOR;
 import static org.kris.oilsimulation.controller.Colors.WATER_COLOR;
+import static org.kris.oilsimulation.model.CellCoords.newCellCoords;
 
 public class MapGeneratorController implements Initializable {
   private static final String ICON_PATH = "view/img/mapicon.png";
+  private final Map<CellCoords, OilSource> oilSources = new HashMap<>();
+  private CellState[][] cellStatesMatrix;
+  private double cellSize;
 
   @FXML
   private Canvas canvas;
   @FXML
-  private Button saveButton;
-  @FXML
-  private Button resetButton;
-  @FXML
   private ToggleGroup cellClickType;
   @FXML
   private Slider mapSizeSlider;
-
-  private CellState[][] cellStatesMatrix;
-  private double cellSize;
-  private boolean mousePressed;
-  private double startMovePosX;
-  private double startMovePosY;
+  @FXML
+  private TextField particlesNumber;
+  @FXML
+  private TextField particlesPerIteration;
+  @FXML
+  private HBox oilSourcesFields;
 
 
   public static int getGeneratedMap(Window mainWindow) {
@@ -57,16 +68,41 @@ public class MapGeneratorController implements Initializable {
 
   public final void reset() {
     handleNewMapSize((int) mapSizeSlider.getValue());
+    oilSources.clear();
   }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    new CanvasDragger(this, canvas,
-        (i, j) -> cellStatesMatrix[i][j] = chooseCorrectCell());
+    new CanvasDragger(this, canvas, this::setCorrectCellState);
 
     mapSizeSlider.valueProperty().addListener(
         (observable, oldValue, newValue) -> handleNewMapSize(newValue.intValue()));
     reset();
+    addTextFieldsIntegerInterceptors();
+    setOilSourceFieldsHider();
+  }
+
+  private void addTextFieldsIntegerInterceptors() {
+    addIntegerInterceptor(particlesNumber);
+    addIntegerInterceptor(particlesPerIteration);
+  }
+
+  private void addIntegerInterceptor(TextField textField) {
+    textField.textProperty().addListener((observable, oldValue, newValue) -> {
+      if (!newValue.matches("\\d*")) {
+        textField.setText(newValue.replaceAll("[^\\d]", ""));
+      }
+    });
+  }
+
+  private void setOilSourceFieldsHider() {
+    cellClickType.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue.getUserData() == CellType.OIL_SOURCE) {
+        oilSourcesFields.setVisible(true);
+      } else {
+        oilSourcesFields.setVisible(false);
+      }
+    });
   }
 
   private void handleNewMapSize(int newMapSize) {
@@ -114,6 +150,16 @@ public class MapGeneratorController implements Initializable {
         drawCell(graphics, cellSize, i, j);
       }
     }
+    drawOilSources(graphics, cellSize);
+  }
+
+  private void drawOilSources(GraphicsContext graphics, double cellSize) {
+    graphics.setFill(Colors.OIL_SOURCES_COLOR);
+    oilSources.entrySet().forEach(entry -> {
+      CellCoords coords = entry.getKey();
+      graphics.fillRect(coords.getRow() * cellSize, coords.getCol() * cellSize,
+          cellSize, cellSize);
+    });
   }
 
   private void drawCell(GraphicsContext graphics, double cellSize, int i, int j) {
@@ -138,15 +184,40 @@ public class MapGeneratorController implements Initializable {
       return Color.BLACK;
   }
 
-  private CellState chooseCorrectCell() {
+  private void setCorrectCellState(int i, int j) {
     if (cellClickType.getSelectedToggle().getUserData() == CellType.LAND) {
-      return LandCellState.emptyCell();
+      setCellState(i, j, LandCellState.emptyCell());
     } else if (cellClickType.getSelectedToggle().getUserData() == CellType.WATER) {
-      return WaterCellState.emptyCell();
+      setCellState(i, j, WaterCellState.emptyCell());
     } else {
-      OilParticle particle = new OilParticle(100, 100, 100, 100);
-      return new WaterCellState(Collections.singletonList(particle));
+      setOilSource(i, j);
     }
+  }
+
+  private void setCellState(int i, int j, CellState cellState) {
+    cellStatesMatrix[i][j] = cellState;
+    oilSources.remove(newCellCoords(i, j));
+  }
+
+  private void setOilSource(int i, int j) {
+    OilParticle particle = StartUpSettings.getDefault()
+        .getOilSimulationConstants()
+        .getStartingParticle();
+
+    int numberOfParticles = Integer.parseInt(particlesNumber.getText());
+    int particlesPerStep = Integer.parseInt(particlesPerIteration.getText());
+
+    OilSource oilSource = new OilSourceImpl(getParticlesList(particle, numberOfParticles),
+        particlesPerStep);
+    oilSources.put(newCellCoords(i, j), oilSource);
+    cellStatesMatrix[i][j] = WaterCellState.emptyCell();
+  }
+
+  private List<OilParticle> getParticlesList(OilParticle particle, int numberOfParticles) {
+    return Stream
+        .generate(() -> particle)
+        .limit(numberOfParticles)
+        .collect(Collectors.toList());
   }
 
   int getCellMatrixSize() {
