@@ -28,22 +28,22 @@ public class CanvasDragger {
 
   private void onMousePressed(MouseEvent event) {
     this.mousePressed = true;
-    this.startMovePosX = event.getSceneX();
-    this.startMovePosY = event.getSceneY();
+    this.startMovePosX = event.getX();
+    this.startMovePosY = event.getY();
   }
 
   private void onMouseDrag(MouseEvent event) {
     if (!mousePressed) {
       return;
     }
-    Coords coords = Coords.ascendingCoords(event.getSceneX(), startMovePosX);
+    Coords coords = Coords.ascendingCoords(event.getX(), startMovePosX);
     if (coords.second > getMatrixSize() * getCellSize()) {
       coords.second = getMatrixSize() * getCellSize();
     }
     double xSize = coords.second - coords.first;
     double xStart = coords.first;
 
-    coords = Coords.ascendingCoords(event.getSceneY(), startMovePosY);
+    coords = Coords.ascendingCoords(event.getY(), startMovePosY);
     if (coords.second > getMatrixSize() * getCellSize()) {
       coords.second = getMatrixSize() * getCellSize();
     }
@@ -54,8 +54,8 @@ public class CanvasDragger {
   }
 
   private void onMouseRelease(MouseEvent event) {
-    Coords coordsX = Coords.ascendingCoords(event.getSceneX(), startMovePosX);
-    Coords coordsY = Coords.ascendingCoords(event.getSceneY(), startMovePosY);
+    Coords coordsX = Coords.ascendingCoords(event.getX(), startMovePosX);
+    Coords coordsY = Coords.ascendingCoords(event.getY(), startMovePosY);
 
     coordsX.first = findPosition(coordsX.first);
     coordsX.second = findPosition(coordsX.second);
