@@ -6,6 +6,7 @@ import org.kris.oilsimulation.controller.StartUpSettings;
 import org.kris.oilsimulation.controller.util.WindowUtil;
 import org.kris.oilsimulation.model.CellCoords;
 import org.kris.oilsimulation.model.CellState;
+import org.kris.oilsimulation.model.InitialStates;
 import org.kris.oilsimulation.model.LandCellState;
 import org.kris.oilsimulation.model.OilParticle;
 import org.kris.oilsimulation.model.OilSource;
@@ -38,7 +39,7 @@ import static org.kris.oilsimulation.model.CellCoords.newCellCoords;
 
 public class MapGeneratorController implements Initializable {
   private static final String ICON_PATH = "view/img/mapicon.png";
-  private final Map<CellCoords, OilSource> oilSources = new HashMap<>();
+  private Map<CellCoords, OilSource> oilSources = new HashMap<>();
   private CellState[][] cellStatesMatrix;
   private double cellSize;
 
@@ -59,7 +60,8 @@ public class MapGeneratorController implements Initializable {
   public static int getGeneratedMap(Window mainWindow) {
     MapGeneratorController controller = WindowUtil
         .showWindowAndGetController(mainWindow, "view/fxml/mapGenerator.fxml", "startSettings", ICON_PATH);
-    return controller.getCellMatrixSize();
+    InitialStates initialStates = controller.createInitialStates();
+    return 10;
   }
 
   public void save() {
@@ -67,8 +69,10 @@ public class MapGeneratorController implements Initializable {
   }
 
   public final void reset() {
-    handleNewMapSize((int) mapSizeSlider.getValue());
+    int mapSize = (int) mapSizeSlider.getValue();
+    this.cellStatesMatrix = allocateNewCells(mapSize);
     oilSources.clear();
+    redraw(mapSize);
   }
 
   @Override
@@ -106,17 +110,39 @@ public class MapGeneratorController implements Initializable {
   }
 
   private void handleNewMapSize(int newMapSize) {
-    allocateNewCells(newMapSize);
+    CellState[][] newCellStatesMatrix = allocateNewCells(newMapSize);
+    copyCurrentMatrixToNewAndSet(newCellStatesMatrix, newMapSize);
+    filterOilSources(newMapSize);
     redraw(newMapSize);
   }
 
-  private void allocateNewCells(int newMapSize) {
-    this.cellStatesMatrix = new CellState[newMapSize][newMapSize];
+  private void copyCurrentMatrixToNewAndSet(CellState[][] newCellStatesMatrix, int newMapSize) {
+    int smallerSize = newMapSize <= this.cellStatesMatrix.length ?
+        newMapSize : this.cellStatesMatrix.length;
+    for (int i = 0; i < smallerSize; i++) {
+      System.arraycopy(this.cellStatesMatrix[i], 0, newCellStatesMatrix[i], 0, smallerSize);
+    }
+    this.cellStatesMatrix = newCellStatesMatrix;
+  }
+
+  private CellState[][] allocateNewCells(int newMapSize) {
+    CellState[][] newCellStatesMatrix = new CellState[newMapSize][newMapSize];
     for (int i = 0; i < newMapSize; i++) {
       for (int j = 0; j < newMapSize; j++) {
-        this.cellStatesMatrix[i][j] = WaterCellState.emptyCell();
+        newCellStatesMatrix[i][j] = WaterCellState.emptyCell();
       }
     }
+    return newCellStatesMatrix;
+  }
+
+  private void filterOilSources(int mapSize) {
+    this.oilSources = oilSources.entrySet().stream()
+        .filter(entry -> {
+          CellCoords coords = entry.getKey();
+          return coords.getCol() < mapSize
+              && coords.getRow() < mapSize;
+        })
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
   void redraw() {
@@ -226,5 +252,9 @@ public class MapGeneratorController implements Initializable {
 
   double getCellSize() {
     return cellSize;
+  }
+
+  private InitialStates createInitialStates() {
+    return null;
   }
 }
