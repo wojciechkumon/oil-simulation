@@ -1,6 +1,6 @@
 package org.kris.oilsimulation.model.automatonview;
 
-import org.kris.oilsimulation.model.CellState;
+import org.kris.oilsimulation.model.cell.CellState;
 import org.kris.oilsimulation.model.Size;
 
 public class GridViewFactory {

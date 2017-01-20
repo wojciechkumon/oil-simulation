@@ -4,6 +4,16 @@ import org.kris.oilsimulation.model.automatonview.AutomatonView;
 import org.kris.oilsimulation.model.automatonview.AutomatonViewFactory;
 import org.kris.oilsimulation.model.automatonview.History;
 import org.kris.oilsimulation.model.automatonview.HistoryFactory;
+import org.kris.oilsimulation.model.calculators.AdvectionCalculator;
+import org.kris.oilsimulation.model.calculators.Calculators;
+import org.kris.oilsimulation.model.calculators.EvaporationCalculator;
+import org.kris.oilsimulation.model.calculators.OilSourcesCalculator;
+import org.kris.oilsimulation.model.calculators.SpreadingCalculator;
+import org.kris.oilsimulation.model.cell.CellCoords;
+import org.kris.oilsimulation.model.cell.CellState;
+import org.kris.oilsimulation.model.cell.LandCellState;
+import org.kris.oilsimulation.model.cell.OilSource;
+import org.kris.oilsimulation.model.cell.WaterCellState;
 
 import java.util.Map;
 import java.util.Random;
@@ -60,11 +70,6 @@ public class OilAutomaton extends AbstractAutomaton {
     });
 
     return automaton;
-  }
-
-  @Override
-  public Automaton nextState() {
-    return produceNextState(externalConditions);
   }
 
   @Override

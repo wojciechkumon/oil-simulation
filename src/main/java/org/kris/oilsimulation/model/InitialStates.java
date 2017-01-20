@@ -1,5 +1,9 @@
 package org.kris.oilsimulation.model;
 
+import org.kris.oilsimulation.model.cell.CellCoords;
+import org.kris.oilsimulation.model.cell.CellState;
+import org.kris.oilsimulation.model.cell.OilSource;
+
 import java.util.Collections;
 import java.util.Map;
 

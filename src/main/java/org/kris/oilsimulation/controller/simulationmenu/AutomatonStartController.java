@@ -1,4 +1,4 @@
-package org.kris.oilsimulation.controller;
+package org.kris.oilsimulation.controller.simulationmenu;
 
 import org.kris.oilsimulation.controller.handler.IterationCounter;
 import org.kris.oilsimulation.controller.handler.SimulationHandlers;

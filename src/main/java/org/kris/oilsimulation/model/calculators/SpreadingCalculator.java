@@ -1,11 +1,18 @@
-package org.kris.oilsimulation.model;
+package org.kris.oilsimulation.model.calculators;
+
+import org.kris.oilsimulation.model.AutomatonGrid;
+import org.kris.oilsimulation.model.cell.CellCoords;
+import org.kris.oilsimulation.model.cell.CellState;
+import org.kris.oilsimulation.model.cell.OilParticle;
+import org.kris.oilsimulation.model.OilSimulationConstants;
+import org.kris.oilsimulation.model.Size;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import static org.kris.oilsimulation.model.CellCoords.newCellCoords;
+import static org.kris.oilsimulation.model.cell.CellCoords.newCellCoords;
 
 /**
  * Land to land = no mass change

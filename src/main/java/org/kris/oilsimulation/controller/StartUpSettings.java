@@ -1,16 +1,16 @@
 package org.kris.oilsimulation.controller;
 
-import org.kris.oilsimulation.model.CellCoords;
-import org.kris.oilsimulation.model.CellState;
+import org.kris.oilsimulation.model.cell.CellCoords;
+import org.kris.oilsimulation.model.cell.CellState;
 import org.kris.oilsimulation.model.ExternalConditions;
 import org.kris.oilsimulation.model.InitialStates;
-import org.kris.oilsimulation.model.LandCellState;
-import org.kris.oilsimulation.model.OilParticle;
+import org.kris.oilsimulation.model.cell.LandCellState;
+import org.kris.oilsimulation.model.cell.OilParticle;
 import org.kris.oilsimulation.model.OilSimulationConstants;
-import org.kris.oilsimulation.model.OilSource;
-import org.kris.oilsimulation.model.OilSourceImpl;
+import org.kris.oilsimulation.model.cell.OilSource;
+import org.kris.oilsimulation.model.cell.OilSourceImpl;
 import org.kris.oilsimulation.model.Size;
-import org.kris.oilsimulation.model.WaterCellState;
+import org.kris.oilsimulation.model.cell.WaterCellState;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.kris.oilsimulation.model.CellCoords.newCellCoords;
+import static org.kris.oilsimulation.model.cell.CellCoords.newCellCoords;
 
 public class StartUpSettings {
   private static final int START_MAP_SIZE = 50;

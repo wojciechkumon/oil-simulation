@@ -1,4 +1,11 @@
-package org.kris.oilsimulation.model;
+package org.kris.oilsimulation.model.calculators;
+
+import org.kris.oilsimulation.model.AutomatonGrid;
+import org.kris.oilsimulation.model.cell.CellCoords;
+import org.kris.oilsimulation.model.cell.CellState;
+import org.kris.oilsimulation.model.cell.OilParticle;
+import org.kris.oilsimulation.model.cell.OilSource;
+import org.kris.oilsimulation.model.cell.WaterCellState;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;

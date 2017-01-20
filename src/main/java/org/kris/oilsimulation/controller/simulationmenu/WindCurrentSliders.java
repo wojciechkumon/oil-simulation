@@ -1,4 +1,4 @@
-package org.kris.oilsimulation.controller;
+package org.kris.oilsimulation.controller.simulationmenu;
 
 import java.util.Arrays;
 import java.util.List;

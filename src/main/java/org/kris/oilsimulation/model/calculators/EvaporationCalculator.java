@@ -1,4 +1,9 @@
-package org.kris.oilsimulation.model;
+package org.kris.oilsimulation.model.calculators;
+
+import org.kris.oilsimulation.model.AutomatonGrid;
+import org.kris.oilsimulation.model.cell.CellState;
+import org.kris.oilsimulation.model.cell.OilParticle;
+import org.kris.oilsimulation.model.Size;
 
 import java.util.List;
 import java.util.stream.Collectors;

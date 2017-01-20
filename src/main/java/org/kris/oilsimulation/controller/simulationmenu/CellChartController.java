@@ -1,5 +1,6 @@
-package org.kris.oilsimulation.controller;
+package org.kris.oilsimulation.controller.simulationmenu;
 
+import org.kris.oilsimulation.controller.maingrid.GridCanvasController;
 import org.kris.oilsimulation.controller.pollutionmap.PollutionMeter;
 import org.kris.oilsimulation.model.automatonview.CellView;
 import org.kris.oilsimulation.model.automatonview.GridView;

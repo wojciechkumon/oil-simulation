@@ -1,8 +1,8 @@
 package org.kris.oilsimulation;
 
-import org.kris.oilsimulation.controller.CellChartController;
-import org.kris.oilsimulation.controller.CellTooltipController;
-import org.kris.oilsimulation.controller.GridCanvasController;
+import org.kris.oilsimulation.controller.simulationmenu.CellChartController;
+import org.kris.oilsimulation.controller.maingrid.CellTooltipController;
+import org.kris.oilsimulation.controller.maingrid.GridCanvasController;
 import org.kris.oilsimulation.controller.RootController;
 import org.kris.oilsimulation.controller.StartUpSettings;
 import org.kris.oilsimulation.model.Model;

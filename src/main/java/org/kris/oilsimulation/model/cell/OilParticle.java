@@ -1,4 +1,4 @@
-package org.kris.oilsimulation.model;
+package org.kris.oilsimulation.model.cell;
 
 public class OilParticle {
   private final double mass;

@@ -1,5 +1,6 @@
-package org.kris.oilsimulation.controller;
+package org.kris.oilsimulation.controller.maingrid;
 
+import org.kris.oilsimulation.controller.simulationmenu.CellChartController;
 import org.kris.oilsimulation.model.Automaton;
 import org.kris.oilsimulation.model.Model;
 import org.kris.oilsimulation.model.automatonview.AutomatonView;
@@ -43,7 +44,7 @@ public class GridCanvasController implements Initializable {
     drawGrid(gridView, graphics, cellSize);
   }
 
-  double calculateCellSize(GridView gridView) {
+  public double calculateCellSize(GridView gridView) {
     if (gridView.getWidth() == 0) {
       return 0;
     }
@@ -107,7 +108,7 @@ public class GridCanvasController implements Initializable {
     graphicsContext.setLineWidth(0.5);
   }
 
-  AutomatonView getCurrentView() {
+  public AutomatonView getCurrentView() {
     return currentView;
   }
 
