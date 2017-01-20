@@ -13,10 +13,11 @@ import org.kris.oilsimulation.model.Size;
 import org.kris.oilsimulation.model.Vector;
 import org.kris.oilsimulation.model.WaterCellState;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.kris.oilsimulation.model.CellCoords.newCellCoords;
 
@@ -95,11 +96,10 @@ public class StartUpSettings {
   }
 
   private List<OilParticle> getParticles(int amount, OilSimulationConstants constants) {
-    List<OilParticle> particles = new ArrayList<>(amount);
-    for (int i = 0; i < amount; i++) {
-      particles.add(constants.getStartingParticle());
-    }
-    return particles;
+    return Stream
+        .generate(constants::getStartingParticle)
+        .limit(amount)
+        .collect(Collectors.toList());
   }
 
   private Map<CellCoords, OilSource> getInitialSources() {
