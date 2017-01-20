@@ -192,7 +192,7 @@ public class MapGeneratorController implements Initializable {
     graphics.setFill(Colors.OIL_SOURCES_COLOR);
     oilSources.entrySet().forEach(entry -> {
       CellCoords coords = entry.getKey();
-      graphics.fillRect(coords.getRow() * cellSize, coords.getCol() * cellSize,
+      graphics.fillRect(coords.getCol() * cellSize, coords.getRow() * cellSize,
           cellSize, cellSize);
     });
   }
@@ -231,7 +231,7 @@ public class MapGeneratorController implements Initializable {
 
   private void setCellState(int i, int j, CellState cellState) {
     cellStatesMatrix[i][j] = cellState;
-    oilSources.remove(newCellCoords(i, j));
+    oilSources.remove(newCellCoords(j, i));
   }
 
   private void setOilSource(int i, int j) {
@@ -244,7 +244,7 @@ public class MapGeneratorController implements Initializable {
 
     OilSource oilSource = new OilSourceImpl(getParticlesList(particle, numberOfParticles),
         particlesPerStep);
-    oilSources.put(newCellCoords(i, j), oilSource);
+    oilSources.put(newCellCoords(j, i), oilSource);
     cellStatesMatrix[i][j] = WaterCellState.emptyCell();
   }
 
@@ -274,7 +274,7 @@ public class MapGeneratorController implements Initializable {
     Map<CellCoords, CellState> map = new HashMap<>(capacity);
     for (int i = 0; i < cellStatesMatrix.length; i++) {
       for (int j = 0; j < cellStatesMatrix[0].length; j++) {
-        map.put(newCellCoords(i, j), cellStatesMatrix[i][j]);
+        map.put(newCellCoords(j, i), cellStatesMatrix[i][j]);
       }
     }
     return map;

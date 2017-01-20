@@ -28,9 +28,10 @@ public class EvaporationCalculator {
     double evaporationRate = oilParticle.getEvaporationRate();
 
     double newMass = oilParticle.getMass() * (1 - evaporationRate);
+    double newVolume = oilParticle.getVolume() * (1 - evaporationRate);
     double newEvaporationRate = evaporationRate - Math.pow(evaporationRate, 2);
 
     return new OilParticle(newMass, oilParticle.getWaterContent(),
-        oilParticle.getVolume(), newEvaporationRate);
+        newVolume, newEvaporationRate);
   }
 }

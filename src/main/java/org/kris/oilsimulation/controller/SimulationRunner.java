@@ -89,6 +89,7 @@ public class SimulationRunner {
   }
 
   public void setNewGeneratedMap(GeneratedMap generatedMap) {
+    handlers.clear();
     OilSimulationConstants constants = model.getAutomaton().getOilSimulationConstants();
     model.setAutomaton(
         OilAutomaton.newAutomaton(

@@ -29,7 +29,7 @@ public class CellTooltipController {
   }
 
   private PauseTransition initDelayedTooltipHider() {
-    PauseTransition pause = new PauseTransition(Duration.seconds(1));
+    PauseTransition pause = new PauseTransition(Duration.seconds(3));
     pause.setOnFinished(e -> tooltip.hide());
     return pause;
   }
@@ -70,7 +70,7 @@ public class CellTooltipController {
     return bundle.getString("type") + ": " + landType + "\n"
         + bundle.getString("xCellPos") + ": " + (col + 1) + "\n"
         + bundle.getString("yCellPos") + ": " + (row + 1) + "\n"
-        + bundle.getString("Mass") + ": " + cellView.getMass() + "kg\n"
+        + bundle.getString("Mass") + ": " + roundToThirdPlace(cellView.getMass()) + "kg\n"
         + bundle.getString("Volume") + ": " + roundToThirdPlace(cellView.getVolume()) + "m^3\n"
         + bundle.getString("OilParticles") + ": " + cellView.getNumberOfParticles() + "\n";
   }
