@@ -15,7 +15,7 @@ import static org.kris.oilsimulation.model.CellCoords.newCellCoords;
  */
 public class SpreadingCalculator {
   private static final double GRAVITY = 9.80665;
-  public static final double LAND_WATER_FACTOR = 0.3;
+  private static final double LAND_WATER_FACTOR = 0.3;
   private final Random random;
 
   public SpreadingCalculator(Random random) {

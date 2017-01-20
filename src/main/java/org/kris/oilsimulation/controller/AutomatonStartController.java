@@ -4,9 +4,11 @@ import org.kris.oilsimulation.controller.handler.IterationCounter;
 import org.kris.oilsimulation.controller.handler.SimulationHandlers;
 import org.kris.oilsimulation.controller.handler.SimulationTimeLogger;
 import org.kris.oilsimulation.controller.handler.ViewRefresher;
+import org.kris.oilsimulation.controller.mapgenerator.GeneratedMap;
 import org.kris.oilsimulation.controller.mapgenerator.MapGeneratorController;
 import org.kris.oilsimulation.model.Model;
 
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -27,7 +29,7 @@ public class AutomatonStartController {
   @FXML
   private ToggleGroup iterationDelayMillis;
   @FXML
-  private Button startSettingsButton;
+  private Button setMapButton;
   @FXML
   private Button pollutionMapButton;
   @FXML
@@ -52,8 +54,10 @@ public class AutomatonStartController {
   }
 
   public void startSettingsClicked() {
-    int i = MapGeneratorController.getGeneratedMap(iterations.getScene().getWindow());
-    System.out.println(i);
+    GeneratedMap generatedMap = MapGeneratorController
+        .getGeneratedMap(iterations.getScene().getWindow());
+
+    Optional.ofNullable(generatedMap).ifPresent(simulationRunner::setNewGeneratedMap);
   }
 
   public void pollutionMapButtonClicked() {
@@ -70,7 +74,7 @@ public class AutomatonStartController {
     ViewData viewData = new ViewData(iterationDelayMillis, sliders);
     SimulationTimeLogger logger = new SimulationTimeLogger();
     ViewRefresher viewRefresher =
-        new ViewRefresher(startSettingsButton, pollutionMapButton, startButton,
+        new ViewRefresher(setMapButton, pollutionMapButton, startButton,
             clearButton, iterationDelayMillis, resources);
     SimulationHandlers handlers = createSimulationHandlers(resources, logger, viewRefresher, viewData);
     this.simulationRunner = new SimulationRunner(model, viewData, handlers);
@@ -84,7 +88,7 @@ public class AutomatonStartController {
         asList(logger.onStartHandler(), viewRefresher.onStartHandler()),
         asList(logger.onStopHandler(), viewRefresher.onStopHandler()),
         singletonList(new IterationCounter(iterations, resources).afterStepHandler()),
-        asList(viewData.onClearHandler(), viewRefresher.onClearHandler()));
+        singletonList(viewData.onClearHandler()));
   }
 
   public void clear() {

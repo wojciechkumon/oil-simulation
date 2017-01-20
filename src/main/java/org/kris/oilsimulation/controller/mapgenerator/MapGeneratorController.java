@@ -11,6 +11,7 @@ import org.kris.oilsimulation.model.LandCellState;
 import org.kris.oilsimulation.model.OilParticle;
 import org.kris.oilsimulation.model.OilSource;
 import org.kris.oilsimulation.model.OilSourceImpl;
+import org.kris.oilsimulation.model.Size;
 import org.kris.oilsimulation.model.WaterCellState;
 
 import java.net.URL;
@@ -30,6 +31,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import static org.kris.oilsimulation.controller.Colors.BACKGROUND_COLOR;
@@ -42,6 +44,7 @@ public class MapGeneratorController implements Initializable {
   private Map<CellCoords, OilSource> oilSources = new HashMap<>();
   private CellState[][] cellStatesMatrix;
   private double cellSize;
+  private boolean saved = false;
 
   @FXML
   private Canvas canvas;
@@ -57,18 +60,24 @@ public class MapGeneratorController implements Initializable {
   private HBox oilSourcesFields;
 
 
-  public static int getGeneratedMap(Window mainWindow) {
+  public static GeneratedMap getGeneratedMap(Window mainWindow) {
     MapGeneratorController controller = WindowUtil
-        .showWindowAndGetController(mainWindow, "view/fxml/mapGenerator.fxml", "startSettings", ICON_PATH);
-    InitialStates initialStates = controller.createInitialStates();
-    return 10;
+        .showWindowAndGetController(mainWindow, "view/fxml/mapGenerator.fxml", "setMap", ICON_PATH);
+    if (controller.saved) {
+      return controller.getGeneratedMap();
+    }
+    return null;
   }
 
-  public void save() {
-    System.out.println("save pressed");
+  @FXML
+  private void save() {
+    saved = true;
+    Stage stage = (Stage) canvas.getScene().getWindow();
+    stage.close();
   }
 
-  public final void reset() {
+  @FXML
+  private void reset() {
     int mapSize = (int) mapSizeSlider.getValue();
     this.cellStatesMatrix = allocateNewCells(mapSize);
     oilSources.clear();
@@ -254,7 +263,20 @@ public class MapGeneratorController implements Initializable {
     return cellSize;
   }
 
-  private InitialStates createInitialStates() {
-    return null;
+  private GeneratedMap getGeneratedMap() {
+    Size size = new Size(cellStatesMatrix.length, cellStatesMatrix.length);
+    InitialStates initialStates = new InitialStates(toMap(cellStatesMatrix), oilSources);
+    return new GeneratedMap(size, initialStates);
+  }
+
+  private Map<CellCoords, ? extends CellState> toMap(CellState[][] cellStatesMatrix) {
+    int capacity = cellStatesMatrix.length * cellStatesMatrix[0].length;
+    Map<CellCoords, CellState> map = new HashMap<>(capacity);
+    for (int i = 0; i < cellStatesMatrix.length; i++) {
+      for (int j = 0; j < cellStatesMatrix[0].length; j++) {
+        map.put(newCellCoords(i, j), cellStatesMatrix[i][j]);
+      }
+    }
+    return map;
   }
 }

@@ -81,6 +81,11 @@ public class OilAutomaton extends AbstractAutomaton {
     return newAutomaton;
   }
 
+  @Override
+  public OilSimulationConstants getOilSimulationConstants() {
+    return constants;
+  }
+
   private Automaton produceNextState(ExternalConditions newExternalConditions) {
     AutomatonView view = getAutomatonView();
     History newHistory = view.getHistory().add(view.getGridView());

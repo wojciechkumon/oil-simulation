@@ -1,9 +1,12 @@
 package org.kris.oilsimulation.controller;
 
 import org.kris.oilsimulation.controller.handler.SimulationHandlers;
+import org.kris.oilsimulation.controller.mapgenerator.GeneratedMap;
 import org.kris.oilsimulation.controller.pollutionmap.PollutionMapController;
+import org.kris.oilsimulation.model.ExternalConditions;
 import org.kris.oilsimulation.model.Model;
 import org.kris.oilsimulation.model.OilAutomaton;
+import org.kris.oilsimulation.model.OilSimulationConstants;
 import org.kris.oilsimulation.util.ExecutorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +75,7 @@ public class SimulationRunner {
     handlers.fireAfterStepHandlers();
   }
 
-  public void clear() {
+  public synchronized void clear() {
     LOG.info("Clear button pressed");
     if (isRunning()) {
       stop();
@@ -83,5 +86,15 @@ public class SimulationRunner {
 
   public void pollutionMapButtonClicked(Window window) {
     PollutionMapController.showPollutionMap(window, model.getAutomaton().getAutomatonView());
+  }
+
+  public void setNewGeneratedMap(GeneratedMap generatedMap) {
+    OilSimulationConstants constants = model.getAutomaton().getOilSimulationConstants();
+    model.setAutomaton(
+        OilAutomaton.newAutomaton(
+            generatedMap.getSize(),
+            ExternalConditions.getNoInfluenceConditions(),
+            constants,
+            generatedMap.getInitialStates()));
   }
 }

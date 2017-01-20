@@ -47,7 +47,7 @@ public class PollutionMapController {
   private void setAutomatonView(AutomatonView automatonView) {
     PollutionMap pollutionMap = getPollutionMap(automatonView);
     drawPollutionMap(pollutionMap);
-    drawGradients(pollutionMap.getMaxIterations());
+    drawGradients();
     setLabels(pollutionMap.getMaxIterations());
   }
 
@@ -88,6 +88,9 @@ public class PollutionMapController {
 
   private Color getCellColor(PollutionCell cell, double maxIterations) {
     Color cleanColor = cell.isWater() ? WATER_COLOR : LAND_COLOR;
+    if (maxIterations == 0) {
+      return cleanColor;
+    }
     double oilPercent = cell.getPollutedIterations() / maxIterations;
     return cleanColor.interpolate(Color.BLACK, oilPercent);
   }
@@ -100,7 +103,7 @@ public class PollutionMapController {
     }
   }
 
-  private void drawGradients(int maxIterations) {
+  private void drawGradients() {
     drawRadialGradient(landPollutionGradient, Colors.LAND_COLOR);
     drawRadialGradient(waterPollutionGradient, Colors.WATER_COLOR);
   }
@@ -115,8 +118,10 @@ public class PollutionMapController {
   }
 
   private void setLabels(int maxIterations) {
-    String stringIterations = Integer.toString(maxIterations);
-    maxIterationsLabel1.setText(stringIterations);
-    maxIterationsLabel2.setText(stringIterations);
+    if (maxIterations > 0) {
+      String stringIterations = Integer.toString(maxIterations);
+      maxIterationsLabel1.setText(stringIterations);
+      maxIterationsLabel2.setText(stringIterations);
+    }
   }
 }

@@ -100,7 +100,7 @@
                 <Insets right="10"/>
             </padding>
             <Button fx:id="startButton" text="%start" onAction="#startOrStopClicked"/>
-            <Button fx:id="startSettingsButton" text="%startSettings"
+            <Button fx:id="setMapButton" text="%setMap"
                     onAction="#startSettingsClicked"/>
         </VBox>
         <VBox spacing="10" alignment="CENTER">

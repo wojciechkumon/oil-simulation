@@ -52,7 +52,7 @@ public class JavaFxApplication extends Application {
     stage.setScene(new Scene(root));
     stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream(ICON_PATH)));
     stage.setMinHeight(550);
-    stage.setMinWidth(850);
+    stage.setMinWidth(1280);
     stage.show();
   }
 
