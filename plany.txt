@@ -2,7 +2,6 @@ TODO:
 2. Rozproszenie (zmniejszenie masy particli na wodzie w czasie)
 4. Dane startowe (ile kg wycieku, jaki czas wyciekalo, jakies informacje jak to wygladalo)
 7. Globalne statystki o obecnym wycieku (kg, ile komórek ponad progiem skażenie obecnie, globlanie przez dowolny moment symulacji)
-8. Tworzenie własnej mapki (ląd/woda, ilość ropy, źródła)
 10. Porównanie z rzeczywistymi danymi
 
 GOTOWE:
@@ -10,3 +9,4 @@ GOTOWE:
 3. MOZNA ZIGNOROWAĆ | Fotooksydencja (zmiana lepkości oraz właściwości emulgacji oleju, dopiero po tygodniu, redukcja max 1% masy ropy)
 5. GOTOWE - tooltip nie działa idealnie | Podgląd informacji o stanie danej komórki, kg ropy, objetosc, liczba czastek, jak dlugo jest skazona (może tooltip)
 6. GOTOWE | Historia dla każdej komórki (kg)
+8. GOTOWE | Tworzenie własnej mapki (ląd/woda, ilość ropy, źródła)
