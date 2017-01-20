@@ -53,13 +53,11 @@ public class OilAutomaton extends AbstractAutomaton {
     OilAutomaton automaton = new OilAutomaton(size, externalConditions,
         constants, calculators, initialStates.getInitialSources());
 
-    initialStates.getInitialCellStates().entrySet().forEach(
-        entry -> {
-          CellCoords coords = entry.getKey();
-          CellState state = entry.getValue();
-          automaton.grid.set(coords, state);
-        }
-    );
+    initialStates.getInitialCellStates().entrySet().forEach(entry -> {
+      CellCoords coords = entry.getKey();
+      CellState state = entry.getValue();
+      automaton.grid.set(coords, state);
+    });
 
     return automaton;
   }
@@ -73,6 +71,14 @@ public class OilAutomaton extends AbstractAutomaton {
   public Automaton nextState(NextStateSettings stateSettings) {
     OilAutomatonNextSettings settings = (OilAutomatonNextSettings) stateSettings;
     return produceNextState(settings.getExternalConditions());
+  }
+
+  @Override
+  public Automaton clearState() {
+    OilAutomaton newAutomaton = new OilAutomaton(size, ExternalConditions.getNoInfluenceConditions(),
+        constants, calculators, getSourcesNextState(), HistoryFactory.getEmptyHistory());
+    copyLandToNewAutomaton(newAutomaton);
+    return newAutomaton;
   }
 
   private Automaton produceNextState(ExternalConditions newExternalConditions) {

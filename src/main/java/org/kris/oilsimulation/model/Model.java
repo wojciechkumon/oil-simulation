@@ -12,5 +12,4 @@ public interface Model {
   void addChangeListener(ChangeListener<Automaton> listener);
 
   void init();
-
 }

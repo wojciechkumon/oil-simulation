@@ -1,6 +1,9 @@
 package org.kris.oilsimulation.model;
 
 public class ExternalConditions {
+  private static final ExternalConditions ZERO_CONDITIONS =
+      new ExternalConditions(Vector.zeroVector(), Vector.zeroVector());
+
   private final Vector current;
   private final Vector wind;
 
@@ -17,4 +20,7 @@ public class ExternalConditions {
     return wind;
   }
 
+  public static ExternalConditions getNoInfluenceConditions() {
+    return ZERO_CONDITIONS;
+  }
 }

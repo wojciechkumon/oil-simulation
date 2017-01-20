@@ -78,13 +78,7 @@ public class SimulationRunner {
       stop();
     }
     handlers.clear();
-
-    StartUpSettings startUpSettings = StartUpSettings.getDefault();
-    model.setAutomaton(OilAutomaton.newAutomaton(
-        startUpSettings.getSize(),
-        startUpSettings.getExternalConditions(),
-        startUpSettings.getOilSimulationConstants(),
-        startUpSettings.getInitialStates()));
+    model.setAutomaton(model.getAutomaton().clearState());
   }
 
   public void pollutionMapButtonClicked(Window window) {

@@ -14,4 +14,5 @@ public interface Automaton {
 
   AutomatonView getAutomatonView();
 
+  Automaton clearState();
 }

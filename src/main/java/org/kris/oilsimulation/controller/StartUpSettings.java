@@ -10,7 +10,6 @@ import org.kris.oilsimulation.model.OilSimulationConstants;
 import org.kris.oilsimulation.model.OilSource;
 import org.kris.oilsimulation.model.OilSourceImpl;
 import org.kris.oilsimulation.model.Size;
-import org.kris.oilsimulation.model.Vector;
 import org.kris.oilsimulation.model.WaterCellState;
 
 import java.util.HashMap;
@@ -49,9 +48,7 @@ public class StartUpSettings {
 
   public static StartUpSettings getDefault() {
     Size size = new Size(START_MAP_SIZE, START_MAP_SIZE);
-    Vector current = Vector.zeroVector();
-    Vector wind = Vector.zeroVector();
-    ExternalConditions externalConditions = new ExternalConditions(current, wind);
+    ExternalConditions externalConditions = ExternalConditions.getNoInfluenceConditions();
     OilSimulationConstants constants =
         new OilSimulationConstants(START_CELL_SIZE, START_TIME_STEP, START_DENSITY,
             START_SURFACE_TENSION, START_PARTICLE_MASS, START_EVAPORATION_RATE,
