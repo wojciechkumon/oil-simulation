@@ -2,6 +2,8 @@ package org.kris.oilsimulation.model;
 
 import org.kris.oilsimulation.model.automatonview.GridView;
 import org.kris.oilsimulation.model.automatonview.GridViewFactory;
+import org.kris.oilsimulation.model.cell.CellCoords;
+import org.kris.oilsimulation.model.cell.CellState;
 
 public class AutomatonGrid {
   private final CellState[][] grid;

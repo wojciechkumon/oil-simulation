@@ -1,4 +1,4 @@
-package org.kris.oilsimulation.util;
+package org.kris.oilsimulation.controller.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

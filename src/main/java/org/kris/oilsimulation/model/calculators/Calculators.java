@@ -1,4 +1,4 @@
-package org.kris.oilsimulation.model;
+package org.kris.oilsimulation.model.calculators;
 
 public class Calculators {
   private final SpreadingCalculator spreadingCalculator;

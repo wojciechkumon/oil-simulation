@@ -1,6 +1,8 @@
-package org.kris.oilsimulation.controller;
+package org.kris.oilsimulation.controller.simulationmenu;
 
 import org.kris.oilsimulation.controller.handler.Handler;
+import org.kris.oilsimulation.controller.simulationmenu.SimulationSpeed;
+import org.kris.oilsimulation.controller.simulationmenu.WindCurrentSliders;
 import org.kris.oilsimulation.model.OilAutomatonNextSettings;
 import org.kris.oilsimulation.model.Vector;
 

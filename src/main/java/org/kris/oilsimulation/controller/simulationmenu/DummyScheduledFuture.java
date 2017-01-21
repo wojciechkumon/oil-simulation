@@ -1,4 +1,4 @@
-package org.kris.oilsimulation.controller;
+package org.kris.oilsimulation.controller.simulationmenu;
 
 import java.util.concurrent.Delayed;
 import java.util.concurrent.ExecutionException;

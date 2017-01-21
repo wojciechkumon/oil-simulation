@@ -4,15 +4,15 @@ package org.kris.oilsimulation.controller.mapgenerator;
 import org.kris.oilsimulation.controller.Colors;
 import org.kris.oilsimulation.controller.StartUpSettings;
 import org.kris.oilsimulation.controller.util.WindowUtil;
-import org.kris.oilsimulation.model.CellCoords;
-import org.kris.oilsimulation.model.CellState;
+import org.kris.oilsimulation.model.cell.CellCoords;
+import org.kris.oilsimulation.model.cell.CellState;
 import org.kris.oilsimulation.model.InitialStates;
-import org.kris.oilsimulation.model.LandCellState;
-import org.kris.oilsimulation.model.OilParticle;
-import org.kris.oilsimulation.model.OilSource;
-import org.kris.oilsimulation.model.OilSourceImpl;
+import org.kris.oilsimulation.model.cell.LandCellState;
+import org.kris.oilsimulation.model.cell.OilParticle;
+import org.kris.oilsimulation.model.cell.OilSource;
+import org.kris.oilsimulation.model.cell.OilSourceImpl;
 import org.kris.oilsimulation.model.Size;
-import org.kris.oilsimulation.model.WaterCellState;
+import org.kris.oilsimulation.model.cell.WaterCellState;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ import javafx.stage.Window;
 import static org.kris.oilsimulation.controller.Colors.BACKGROUND_COLOR;
 import static org.kris.oilsimulation.controller.Colors.LAND_COLOR;
 import static org.kris.oilsimulation.controller.Colors.WATER_COLOR;
-import static org.kris.oilsimulation.model.CellCoords.newCellCoords;
+import static org.kris.oilsimulation.model.cell.CellCoords.newCellCoords;
 
 public class MapGeneratorController implements Initializable {
   private static final String ICON_PATH = "view/img/mapicon.png";

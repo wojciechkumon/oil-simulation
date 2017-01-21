@@ -1,4 +1,13 @@
-package org.kris.oilsimulation.model;
+package org.kris.oilsimulation.model.calculators;
+
+import org.kris.oilsimulation.model.AutomatonGrid;
+import org.kris.oilsimulation.model.cell.CellCoords;
+import org.kris.oilsimulation.model.cell.CellState;
+import org.kris.oilsimulation.model.ExternalConditions;
+import org.kris.oilsimulation.model.cell.OilParticle;
+import org.kris.oilsimulation.model.OilSimulationConstants;
+import org.kris.oilsimulation.model.Size;
+import org.kris.oilsimulation.model.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static org.kris.oilsimulation.model.CellCoords.newCellCoords;
+import static org.kris.oilsimulation.model.cell.CellCoords.newCellCoords;
 
 public class AdvectionCalculator {
   private static final double CURRENT_COEFFICIENT = 1.1;

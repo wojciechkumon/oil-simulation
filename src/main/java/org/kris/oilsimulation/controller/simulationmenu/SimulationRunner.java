@@ -1,4 +1,4 @@
-package org.kris.oilsimulation.controller;
+package org.kris.oilsimulation.controller.simulationmenu;
 
 import org.kris.oilsimulation.controller.handler.SimulationHandlers;
 import org.kris.oilsimulation.controller.mapgenerator.GeneratedMap;
@@ -7,7 +7,7 @@ import org.kris.oilsimulation.model.ExternalConditions;
 import org.kris.oilsimulation.model.Model;
 import org.kris.oilsimulation.model.OilAutomaton;
 import org.kris.oilsimulation.model.OilSimulationConstants;
-import org.kris.oilsimulation.util.ExecutorFactory;
+import org.kris.oilsimulation.controller.util.ExecutorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,5 +1,7 @@
 package org.kris.oilsimulation.model;
 
+import org.kris.oilsimulation.model.cell.OilParticle;
+
 public class OilSimulationConstants {
   private final double cellSize; // m
   private final double timeStep; // s

@@ -3,7 +3,7 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <LineChart fx:id="cellChart" styleClass="root" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="org.kris.oilsimulation.controller.CellChartController"
+           fx:controller="org.kris.oilsimulation.controller.simulationmenu.CellChartController"
            createSymbols="false">
     <xAxis>
         <NumberAxis side="BOTTOM" label="%iterationChart"/>

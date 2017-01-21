@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import org.kris.oilsimulation.controller.SimulationSpeed?>
+<?import org.kris.oilsimulation.controller.simulationmenu.SimulationSpeed?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -10,7 +10,7 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<VBox fx:controller="org.kris.oilsimulation.controller.AutomatonStartController"
+<VBox fx:controller="org.kris.oilsimulation.controller.simulationmenu.AutomatonStartController"
       xmlns:fx="http://javafx.com/fxml">
 
     <stylesheets>

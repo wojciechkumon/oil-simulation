@@ -1,4 +1,4 @@
-package org.kris.oilsimulation.controller;
+package org.kris.oilsimulation.controller.maingrid;
 
 import org.kris.oilsimulation.model.automatonview.CellView;
 import org.kris.oilsimulation.model.automatonview.GridView;

@@ -1,4 +1,4 @@
-package org.kris.oilsimulation.model;
+package org.kris.oilsimulation.model.cell;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,8 +10,7 @@ public class OilSourceImpl implements OilSource {
   private final int particlesPerStep;
 
   public OilSourceImpl(List<OilParticle> particlesLeft, int particlesPerStep) {
-    this.particlesLeft = Collections.unmodifiableList(particlesLeft);
-    this.particlesPerStep = particlesPerStep;
+    this.particlesLeft = Collections.unmodifiableList(particlesLeft);this.particlesPerStep = particlesPerStep;
   }
 
   @Override

@@ -16,14 +16,6 @@ public abstract class AbstractAutomaton implements Automaton {
   }
 
   @Override
-  public void insertStructure(Collection<Cell> structure) {
-    structure.forEach(cell -> {
-      CellCoords coords = cell.getCoords();
-      grid.set(coords, cell.getState());
-    });
-  }
-
-  @Override
   public AutomatonView getAutomatonView() {
     // thread safe lazy init without blocking
     AutomatonView result = viewReference.get();

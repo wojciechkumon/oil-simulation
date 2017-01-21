@@ -1,10 +1,11 @@
-package org.kris.oilsimulation.controller;
+package org.kris.oilsimulation.controller.simulationmenu;
 
+import org.kris.oilsimulation.controller.maingrid.GridCanvasController;
 import org.kris.oilsimulation.controller.pollutionmap.PollutionMeter;
 import org.kris.oilsimulation.model.automatonview.CellView;
 import org.kris.oilsimulation.model.automatonview.GridView;
 import org.kris.oilsimulation.model.automatonview.History;
-import org.kris.oilsimulation.util.ExecutorFactory;
+import org.kris.oilsimulation.controller.util.ExecutorFactory;
 
 import java.util.ResourceBundle;
 import java.util.concurrent.Executor;

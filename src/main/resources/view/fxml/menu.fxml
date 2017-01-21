@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
-<VBox fx:controller="org.kris.oilsimulation.controller.MenuController"
+<VBox fx:controller="org.kris.oilsimulation.controller.simulationmenu.MenuController"
       xmlns:fx="http://javafx.com/fxml"
       styleClass="root"
       GridPane.columnIndex="1" GridPane.rowIndex="0"
