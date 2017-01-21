@@ -54,10 +54,10 @@ public class AutomatonStartController {
   }
 
   public void startSettingsClicked() {
-    GeneratedMap generatedMap = MapGeneratorController
+    Optional<GeneratedMap> generatedMap = MapGeneratorController
         .getGeneratedMap(iterations.getScene().getWindow());
 
-    Optional.ofNullable(generatedMap).ifPresent(simulationRunner::setNewGeneratedMap);
+    generatedMap.ifPresent(simulationRunner::setNewGeneratedMap);
   }
 
   public void pollutionMapButtonClicked() {

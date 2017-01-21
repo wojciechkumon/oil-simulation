@@ -18,6 +18,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -60,13 +61,13 @@ public class MapGeneratorController implements Initializable {
   private HBox oilSourcesFields;
 
 
-  public static GeneratedMap getGeneratedMap(Window mainWindow) {
+  public static Optional<GeneratedMap> getGeneratedMap(Window mainWindow) {
     MapGeneratorController controller = WindowUtil
         .showWindowAndGetController(mainWindow, "view/fxml/mapGenerator.fxml", "setMap", ICON_PATH);
     if (controller.saved) {
-      return controller.getGeneratedMap();
+      return Optional.of(controller.getGeneratedMap());
     }
-    return null;
+    return Optional.empty();
   }
 
   @FXML
