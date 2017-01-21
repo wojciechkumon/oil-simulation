@@ -98,8 +98,8 @@ public class GridCanvasController implements Initializable {
 
   private void initGrid() {
     this.currentView = AutomatonViewFactory.getEmptyView();
-    canvas.widthProperty().bind(parentLayout.widthProperty().subtract(20));
-    canvas.heightProperty().bind(parentLayout.heightProperty().subtract(20));
+    canvas.widthProperty().bind(parentLayout.widthProperty());
+    canvas.heightProperty().bind(parentLayout.heightProperty());
 
     canvas.widthProperty().addListener((observable) -> redraw(this.currentView.getGridView()));
     canvas.heightProperty().addListener((observable) -> redraw(this.currentView.getGridView()));
