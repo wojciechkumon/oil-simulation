@@ -27,6 +27,14 @@ public class AutomatonStartController {
   @FXML
   private Label iterations;
   @FXML
+  private Label cellSizeLabel;
+  @FXML
+  private Label iterationTimeLabel;
+  @FXML
+  private Label mapSizeLabel;
+  @FXML
+  private Label pollutedCellsLabel;
+  @FXML
   private ToggleGroup iterationDelayMillis;
   @FXML
   private Button setMapButton;
@@ -65,6 +73,9 @@ public class AutomatonStartController {
   }
 
   public void initModel(Model model) {
+    new ConstantsController(model, cellSizeLabel, iterationTimeLabel, resources).updateOnModelChange();
+    new MapSizeLabelUpdater(model, mapSizeLabel, resources).updateOnModelChange();
+    new PollutedCellsLabelController(model, pollutedCellsLabel, resources).updateOnModelChange();
     createSimulationRunner(model);
   }
 

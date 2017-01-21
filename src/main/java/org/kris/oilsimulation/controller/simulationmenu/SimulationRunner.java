@@ -3,11 +3,11 @@ package org.kris.oilsimulation.controller.simulationmenu;
 import org.kris.oilsimulation.controller.handler.SimulationHandlers;
 import org.kris.oilsimulation.controller.mapgenerator.GeneratedMap;
 import org.kris.oilsimulation.controller.pollutionmap.PollutionMapController;
+import org.kris.oilsimulation.controller.util.ExecutorFactory;
 import org.kris.oilsimulation.model.ExternalConditions;
 import org.kris.oilsimulation.model.Model;
 import org.kris.oilsimulation.model.OilAutomaton;
 import org.kris.oilsimulation.model.OilSimulationConstants;
-import org.kris.oilsimulation.controller.util.ExecutorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,19 +20,19 @@ import javafx.stage.Window;
 public class SimulationRunner {
   private static final Logger LOG = LoggerFactory.getLogger(SimulationRunner.class);
 
-  private final ScheduledExecutorService scheduler;
   private final Model model;
-  private final SimulationHandlers handlers;
   private final ViewData viewData;
+  private final SimulationHandlers handlers;
+  private final ScheduledExecutorService scheduler;
 
   private ScheduledFuture<?> currentTask;
 
   public SimulationRunner(Model model, ViewData viewData,
                           SimulationHandlers handlers) {
-    this.viewData = viewData;
-    this.scheduler = ExecutorFactory.createScheduledSingleThreadDaemonExecutor();
     this.model = model;
+    this.viewData = viewData;
     this.handlers = handlers;
+    this.scheduler = ExecutorFactory.createScheduledSingleThreadDaemonExecutor();
     this.currentTask = new DummyScheduledFuture<>();
   }
 

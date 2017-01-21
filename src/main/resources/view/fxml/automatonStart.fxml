@@ -28,14 +28,7 @@
         <SimulationSpeed fx:id="PER_SECOND_100" fx:value="PER_SECOND_100"/>
     </fx:define>
 
-    <HBox>
-        <HBox alignment="CENTER">
-            <VBox>
-                <padding>
-                    <Insets right="10"/>
-                </padding>
-            </VBox>
-        </HBox>
+    <HBox spacing="20">
         <VBox>
             <padding>
                 <Insets right="10"/>
@@ -86,6 +79,12 @@
             <RadioButton userData="$PER_SECOND_25" text="25" toggleGroup="$iterationDelayMillis"/>
             <RadioButton userData="$PER_SECOND_50" text="50" toggleGroup="$iterationDelayMillis"/>
             <RadioButton userData="$PER_SECOND_100" text="100" toggleGroup="$iterationDelayMillis"/>
+        </VBox>
+        <VBox spacing="5">
+            <Label fx:id="cellSizeLabel" text="%cellSize"/>
+            <Label fx:id="iterationTimeLabel" text="%iterationTime"/>
+            <Label fx:id="mapSizeLabel" text="%mapSize"/>
+            <Label fx:id="pollutedCellsLabel" text="%pollutedCells"/>
         </VBox>
     </HBox>
 
