@@ -10,8 +10,6 @@
       GridPane.columnIndex="0" GridPane.rowIndex="0"
       GridPane.hgrow="always" GridPane.vgrow="always">
 
-    <VBox>
-        <Canvas fx:id="canvas"/>
-    </VBox>
+    <Canvas fx:id="canvas"/>
 
 </VBox>
