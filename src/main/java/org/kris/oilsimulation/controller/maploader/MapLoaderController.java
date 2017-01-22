@@ -3,6 +3,7 @@ package org.kris.oilsimulation.controller.maploader;
 
 import org.kris.oilsimulation.controller.Colors;
 import org.kris.oilsimulation.controller.StartUpSettings;
+import org.kris.oilsimulation.controller.util.Mapper;
 import org.kris.oilsimulation.controller.util.WindowUtil;
 import org.kris.oilsimulation.model.InitialStates;
 import org.kris.oilsimulation.model.Size;
@@ -286,19 +287,8 @@ public class MapLoaderController implements Initializable {
 
   private LoadedMap getLoadedMap() {
     Size size = new Size(cellStatesMatrix.length, cellStatesMatrix.length);
-    InitialStates initialStates = new InitialStates(toMap(cellStatesMatrix), oilSources);
+    InitialStates initialStates = new InitialStates(Mapper.toMap(cellStatesMatrix), oilSources);
     return new LoadedMap(size, initialStates);
-  }
-
-  private Map<CellCoords, ? extends CellState> toMap(CellState[][] cellStatesMatrix) {
-    int capacity = cellStatesMatrix.length * cellStatesMatrix[0].length;
-    Map<CellCoords, CellState> map = new HashMap<>(capacity);
-    for (int i = 0; i < cellStatesMatrix.length; i++) {
-      for (int j = 0; j < cellStatesMatrix[0].length; j++) {
-        map.put(newCellCoords(j, i), cellStatesMatrix[i][j]);
-      }
-    }
-    return map;
   }
 
   private void closeWindow() {
@@ -307,12 +297,6 @@ public class MapLoaderController implements Initializable {
 
   private Stage getStage() {
     return (Stage) canvas.getScene().getWindow();
-  }
-
-  private static void configureFileChooser(FileChooser fileChooser) {
-    fileChooser.setSelectedExtensionFilter(
-        new FileChooser.ExtensionFilter(EXTENSION_DESCRIPTION, MAP_EXTENSION));
-    fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
   }
 
   @FXML
@@ -352,20 +336,15 @@ public class MapLoaderController implements Initializable {
   }
 
   private void setLoadedMap(LoadedMap loadedMap) {
-    this.cellStatesMatrix = getCellStates(loadedMap);
+    this.cellStatesMatrix = Mapper.mapToCellStates(loadedMap);
     this.oilSources = loadedMap.getInitialStates().getInitialSources();
 
     redraw();
   }
 
-  private CellState[][] getCellStates(LoadedMap loadedMap) {
-    Size size = loadedMap.getSize();
-    CellState[][] newCellStates = new CellState[size.getHeight()][size.getWidth()];
-    loadedMap.getInitialStates().getInitialCellStates().entrySet()
-        .forEach(entry -> {
-          CellCoords coords = entry.getKey();
-          newCellStates[coords.getCol()][coords.getRow()] = entry.getValue();
-        });
-    return newCellStates;
+  private static void configureFileChooser(FileChooser fileChooser) {
+    fileChooser.setSelectedExtensionFilter(
+        new FileChooser.ExtensionFilter(EXTENSION_DESCRIPTION, MAP_EXTENSION));
+    fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
   }
 }
