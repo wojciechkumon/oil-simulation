@@ -1,5 +1,5 @@
 TODO:
-
+- mapka startowa, kalibracja
 10. Porównanie z rzeczywistymi danymi
 
 GOTOWE:
@@ -11,6 +11,7 @@ GOTOWE:
 - stałe (takie jak wielkość komórki, długość iteracji itp.)
 - ilość obecnie skażonych komórek
 - wielkość mapy
+- wczytywanie/zapis z/do pliku
 
 
 2. ANULOWANE | Rozproszenie (zmniejszenie masy particli na wodzie w czasie)
