@@ -3,14 +3,18 @@ package org.kris.oilsimulation.controller.pollutionmap;
 import org.kris.oilsimulation.controller.Colors;
 import org.kris.oilsimulation.controller.util.WindowUtil;
 import org.kris.oilsimulation.model.automatonview.AutomatonView;
+import org.kris.oilsimulation.model.automatonview.GridView;
 
+import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -33,6 +37,14 @@ public class PollutionMapController {
   private Label maxIterationsLabel1;
   @FXML
   private Label maxIterationsLabel2;
+  @FXML
+  private Label xCellLabel;
+  @FXML
+  private Label yCellLabel;
+  @FXML
+  private Label pollutedIterationsLabel;
+  @FXML
+  private ResourceBundle resources;
 
   public static void showPollutionMap(Window mainWindow, AutomatonView automatonView) {
     Consumer<FXMLLoader> adjustFxml = fxmlLoader -> {
@@ -49,6 +61,8 @@ public class PollutionMapController {
     drawPollutionMap(pollutionMap);
     drawGradients();
     setLabels(pollutionMap.getMaxIterations());
+    mapCanvas.setOnMouseClicked(
+        event -> refreshClickedCellStats(automatonView, pollutionMap, event));
   }
 
   private PollutionMap getPollutionMap(AutomatonView automatonView) {
@@ -81,7 +95,7 @@ public class PollutionMapController {
 
   private void drawCell(GraphicsContext graphics, PollutionMap pollutionMap,
                         double cellSize, int i, int j) {
-    Color cellColor = getCellColor(pollutionMap.get(i, j), pollutionMap.getMaxIterations());
+    Color cellColor = getCellColor(pollutionMap.get(j, i), pollutionMap.getMaxIterations());
     graphics.setFill(cellColor);
     graphics.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
   }
@@ -123,5 +137,29 @@ public class PollutionMapController {
       maxIterationsLabel1.setText(stringIterations);
       maxIterationsLabel2.setText(stringIterations);
     }
+  }
+
+  private void refreshClickedCellStats(AutomatonView automatonView, PollutionMap pollutionMap, MouseEvent event) {
+    double xPixel = event.getX();
+    double yPixel = event.getY();
+    GridView gridView = automatonView.getGridView();
+    int col = (int) ((xPixel / mapCanvas.getWidth()) * gridView.getWidth());
+    int row = (int) ((yPixel / mapCanvas.getHeight()) * gridView.getHeight());
+
+    PollutionCell pollutionCell = pollutionMap.get(row, col);
+    updateCellLabels(row, col, pollutionCell);
+  }
+
+  private void updateCellLabels(int row, int col, PollutionCell pollutionCell) {
+    String xText = resources.getString("x") + " " + col;
+    String yText = resources.getString("y") + " " + row;
+    String pollutedIterationsText = resources.getString("pollutedIterations") + " "
+        + pollutionCell.getPollutedIterations();
+
+    Platform.runLater(() -> {
+      xCellLabel.setText(xText);
+      yCellLabel.setText(yText);
+      pollutedIterationsLabel.setText(pollutedIterationsText);
+    });
   }
 }

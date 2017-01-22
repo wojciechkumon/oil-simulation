@@ -35,7 +35,7 @@
         </padding>
 
         <VBox spacing="10">
-            <Label text="%pollutedIterations"/>
+            <Label text="%cellPollutedIterations"/>
             <HBox spacing="5">
                 <Canvas fx:id="landPollutionGradient" width="30" height="80"/>
                 <VBox spacing="50">
@@ -50,6 +50,11 @@
                     <Label text="0"/>
                 </VBox>
             </HBox>
+            <VBox spacing="10">
+                <Label fx:id="xCellLabel" text="%x"/>
+                <Label fx:id="yCellLabel" text="%y"/>
+                <Label fx:id="pollutedIterationsLabel" text="%pollutedIterations"/>
+            </VBox>
         </VBox>
     </VBox>
 
