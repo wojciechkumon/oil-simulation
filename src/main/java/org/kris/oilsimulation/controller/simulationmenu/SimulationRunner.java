@@ -1,7 +1,7 @@
 package org.kris.oilsimulation.controller.simulationmenu;
 
 import org.kris.oilsimulation.controller.handler.SimulationHandlers;
-import org.kris.oilsimulation.controller.mapgenerator.GeneratedMap;
+import org.kris.oilsimulation.controller.maploader.LoadedMap;
 import org.kris.oilsimulation.controller.pollutionmap.PollutionMapController;
 import org.kris.oilsimulation.controller.util.ExecutorFactory;
 import org.kris.oilsimulation.model.ExternalConditions;
@@ -88,14 +88,14 @@ public class SimulationRunner {
     PollutionMapController.showPollutionMap(window, model.getAutomaton().getAutomatonView());
   }
 
-  public void setNewGeneratedMap(GeneratedMap generatedMap) {
+  public void setNewGeneratedMap(LoadedMap loadedMap) {
     handlers.clear();
     OilSimulationConstants constants = model.getAutomaton().getOilSimulationConstants();
     model.setAutomaton(
         OilAutomaton.newAutomaton(
-            generatedMap.getSize(),
+            loadedMap.getSize(),
             ExternalConditions.getNoInfluenceConditions(),
             constants,
-            generatedMap.getInitialStates()));
+            loadedMap.getInitialStates()));
   }
 }

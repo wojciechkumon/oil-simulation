@@ -4,8 +4,8 @@ import org.kris.oilsimulation.controller.handler.IterationCounter;
 import org.kris.oilsimulation.controller.handler.SimulationHandlers;
 import org.kris.oilsimulation.controller.handler.SimulationTimeLogger;
 import org.kris.oilsimulation.controller.handler.ViewRefresher;
-import org.kris.oilsimulation.controller.mapgenerator.GeneratedMap;
-import org.kris.oilsimulation.controller.mapgenerator.MapGeneratorController;
+import org.kris.oilsimulation.controller.maploader.LoadedMap;
+import org.kris.oilsimulation.controller.maploader.MapLoaderController;
 import org.kris.oilsimulation.model.Model;
 
 import java.util.Optional;
@@ -62,8 +62,8 @@ public class AutomatonStartController {
   }
 
   public void startSettingsClicked() {
-    Optional<GeneratedMap> generatedMap = MapGeneratorController
-        .getGeneratedMap(iterations.getScene().getWindow());
+    Optional<LoadedMap> generatedMap = MapLoaderController
+        .getLoadedMap(iterations.getScene().getWindow());
 
     generatedMap.ifPresent(simulationRunner::setNewGeneratedMap);
   }

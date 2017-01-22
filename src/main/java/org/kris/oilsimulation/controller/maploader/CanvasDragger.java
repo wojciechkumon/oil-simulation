@@ -1,4 +1,4 @@
-package org.kris.oilsimulation.controller.mapgenerator;
+package org.kris.oilsimulation.controller.maploader;
 
 import java.util.function.BiConsumer;
 
@@ -8,7 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class CanvasDragger {
-  private final MapGeneratorController mapGeneratorController;
+  private final MapLoaderController mapLoaderController;
   private final GraphicsContext graphics;
   private final BiConsumer<Integer, Integer> onSelectedCellIndexes;
 
@@ -16,9 +16,9 @@ public class CanvasDragger {
   private double startMovePosX;
   private double startMovePosY;
 
-  public CanvasDragger(MapGeneratorController mapGeneratorController,
+  public CanvasDragger(MapLoaderController mapLoaderController,
                        Canvas canvas, BiConsumer<Integer, Integer> onSelectedCellIndexes) {
-    this.mapGeneratorController = mapGeneratorController;
+    this.mapLoaderController = mapLoaderController;
     this.graphics = canvas.getGraphicsContext2D();
     this.onSelectedCellIndexes = onSelectedCellIndexes;
     canvas.setOnMousePressed(this::onMousePressed);
@@ -83,15 +83,15 @@ public class CanvasDragger {
   }
 
   private int getMatrixSize() {
-    return mapGeneratorController.getCellMatrixSize();
+    return mapLoaderController.getCellMatrixSize();
   }
 
   private double getCellSize() {
-    return mapGeneratorController.getCellSize();
+    return mapLoaderController.getCellSize();
   }
 
   private void redraw() {
-    mapGeneratorController.redraw();
+    mapLoaderController.redraw();
   }
 
   private static class Coords {

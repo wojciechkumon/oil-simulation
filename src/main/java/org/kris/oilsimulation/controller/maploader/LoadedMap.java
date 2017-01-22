@@ -1,13 +1,13 @@
-package org.kris.oilsimulation.controller.mapgenerator;
+package org.kris.oilsimulation.controller.maploader;
 
 import org.kris.oilsimulation.model.InitialStates;
 import org.kris.oilsimulation.model.Size;
 
-public class GeneratedMap {
+public class LoadedMap {
   private final InitialStates initialStates;
   private final Size size;
 
-  public GeneratedMap(Size size, InitialStates initialStates) {
+  public LoadedMap(Size size, InitialStates initialStates) {
     this.initialStates = initialStates;
     this.size = size;
   }

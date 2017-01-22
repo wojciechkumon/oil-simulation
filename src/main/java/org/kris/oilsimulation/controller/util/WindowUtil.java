@@ -1,6 +1,6 @@
 package org.kris.oilsimulation.controller.util;
 
-import org.kris.oilsimulation.controller.mapgenerator.MapGeneratorController;
+import org.kris.oilsimulation.controller.maploader.MapLoaderController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,7 @@ import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
 public class WindowUtil {
-  private static final Logger LOG = LoggerFactory.getLogger(MapGeneratorController.class);
+  private static final Logger LOG = LoggerFactory.getLogger(MapLoaderController.class);
 
   public static <T> T showWindowAndGetController(Window mainWindow, String fxmlPath, String title,
                                                  String icon) {
@@ -44,7 +44,7 @@ public class WindowUtil {
       stage.showAndWait();
       return fxmlLoader.getController();
     } catch (IOException e) {
-      LOG.error("Error while creating map generator window", e);
+      LOG.error("Error while creating new window for: " + fxmlPath, e);
       throw new RuntimeException(e);
     }
   }

@@ -1,4 +1,4 @@
-package org.kris.oilsimulation.controller.mapgenerator;
+package org.kris.oilsimulation.controller.maploader;
 
 
 import org.kris.oilsimulation.controller.Colors;
@@ -40,7 +40,7 @@ import static org.kris.oilsimulation.controller.Colors.LAND_COLOR;
 import static org.kris.oilsimulation.controller.Colors.WATER_COLOR;
 import static org.kris.oilsimulation.model.cell.CellCoords.newCellCoords;
 
-public class MapGeneratorController implements Initializable {
+public class MapLoaderController implements Initializable {
   private static final String ICON_PATH = "view/img/mapicon.png";
   private Map<CellCoords, OilSource> oilSources = new HashMap<>();
   private CellState[][] cellStatesMatrix;
@@ -61,11 +61,11 @@ public class MapGeneratorController implements Initializable {
   private HBox oilSourcesFields;
 
 
-  public static Optional<GeneratedMap> getGeneratedMap(Window mainWindow) {
-    MapGeneratorController controller = WindowUtil
-        .showWindowAndGetController(mainWindow, "view/fxml/mapGenerator.fxml", "setMap", ICON_PATH);
+  public static Optional<LoadedMap> getLoadedMap(Window mainWindow) {
+    MapLoaderController controller = WindowUtil
+        .showWindowAndGetController(mainWindow, "view/fxml/mapLoader.fxml", "setMap", ICON_PATH);
     if (controller.saved) {
-      return Optional.of(controller.getGeneratedMap());
+      return Optional.of(controller.getLoadedMap());
     }
     return Optional.empty();
   }
@@ -264,10 +264,10 @@ public class MapGeneratorController implements Initializable {
     return cellSize;
   }
 
-  private GeneratedMap getGeneratedMap() {
+  private LoadedMap getLoadedMap() {
     Size size = new Size(cellStatesMatrix.length, cellStatesMatrix.length);
     InitialStates initialStates = new InitialStates(toMap(cellStatesMatrix), oilSources);
-    return new GeneratedMap(size, initialStates);
+    return new LoadedMap(size, initialStates);
   }
 
   private Map<CellCoords, ? extends CellState> toMap(CellState[][] cellStatesMatrix) {

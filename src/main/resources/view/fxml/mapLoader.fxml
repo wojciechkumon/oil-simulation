@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import org.kris.oilsimulation.controller.mapgenerator.CellType?>
+<?import org.kris.oilsimulation.controller.maploader.CellType?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <GridPane xmlns:fx="http://javafx.com/fxml"
-          fx:controller="org.kris.oilsimulation.controller.mapgenerator.MapGeneratorController"
+          fx:controller="org.kris.oilsimulation.controller.maploader.MapLoaderController"
           alignment="center" maxHeight="Infinity" maxWidth="Infinity">
 
     <columnConstraints>
