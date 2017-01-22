@@ -1,6 +1,8 @@
 package org.kris.oilsimulation.model.cell;
 
-public class OilParticle {
+import java.io.Serializable;
+
+public class OilParticle implements Serializable {
   private final double mass;
   private final double waterContent;
   private final double volume;

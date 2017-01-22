@@ -47,25 +47,26 @@
             <Insets left="10" top="80"/>
         </padding>
 
-        <VBox>
-            <HBox>
+        <VBox spacing="10">
+            <HBox spacing="20">
+                <Button text="%save" onAction="#save"/>
+                <Button text="%reset" onAction="#reset"/>
                 <VBox>
                     <padding>
-                        <Insets right="20"/>
+                        <Insets left="10"/>
                     </padding>
-                    <Button fx:id="saveButton" text="%save" onAction="#save"/>
+                    <Button text="%cancel" onAction="#cancel"/>
                 </VBox>
-                <VBox>
-                    <padding>
-                        <Insets left="20"/>
-                    </padding>
-                    <Button fx:id="resetButton" text="%reset" onAction="#reset"/>
-                </VBox>
+            </HBox>
+
+            <HBox spacing="20">
+                <Button text="%saveToFile" onAction="#saveToFile"/>
+                <Button text="%loadFromFile" onAction="#loadFromFile"/>
             </HBox>
 
             <VBox spacing="10">
                 <padding>
-                    <Insets top="50"/>
+                    <Insets top="40"/>
                 </padding>
                 <RadioButton userData="$LAND" text="%land" toggleGroup="$cellClickType"
                              selected="true"/>
@@ -91,7 +92,8 @@
                         <Insets top="10"/>
                     </padding>
                     <Label text="%mapSize"/>
-                    <Slider fx:id="mapSizeSlider" min="20" max="180" value="50" showTickLabels="true"
+                    <Slider fx:id="mapSizeSlider" min="20" max="180" value="50"
+                            showTickLabels="true"
                             showTickMarks="true"
                             majorTickUnit="40" blockIncrement="20"
                             prefWidth="200" maxWidth="200" minWidth="200"/>

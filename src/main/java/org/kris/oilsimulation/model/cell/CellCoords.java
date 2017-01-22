@@ -1,8 +1,9 @@
 package org.kris.oilsimulation.model.cell;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class CellCoords {
+public class CellCoords implements Serializable {
   private final int row;
   private final int col;
 

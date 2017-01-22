@@ -1,6 +1,8 @@
 package org.kris.oilsimulation.model;
 
-public class Size {
+import java.io.Serializable;
+
+public class Size implements Serializable {
   private final int width;
   private final int height;
 

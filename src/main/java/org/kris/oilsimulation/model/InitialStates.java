@@ -4,10 +4,11 @@ import org.kris.oilsimulation.model.cell.CellCoords;
 import org.kris.oilsimulation.model.cell.CellState;
 import org.kris.oilsimulation.model.cell.OilSource;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 
-public class InitialStates {
+public class InitialStates implements Serializable {
   private final Map<CellCoords, ? extends CellState> initialCellStates;
   private final Map<CellCoords, OilSource> initialSources;
 

@@ -4,16 +4,24 @@ package org.kris.oilsimulation.controller.maploader;
 import org.kris.oilsimulation.controller.Colors;
 import org.kris.oilsimulation.controller.StartUpSettings;
 import org.kris.oilsimulation.controller.util.WindowUtil;
+import org.kris.oilsimulation.model.InitialStates;
+import org.kris.oilsimulation.model.Size;
 import org.kris.oilsimulation.model.cell.CellCoords;
 import org.kris.oilsimulation.model.cell.CellState;
-import org.kris.oilsimulation.model.InitialStates;
 import org.kris.oilsimulation.model.cell.LandCellState;
 import org.kris.oilsimulation.model.cell.OilParticle;
 import org.kris.oilsimulation.model.cell.OilSource;
 import org.kris.oilsimulation.model.cell.OilSourceImpl;
-import org.kris.oilsimulation.model.Size;
 import org.kris.oilsimulation.model.cell.WaterCellState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +40,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -41,7 +50,12 @@ import static org.kris.oilsimulation.controller.Colors.WATER_COLOR;
 import static org.kris.oilsimulation.model.cell.CellCoords.newCellCoords;
 
 public class MapLoaderController implements Initializable {
+  private static final Logger LOG = LoggerFactory.getLogger(MapLoaderController.class);
   private static final String ICON_PATH = "view/img/mapicon.png";
+  private static final String MAP_EXTENSION = "map";
+  private static final String EXTENSION_DESCRIPTION = "Oil simulation map";
+
+  private final FileChooser fileChooser = new FileChooser();
   private Map<CellCoords, OilSource> oilSources = new HashMap<>();
   private CellState[][] cellStatesMatrix;
   private double cellSize;
@@ -59,6 +73,7 @@ public class MapLoaderController implements Initializable {
   private TextField particlesPerIteration;
   @FXML
   private HBox oilSourcesFields;
+  private ResourceBundle resources;
 
 
   public static Optional<LoadedMap> getLoadedMap(Window mainWindow) {
@@ -73,8 +88,7 @@ public class MapLoaderController implements Initializable {
   @FXML
   private void save() {
     saved = true;
-    Stage stage = (Stage) canvas.getScene().getWindow();
-    stage.close();
+    closeWindow();
   }
 
   @FXML
@@ -85,8 +99,14 @@ public class MapLoaderController implements Initializable {
     redraw(mapSize);
   }
 
+  @FXML
+  private void cancel() {
+    closeWindow();
+  }
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    this.resources = resources;
     new CanvasDragger(this, canvas, this::setCorrectCellState);
 
     mapSizeSlider.valueProperty().addListener(
@@ -279,5 +299,73 @@ public class MapLoaderController implements Initializable {
       }
     }
     return map;
+  }
+
+  private void closeWindow() {
+    getStage().close();
+  }
+
+  private Stage getStage() {
+    return (Stage) canvas.getScene().getWindow();
+  }
+
+  private static void configureFileChooser(FileChooser fileChooser) {
+    fileChooser.setSelectedExtensionFilter(
+        new FileChooser.ExtensionFilter(EXTENSION_DESCRIPTION, MAP_EXTENSION));
+    fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+  }
+
+  @FXML
+  private void saveToFile() {
+    configureFileChooser(fileChooser);
+    fileChooser.setTitle(resources.getString("mapSaveDialogTitle"));
+    fileChooser.setInitialFileName("mapName." + MAP_EXTENSION);
+
+    Optional.ofNullable(fileChooser.showSaveDialog(getStage()))
+        .ifPresent(this::saveMap);
+  }
+
+  private void saveMap(File file) {
+    try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
+      out.writeObject(getLoadedMap());
+    } catch (IOException e) {
+      LOG.error("error while save map to file", e);
+    }
+  }
+
+  @FXML
+  private void loadFromFile() {
+    configureFileChooser(fileChooser);
+    fileChooser.setTitle(resources.getString("mapOpenDialogTitle"));
+
+    Optional.ofNullable(fileChooser.showOpenDialog(getStage()))
+        .ifPresent(this::loadFile);
+  }
+
+  private void loadFile(File file) {
+    try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+      LoadedMap loadedMap = (LoadedMap) in.readObject();
+      setLoadedMap(loadedMap);
+    } catch (IOException | ClassNotFoundException e) {
+      LOG.error("error while save map to file", e);
+    }
+  }
+
+  private void setLoadedMap(LoadedMap loadedMap) {
+    this.cellStatesMatrix = getCellStates(loadedMap);
+    this.oilSources = loadedMap.getInitialStates().getInitialSources();
+
+    redraw();
+  }
+
+  private CellState[][] getCellStates(LoadedMap loadedMap) {
+    Size size = loadedMap.getSize();
+    CellState[][] newCellStates = new CellState[size.getHeight()][size.getWidth()];
+    loadedMap.getInitialStates().getInitialCellStates().entrySet()
+        .forEach(entry -> {
+          CellCoords coords = entry.getKey();
+          newCellStates[coords.getCol()][coords.getRow()] = entry.getValue();
+        });
+    return newCellStates;
   }
 }

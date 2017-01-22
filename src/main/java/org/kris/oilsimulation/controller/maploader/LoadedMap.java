@@ -3,7 +3,9 @@ package org.kris.oilsimulation.controller.maploader;
 import org.kris.oilsimulation.model.InitialStates;
 import org.kris.oilsimulation.model.Size;
 
-public class LoadedMap {
+import java.io.Serializable;
+
+public class LoadedMap implements Serializable {
   private final InitialStates initialStates;
   private final Size size;
 
