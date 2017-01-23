@@ -26,7 +26,7 @@ public class OilSimulationConstants {
     this.startingParticle = new OilParticle(particleMass, 0,
         particleMass / density, evaporationRate);
     this.maxLandParticlesNumber = maxLandParticlesNumber;
-    maxLandMass = cellSize * maxLandParticlesNumber;
+    maxLandMass = particleMass * maxLandParticlesNumber;
   }
 
   public double getCellSize() {

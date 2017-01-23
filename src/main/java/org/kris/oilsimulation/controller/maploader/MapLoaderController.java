@@ -340,6 +340,7 @@ public class MapLoaderController implements Initializable {
     this.oilSources = loadedMap.getInitialStates().getInitialSources();
 
     redraw();
+    mapSizeSlider.setValue(cellStatesMatrix.length);
   }
 
   private static void configureFileChooser(FileChooser fileChooser) {

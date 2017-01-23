@@ -25,7 +25,7 @@ import static org.kris.oilsimulation.controller.Colors.LAND_COLOR;
 import static org.kris.oilsimulation.controller.Colors.WATER_COLOR;
 
 public class GridCanvasController implements Initializable {
-  private static final int MAX_MASS = 10_000;
+  private static final int MAX_MASS = 2_500;
 
   private ResourceBundle bundle;
   private AutomatonView currentView;

@@ -91,7 +91,7 @@ public class AdvectionCalculator {
                                           CellCoords source, CellCoords target) {
     if (isInsideGrid(target, oldAutomatonGrid.getSize()) && !oldAutomatonGrid.get(target).isWater()) {
       List<OilParticle> oilParticles = particlesMap.get(target);
-      if (oilParticles != null && oilParticles.size() > maxLandParticles) {
+      if (oilParticles != null && oilParticles.size() >= maxLandParticles) {
         return source;
       }
     }

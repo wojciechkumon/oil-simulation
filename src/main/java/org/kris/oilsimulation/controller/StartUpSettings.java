@@ -22,14 +22,14 @@ import static org.kris.oilsimulation.model.cell.CellCoords.newCellCoords;
 
 public class StartUpSettings {
   private static final int START_MAP_SIZE = 50;
-  private static final int START_CELL_SIZE = 50;
+  private static final int START_CELL_SIZE = 100;
   private static final int START_TIME_STEP = 600;
   private static final int START_DENSITY = 835;
   private static final int START_SURFACE_TENSION = 30;
-  private static final int START_PARTICLE_MASS = 50;
+  private static final int START_PARTICLE_MASS = 10;
   private static final double START_EVAPORATION_RATE = 1 - 0.99811;
-  private static final int START_PROPAGATION_FACTOR = 3;
-  private static final int START_MAX_LAND_PARTICLES = 1_000;
+  private static final int START_PROPAGATION_FACTOR = 1;
+  private static final int START_MAX_LAND_PARTICLES = 100;
 
   private final Size size;
   private final ExternalConditions externalConditions;
