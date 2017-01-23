@@ -3,7 +3,7 @@ package org.kris.oilsimulation.controller.pollutionmap;
 import org.kris.oilsimulation.model.automatonview.CellView;
 
 public class PollutionMeter {
-  private static final double DEFAULT_THRESHOLD = 20;
+  private static final double DEFAULT_THRESHOLD = 10;
   private final double threshold;
 
   public PollutionMeter() {

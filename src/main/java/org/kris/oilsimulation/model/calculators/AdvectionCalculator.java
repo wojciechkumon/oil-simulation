@@ -20,8 +20,7 @@ import static org.kris.oilsimulation.model.cell.CellCoords.newCellCoords;
 public class AdvectionCalculator {
   private static final double CURRENT_COEFFICIENT = 1.1;
   private static final double WIND_COEFFICIENT = 0.3;
-  private static final double LAND_LOWER_THRESHOLD = 0.999;
-  private static final double LAND_HIGHER_THRESHOLD = 0.9999999;
+  private static final double LAND_THRESHOLD = 0.9999;
   private final Random random;
 
   public AdvectionCalculator(Random random) {
@@ -82,26 +81,21 @@ public class AdvectionCalculator {
       int newCol = getNewIndex(horizontalThreshold,
           closerPos.getCol(), furtherPos.getCol());
 
-      CellCoords newCellCoords = getCheckedCellCoords(particlesMap, oldAutomatonGrid,
+      CellCoords newCellCoords = getCheckedCellCoords(oldAutomatonGrid,
           constants.getMaxLandParticlesNumber(), newCellCoords(i, j), newCellCoords(newRow, newCol));
       addToMap(particlesMap, newCellCoords, particle);
     });
   }
 
-  private CellCoords getCheckedCellCoords(Map<CellCoords, List<OilParticle>> particlesMap,
-                                          AutomatonGrid oldAutomatonGrid, int maxLandParticles,
+  private CellCoords getCheckedCellCoords(AutomatonGrid oldAutomatonGrid, int maxLandParticles,
                                           CellCoords source, CellCoords target) {
     if (isInsideGrid(target, oldAutomatonGrid.getSize()) && !oldAutomatonGrid.get(target).isWater()) {
-      List<OilParticle> oilParticles = particlesMap.get(target);
-      if (oilParticles != null) {
-        if (oilParticles.size() >= maxLandParticles * 5) {
-          if (random.nextDouble() < LAND_HIGHER_THRESHOLD) {
-            return source;
-          }
-        } else if (oilParticles.size() >= maxLandParticles) {
-          if (random.nextDouble() < LAND_LOWER_THRESHOLD) {
-            return source;
-          }
+      int particlesNumber = oldAutomatonGrid.get(target).getOilParticles().size();
+      if (particlesNumber >= maxLandParticles * 4 + random.nextInt(100)) {
+        return source;
+      } else if (particlesNumber >= maxLandParticles) {
+        if (random.nextDouble() < LAND_THRESHOLD) {
+          return source;
         }
       }
     }
@@ -110,12 +104,14 @@ public class AdvectionCalculator {
 
   private void addToMap(Map<CellCoords, List<OilParticle>> particlesMap,
                         CellCoords coords, OilParticle newParticle) {
-    List<OilParticle> particles = particlesMap.remove(coords);
+    List<OilParticle> particles = particlesMap.get(coords);
     if (particles == null) {
       particles = new ArrayList<>();
+      particles.add(newParticle);
+      particlesMap.put(coords, particles);
+    } else {
+      particles.add(newParticle);
     }
-    particles.add(newParticle);
-    particlesMap.put(coords, particles);
   }
 
   private int getNewIndex(double threshold, int closerIndex, int furtherIndex) {
