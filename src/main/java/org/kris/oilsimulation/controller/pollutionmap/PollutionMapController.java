@@ -34,9 +34,9 @@ public class PollutionMapController {
   @FXML
   private Canvas waterPollutionGradient;
   @FXML
-  private Label maxIterationsLabel1;
+  private Label landMaxIterationsLabel;
   @FXML
-  private Label maxIterationsLabel2;
+  private Label waterMaxIterationsLabel;
   @FXML
   private Label xCellLabel;
   @FXML
@@ -60,7 +60,7 @@ public class PollutionMapController {
     PollutionMap pollutionMap = getPollutionMap(automatonView);
     drawPollutionMap(pollutionMap);
     drawGradients();
-    setLabels(pollutionMap.getMaxIterations());
+    setLabels(pollutionMap.getWaterMaxIterations(), pollutionMap.getLandMaxIterations());
     mapCanvas.setOnMouseClicked(
         event -> refreshClickedCellStats(automatonView, pollutionMap, event));
   }
@@ -95,17 +95,20 @@ public class PollutionMapController {
 
   private void drawCell(GraphicsContext graphics, PollutionMap pollutionMap,
                         double cellSize, int i, int j) {
-    Color cellColor = getCellColor(pollutionMap.get(j, i), pollutionMap.getMaxIterations());
+    Color cellColor = getCellColor(pollutionMap.get(j, i), pollutionMap.getWaterMaxIterations(),
+        pollutionMap.getLandMaxIterations());
     graphics.setFill(cellColor);
     graphics.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
   }
 
-  private Color getCellColor(PollutionCell cell, double maxIterations) {
+  private Color getCellColor(PollutionCell cell, double waterMaxIterations, double landMaxIterations) {
     Color cleanColor = cell.isWater() ? WATER_COLOR : LAND_COLOR;
+    double maxIterations = cell.isWater() ? waterMaxIterations : landMaxIterations;
     if (maxIterations == 0) {
       return cleanColor;
     }
     double oilPercent = cell.getPollutedIterations() / maxIterations;
+    oilPercent = oilPercent > 0.6 ? 0.6 : oilPercent;
     return cleanColor.interpolate(Color.BLACK, oilPercent);
   }
 
@@ -131,11 +134,15 @@ public class PollutionMapController {
     graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
   }
 
-  private void setLabels(int maxIterations) {
+  private void setLabels(int waterMaxIterations, int landMaxIterations) {
+    setLabel(waterMaxIterationsLabel, waterMaxIterations);
+    setLabel(landMaxIterationsLabel, landMaxIterations);
+  }
+
+  private void setLabel(Label maxIterationsLabel, int maxIterations) {
     if (maxIterations > 0) {
       String stringIterations = Integer.toString(maxIterations);
-      maxIterationsLabel1.setText(stringIterations);
-      maxIterationsLabel2.setText(stringIterations);
+      maxIterationsLabel.setText(stringIterations);
     }
   }
 

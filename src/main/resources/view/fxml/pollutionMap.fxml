@@ -39,14 +39,14 @@
             <HBox spacing="5">
                 <Canvas fx:id="landPollutionGradient" width="30" height="80"/>
                 <VBox spacing="50">
-                    <Label fx:id="maxIterationsLabel1"/>
+                    <Label fx:id="landMaxIterationsLabel"/>
                     <Label text="0"/>
                 </VBox>
             </HBox>
             <HBox spacing="5">
                 <Canvas fx:id="waterPollutionGradient" width="30" height="80"/>
                 <VBox spacing="50">
-                    <Label fx:id="maxIterationsLabel2"/>
+                    <Label fx:id="waterMaxIterationsLabel"/>
                     <Label text="0"/>
                 </VBox>
             </HBox>

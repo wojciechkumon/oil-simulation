@@ -1,19 +1,24 @@
 package org.kris.oilsimulation.controller.pollutionmap;
 
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 public class PollutionMap {
   private final PollutionCell[][] cells;
-  private final int maxIterations;
+  private final int maxWaterIterations;
+  private final int maxLandIterations;
 
   public PollutionMap(PollutionCell[][] cells) {
     this.cells = cells;
-    this.maxIterations = findMaxIterations(cells);
+    Predicate<PollutionCell> isWaterPredicate = PollutionCell::isWater;
+    this.maxWaterIterations = findMaxIterations(cells, isWaterPredicate);
+    this.maxLandIterations = findMaxIterations(cells, isWaterPredicate.negate());
   }
 
-  private int findMaxIterations(PollutionCell[][] cells) {
+  private int findMaxIterations(PollutionCell[][] cells, Predicate<? super PollutionCell> predicate) {
     return Arrays.stream(cells)
         .flatMap(Arrays::stream)
+        .filter(predicate)
         .map(PollutionCell::getPollutedIterations)
         .reduce(0, Math::max);
   }
@@ -22,8 +27,12 @@ public class PollutionMap {
     return cells[i][j];
   }
 
-  public int getMaxIterations() {
-    return maxIterations;
+  public int getWaterMaxIterations() {
+    return maxWaterIterations;
+  }
+
+  public int getLandMaxIterations() {
+    return maxLandIterations;
   }
 
   public int getRows() {
