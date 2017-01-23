@@ -1,5 +1,6 @@
 package org.kris.oilsimulation.controller.maingrid;
 
+import org.kris.oilsimulation.controller.pollutionmap.PollutionMeter;
 import org.kris.oilsimulation.controller.simulationmenu.CellChartController;
 import org.kris.oilsimulation.model.Automaton;
 import org.kris.oilsimulation.model.Model;
@@ -61,25 +62,31 @@ public class GridCanvasController implements Initializable {
   }
 
   private void drawCells(GridView gridView, GraphicsContext graphics, double cellSize) {
+    PollutionMeter pollutionMeter = new PollutionMeter();
     for (int i = 0; i < gridView.getHeight(); i++) {
       for (int j = 0; j < gridView.getWidth(); j++) {
-        drawOilCell(gridView, graphics, cellSize, i, j);
+        drawOilCell(gridView, graphics, cellSize, i, j, pollutionMeter);
       }
     }
   }
 
   private void drawOilCell(GridView gridView, GraphicsContext graphics,
-                           double cellSize, int i, int j) {
-    graphics.setFill(calculateCellColor(gridView.getCellView(i, j)));
+                           double cellSize, int i, int j, PollutionMeter pollutionMeter) {
+    graphics.setFill(calculateCellColor(gridView.getCellView(i, j), pollutionMeter));
     graphics.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
   }
 
-  private Color calculateCellColor(CellView cellView) {
+  private Color calculateCellColor(CellView cellView, PollutionMeter pollutionMeter) {
     Color cellColor = cellView.isWater() ? WATER_COLOR : LAND_COLOR;
+    if (!pollutionMeter.isPolluted(cellView)) {
+      return cellColor;
+    }
+
+    Color basePollutionColor = cellColor.interpolate(Color.BLACK, 0.2);
     double cellMass = cellView.getMass();
     double mass = cellMass < MAX_MASS ? cellMass : MAX_MASS;
     double oilPercent = mass / MAX_MASS;
-    return cellColor.interpolate(Color.BLACK, oilPercent);
+    return basePollutionColor.interpolate(Color.BLACK, oilPercent);
   }
 
   private void drawGrid(GridView gridView, GraphicsContext graphics, double cellSize) {
