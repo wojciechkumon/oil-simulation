@@ -1,13 +1,13 @@
 package org.kris.oilsimulation.model.calculators;
 
 import org.kris.oilsimulation.model.AutomatonGrid;
-import org.kris.oilsimulation.model.cell.CellCoords;
-import org.kris.oilsimulation.model.cell.CellState;
 import org.kris.oilsimulation.model.ExternalConditions;
-import org.kris.oilsimulation.model.cell.OilParticle;
 import org.kris.oilsimulation.model.OilSimulationConstants;
 import org.kris.oilsimulation.model.Size;
 import org.kris.oilsimulation.model.Vector;
+import org.kris.oilsimulation.model.cell.CellCoords;
+import org.kris.oilsimulation.model.cell.CellState;
+import org.kris.oilsimulation.model.cell.OilParticle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +20,8 @@ import static org.kris.oilsimulation.model.cell.CellCoords.newCellCoords;
 public class AdvectionCalculator {
   private static final double CURRENT_COEFFICIENT = 1.1;
   private static final double WIND_COEFFICIENT = 0.3;
+  private static final double LAND_LOWER_THRESHOLD = 0.999;
+  private static final double LAND_HIGHER_THRESHOLD = 0.9999999;
   private final Random random;
 
   public AdvectionCalculator(Random random) {
@@ -91,8 +93,16 @@ public class AdvectionCalculator {
                                           CellCoords source, CellCoords target) {
     if (isInsideGrid(target, oldAutomatonGrid.getSize()) && !oldAutomatonGrid.get(target).isWater()) {
       List<OilParticle> oilParticles = particlesMap.get(target);
-      if (oilParticles != null && oilParticles.size() >= maxLandParticles) {
-        return source;
+      if (oilParticles != null) {
+        if (oilParticles.size() >= maxLandParticles * 5) {
+          if (random.nextDouble() < LAND_HIGHER_THRESHOLD) {
+            return source;
+          }
+        } else if (oilParticles.size() >= maxLandParticles) {
+          if (random.nextDouble() < LAND_LOWER_THRESHOLD) {
+            return source;
+          }
+        }
       }
     }
     return target;
@@ -100,12 +110,10 @@ public class AdvectionCalculator {
 
   private void addToMap(Map<CellCoords, List<OilParticle>> particlesMap,
                         CellCoords coords, OilParticle newParticle) {
-    List<OilParticle> particles = particlesMap.get(coords);
-    if (particles != null) {
-      particles.add(newParticle);
-      return;
+    List<OilParticle> particles = particlesMap.remove(coords);
+    if (particles == null) {
+      particles = new ArrayList<>();
     }
-    particles = new ArrayList<>();
     particles.add(newParticle);
     particlesMap.put(coords, particles);
   }
