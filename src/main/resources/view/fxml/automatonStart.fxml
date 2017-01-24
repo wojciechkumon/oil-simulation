@@ -91,7 +91,7 @@
 
     <VBox spacing="10" alignment="CENTER">
         <Label text="%startingIteration" fx:id="iterations"/>
-        <Label text="%timeElapsed" fx:id="timeElapsed"/>
+        <Label text="%startingTimeElapsed" fx:id="timeElapsed"/>
     </VBox>
 
     <HBox alignment="CENTER">
