@@ -27,6 +27,8 @@ public class AutomatonStartController {
   @FXML
   private Label iterations;
   @FXML
+  private Label timeElapsed;
+  @FXML
   private Label cellSizeLabel;
   @FXML
   private Label iterationTimeLabel;
@@ -87,18 +89,19 @@ public class AutomatonStartController {
     ViewRefresher viewRefresher =
         new ViewRefresher(setMapButton, pollutionMapButton, startButton,
             clearButton, iterationDelayMillis, resources);
-    SimulationHandlers handlers = createSimulationHandlers(resources, logger, viewRefresher, viewData);
+    SimulationHandlers handlers = createSimulationHandlers(resources, logger, viewRefresher,
+        viewData, model);
     this.simulationRunner = new SimulationRunner(model, viewData, handlers);
   }
 
   private SimulationHandlers createSimulationHandlers(ResourceBundle resources,
                                                       SimulationTimeLogger logger,
                                                       ViewRefresher viewRefresher,
-                                                      ViewData viewData) {
+                                                      ViewData viewData, Model model) {
     return new SimulationHandlers(
         asList(logger.onStartHandler(), viewRefresher.onStartHandler()),
         asList(logger.onStopHandler(), viewRefresher.onStopHandler()),
-        singletonList(new IterationCounter(iterations, resources).afterStepHandler()),
+        singletonList(new IterationCounter(iterations, timeElapsed, model, resources).afterStepHandler()),
         singletonList(viewData.onClearHandler()));
   }
 

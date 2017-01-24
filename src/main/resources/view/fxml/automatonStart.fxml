@@ -89,9 +89,10 @@
     </HBox>
 
 
-    <HBox spacing="10" alignment="CENTER">
+    <VBox spacing="10" alignment="CENTER">
         <Label text="%startingIteration" fx:id="iterations"/>
-    </HBox>
+        <Label text="%timeElapsed" fx:id="timeElapsed"/>
+    </VBox>
 
     <HBox alignment="CENTER">
         <VBox spacing="10" alignment="CENTER">
